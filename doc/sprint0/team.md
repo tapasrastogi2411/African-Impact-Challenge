@@ -8,6 +8,5 @@
 |Clement Tran|tranclem|1005412144|clement.tran@mail.utoronto.ca|Discord|Clement#3823|
 |Ho Ki Yuen|yuenho4|1005212128|jasonhoki.yuen@mail.utoronto.ca|Discord|L1F3#8226|
 
-
 ---
 **Discord Chat/Server Invite :** https://discord.com/invite/fBWQXWVqSn
