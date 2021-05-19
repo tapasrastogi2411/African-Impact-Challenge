@@ -7,7 +7,7 @@
 |Tapas Rastogi|rastog32|1005734608|tapas.rastogi@mail.utoronto.ca|Discord|just_why#6057|
 |Clement Tran|tranclem|1005412144|clement.tran@mail.utoronto.ca|Discord|Clement#3823|
 |Brandon Jaipersaud|jaipers5|1002521130|brandon.jaipersaud@mail.utoronto.ca|Discord|BrandonJ#4704|
-
+|Ho Ki Yuen|yuenho4|1005212128|jasonhoki.yuen@mail.utoronto.ca|Discord|L1F3#8226|
 
 
 ---
