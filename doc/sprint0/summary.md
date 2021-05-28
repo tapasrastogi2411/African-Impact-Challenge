@@ -50,7 +50,9 @@
 
 Prioritize:
 
--   Quality over quantity when it comes to implementing features. For example, implementing 5 high quality features is better than implementing 10 mediocre features.
+-  Applying security-based principles such as hashing the users' password before storing it in a database. Defend against popular web-based attacks such as cross-site scripting (XSS) and SQL injection. 
+
+-  Reducing un-necessary network activity wherever possible since this lowers performance. 
     
 -   Making features user-friendly even if it incurs a performance cost.
     
