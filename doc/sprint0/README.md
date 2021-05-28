@@ -25,13 +25,13 @@ More detailed steps here: https://www.codecademy.com/articles/react-setup-i
 Contribution Process: 
 
 - The contribution process is dependent on the concept of git flow and git branches. 
-The repository consists of two main branches: "master" and "develop". 
-The master branch is updated at the end of each sprint whereas the develop branch is updated after each feature is implemented. 
+The repository consists of two main branches: "main" and "develop". 
+The main branch is updated at the end of each sprint whereas the develop branch is updated after each feature is implemented. 
 The contribution process is as follows:
 	1) Create a new branch from "develop" and name it as "name_of_the_feature #[the user story number corresponding to the feature]"
 	2) After the feature is implemented after passing all the test cases, a pull request into "develop" is created. 
 	3) One of our group members will be responsible to review the code and accept the pull request. If a conflict occurs, the code reviewer and members involved in the conflict will communicate to resolve the issue.
-	4) At the end of the sprint, "master" branch will pull from "develop"
+	4) At the end of the sprint, "main" branch will pull from "develop"
 
 
 
