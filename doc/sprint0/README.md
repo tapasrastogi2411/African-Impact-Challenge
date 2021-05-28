@@ -63,7 +63,7 @@ To install React do:
 	$  npm install --save react-dom
 	
 	
-Conveiently, the testing tools can also be installed using npm:
+Conveniently, the testing tools can also be installed using npm:
 
 	$ npm install mocha
 	$ npm install --save-dev chai
