@@ -1,7 +1,11 @@
-Motivation:
-- The aim of our project is to construct a community and e-learning platform where young entrepreneurs can undergo training, partake in seminars and conferences, as well as access several resources dedicated to their personal growth as well as that of their enterprise. Additionally, the platform should allow for collaboration and networking among users (hence the community aspect).
+## Motivation
+The aim of our project is to construct a community and e-learning platform to be used by young, aspiring African entrepreneurs partaking in the African Impact Challenge. This platform will allow them to undergo educational training and attend workshops that will aid them in their journey as entrepreneurs. Furthermore, this platform will allow for users to easily collaborate and network through various mediums such as a discussion board and direct messaging. An important reason for this is to faciliate communication between entrepreneurs and potential partners that may want to partner with their startup. Another crucial reason for this is so that the entrepreneurs can easily ask questions and form discussions about the educational content they consume.
 
-Installation:
+More information about the African Impact Challenge can be found here: https://www.africanimpact.ca/the-african-impact-challenge
+
+
+
+## Installation
 - For our project we’ve decided to use the “PERN” stack; which essentially stands for:
     - Postgresql
     - Express.js
@@ -22,7 +26,7 @@ More detailed steps here: https://www.codecademy.com/articles/react-setup-i
     - Download here: https://nodejs.org/en/
 
 
-Contribution Process: 
+## Contribution Process 
 
 - The contribution process is dependent on the concept of git flow and git branches. 
 The repository consists of two main branches: "main" and "develop". 
