@@ -6,24 +6,70 @@ More information about the African Impact Challenge can be found here: https://w
 
 
 ## Installation
-- For our project we’ve decided to use the “PERN” stack; which essentially stands for:
+
+### Technologies Used
+- For our project we’ve decided to use the “PERN” stack; which stands for:
     - Postgresql
     - Express.js
     - React
     - Node.js
+   
+- Testing tools and frameworks used are:
+	- Mocha
+		- JavaScript testing framework	
+	- Chai.js
+		- A flexible and extensive TDD and BDD assertion library  
+	- Sinon.js	
+		- A JavaScript library which gives additional functionality to testing frameworks such as Mocha. It allows the user to create test spies, fakes, stubs, mocks and more.   
 
-The installation instructions for each go as follows:
-- Postgresql (latest version - 13 for both Windows and MacOS):
-    - For detailed instructions, download directly from the postgresql website at: https://www.postgresql.org/download/
-- Express.js:
-    - Can be installed directly through the command line through npm, detailed instructions here: https://expressjs.com/en/starter/installing.html
-- React:
-    - In order to install React, you will need to install a package manager. ‘npm’ (mentioned above) is a great package manager for javascript software. ‘Npm’ is automatically installed with Node.js, so follow the download link below.
-Once npm installed, installing react is as simple as:
-‘npm install --save react’
-More detailed steps here: https://www.codecademy.com/articles/react-setup-i 
-- Node.js:
-    - Download here: https://nodejs.org/en/
+### Build Instructions
+To build and run the project do the following:
+
+First, check if Postgresql is installed on your system by running:
+
+	$ psql -V
+
+If it is not installed, follow the directions in the postgresql website at https://www.postgresql.org/download/ to install it on your desired OS.
+
+Next, you need to install npm (Node package manager) and Node.js. First, check if they are already installed by running:
+
+	$ node -v
+	$ npm -v
+
+If Node.js is not installed, navigate to this website: https://nodejs.dev/learn/how-to-install-nodejs for installation instructions. Note that if you are using Mac OS and have homebrew installed as a package manager you can simply install Node.js by doing:
+
+	$ brew install node
+
+Installing Node.js automatically installs npm so you don't need to worry about installing it separately!
+
+Now, to actually build the project first start by cloning  the repo and navigate to the top-level directory:
+
+	$ git clone https://github.com/UTSCCSCC01/ResilientDevs/
+	$ cd ResilientDevs/
+	
+Then, run 
+
+	$ npm init
+
+which will generate a package.json file containing all the config information for the project.
+
+To install Express simply do:
+
+	$  npm install express --save
+
+To install React do:
+
+	$  npm install --save react
+	$  npm install --save react-dom
+	
+	
+Conveiently, the testing tools can also be installed using npm:
+
+	$ npm install mocha
+	$ npm install --save-dev chai
+	$ npm install sinon
+
+
 
 
 ## Contribution Process 
