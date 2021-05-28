@@ -52,7 +52,7 @@ Prioritize:
 
 -  Applying security-based principles such as hashing the users' password before storing it in a database. Defend against popular web-based attacks such as cross-site scripting (XSS) and SQL injection. 
 
--  Reducing un-necessary network activity wherever possible since this lowers performance. 
+-  Reducing un-necessary network activity on the front-end wherever possible since this lowers performance on the user end system. An example of this would be making excess XMLHttpRequests on the user end system. 
     
 -   Making features user-friendly even if it incurs a performance cost.
     
