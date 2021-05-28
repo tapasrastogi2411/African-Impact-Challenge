@@ -24,7 +24,6 @@ As an unauthorized user, I want to register/create a profile so that I can gain 
     
 -   Teachers and partners need approval from an administrator before they can access the site.
     
-
   
 
 As a user, I want to login to the website so that I can access its functionality.
@@ -33,16 +32,14 @@ As a user, I want to login to the website so that I can access its functionality
     
 -   All users use the same type of information when logging in (i.e. email, password)
     
-
-  
+ 
 
 As a user, I want to logout of the website so that I maintain privacy when I am done using the site.
 
 -   User cannot re-login after being logged-out without entering the correct credentials (i.e. clicking back button, accidental form resubmission)
     
 
-  
-
+ 
 As a user, I want to delete my profile if I am no longer a part of the site so that I am no longer associated with the site.
 
 -   Entrepreneurs, partners and teachers can delete their profile.
@@ -60,7 +57,8 @@ As a user, I want to update my profile so that my profile information is accurat
     
 
 As a user, I want to view the profile of another user so that I can find out more information about that user.
-- Only information the user declares public should be visible to other users.
+
+-   Only information the user declares public should be visible to other users.
 
 
 
@@ -73,7 +71,6 @@ As a founder/co-founder, I want to invite other entrepreneurs registered on the 
     
 
   
-
 As a founder/co-founder, I want to remove entrepreneurs associated with the company I founded/co-founded to keep the company information accurate.
 
 -   The removed entrepreneurs cannot view privileged company info.
@@ -89,19 +86,16 @@ As an entrepreneur, I want to accept/decline invitations to join a company so th
     
 
   
-
 As a founder/co-founder, I want to upload resources/files pertaining to my company so that potential partners can view them and decide whether to partner with my company.
 
 -   Other entrepreneurs outside of the company cannot view the uploaded resources.
     
-
 -   Only founders/co-founders of the company can perform this privileged action.
     
 
 As a partner, I want to see the entrepreneurs in the company and the resources/files posted.
 
 -   Company profile has tabs to divide the information, such as members, mission statement, files, and etc.
-
 
 
 
@@ -129,7 +123,6 @@ As a teacher, I want to post assignments for students to complete by a specified
     
 -   Teacher must add an assignment title and description before posting it.
     
-
   
 
 As a teacher, I want to hold office hours for students to attend so they have a chance to ask questions in real-time about material taught in the videos or to ask assignment questions.
@@ -145,7 +138,6 @@ As a teacher, I want to hold office hours for students to attend so they have a 
 -   Users can view the total number of users currently attending office hours
     
 
-  
 
 As a teacher, I want to hold live workshops so that the students have an opportunity to learn new skills and material in real-time.
 
@@ -172,8 +164,6 @@ As a teacher, I want to respond to questions students ask in an asynchronous man
     
 
   
-  
-
 As an entrepreneur, I want to ask questions about videos and assignments in an asynchronous manner so that I can clarify any doubts I have about the videos and assignments.
 
 -   Entrepreneurs can post questions to the forums and search for similar questions that were previously answered.
@@ -190,6 +180,7 @@ As an entrepreneur, I would like to have an easy, visual way of viewing dates an
 
 -   Entrepreneur has a dashboard to show all the upcoming workshops and deliverables posted by teachers.
     
+
 
 As a teacher, I would like a convenient way of notifying entrepreneurs of dates and deadlines for upcoming workshops and deliverable content so they can better plan and organize.
 
@@ -208,7 +199,6 @@ As a teacher, I want to view assignment submissions and provide grades as well a
 -   Teacher can view assignment submission in the browser or has the option of downloading the submitted assignment as a PDF
     
 
-  
 
 As an entrepreneur, I want to view assignment grades, assignment feedback and my current grade in the course so I can gauge how well I am currently doing in the course.
 

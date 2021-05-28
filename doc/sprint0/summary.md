@@ -3,6 +3,7 @@
   
 - Build a platform to help new and aspiring African entrepreneurs in the Preincubation and Incubation stages of the African Impact Challenge. In particular, a community that facilitates seamless interaction between the entrepreneurs and their partners should be created. Furthermore, there should be an e-learning component enabling teachers to interact with and deliver content to the entrepreneurs.
 
+
 ## Key Users
 
 - Aspiring African entrepreneurs: These are the people who have registered for the African Impact Challenge with the goal of receiving the capital, resources and guidance necessary to launch a start-up which aims to solve critical problems with technology.
@@ -15,7 +16,11 @@
 
 - Administrators: These people have the highest level of privilege on the website. They are responsible for granting permission to teachers and partners to join the website.
 
+
+
 ## Key Use Cases and Scenarios:
+
+
 - Profile creation
 	-    Each category of user can create an account/profile with permissions, views and functionality that is specific to their role.
     
