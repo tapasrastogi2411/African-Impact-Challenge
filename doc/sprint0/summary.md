@@ -1,7 +1,7 @@
 ## Project Objective
 
   
-- Build a platform to help new and aspiring African entrepreneurs in the Preincubation and Incubation stages of the African Impact Challenge. In particular, a community that facilitates seamless interaction between the different users of the system should be created. Furthermore, there should be an e-learning component enabling teachers to interact with and deliver content to the entrepreneurs.
+- Build a platform to help new and aspiring African entrepreneurs in the Preincubation and Incubation stages of the African Impact Challenge. In particular, a community that facilitates seamless interaction between different users of the system should be created. Furthermore, there should be an e-learning component enabling teachers to interact with and deliver content to the entrepreneurs.
 
 
 ## Key Users
