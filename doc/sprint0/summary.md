@@ -7,7 +7,7 @@
 
 - Aspiring African entrepreneurs: These are the people who have registered for the African Impact Challenge with the goal of receiving the capital, resources and guidance necessary to launch a start-up which aims to solve critical problems with technology.
 
-  - Founder entrepreneurs = Entrepreneurs that have founded/co-founded a company. These entrepreneurs have higher company-based privileges than other entrepreneurs in the same company.
+  - Founder entrepreneurs: Entrepreneurs that have founded/co-founded a company. These entrepreneurs have higher company-based privileges than other entrepreneurs in the same company.
 
 - Teachers: The people who will be providing training material/content, workshops and mentorship to the aspiring entrepreneurs.
 
