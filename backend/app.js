@@ -1,7 +1,12 @@
 var express = require('express');
 var app = express();
+var profile = require('./Routes/ProfileRoutes');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// middleware to handle profile-based routes
+app.use('/api/profile/', profile);
+
 
 //Enabling sessions
 var session = require('express-session');
