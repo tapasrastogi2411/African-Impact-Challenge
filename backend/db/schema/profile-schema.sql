@@ -20,7 +20,7 @@ CREATE TABLE aic_user (
   phone_number INT,
   country VARCHAR(20),
   address TEXT,
-  FOREIGN KEY(user_role) REFERENCES "Role"
+  FOREIGN KEY(user_role) REFERENCES aic_role
 );
 
 
@@ -29,8 +29,8 @@ CREATE TABLE message (
   receiver_id INT NOT NULL,
   time timestamp NOT NULL,
   content TEXT NOT NULL,
-  FOREIGN KEY(sender_id) REFERENCES "User", 
-  FOREIGN KEY(receiver_id) REFERENCES "User"
+  FOREIGN KEY(sender_id) REFERENCES aic_user, 
+  FOREIGN KEY(receiver_id) REFERENCES aic_user
 );
 
 CREATE TABLE company(
@@ -43,8 +43,9 @@ CREATE TABLE employee (
   user_id INT NOT NULL,
   company_id INT NOT NULL,
   title TEXT, 
-  FOREIGN KEY(user_id) REFERENCES "User", 
-  FOREIGN KEY(company_id) REFERENCES "Company"
+  FOREIGN KEY(user_id) REFERENCES aic_user, 
+  FOREIGN KEY(company_id) REFERENCES company
 );
+
 
 
