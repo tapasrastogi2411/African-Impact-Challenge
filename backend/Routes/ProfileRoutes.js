@@ -27,7 +27,15 @@ router.put('/update/', auth, function (req, res) {
 });
 
 router.delete('/delete/', auth, function (req, res) {
-    res.send('delete'); // placeholder
+    // uses JS promises
+    db.query("DELETE FROM profile_schema.aic_user WHERE username = $1::text", ['Entrepreneur_1'])
+		.then(pgRes => {
+            res.status(200).json("Deletion Completed");
+        })
+        .catch(err => {
+            console.log(err.message);
+            res.status(500).json({ error: "Bad Query"});
+        });
 });
 
 

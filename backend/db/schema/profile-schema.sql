@@ -20,6 +20,7 @@ CREATE TABLE aic_user (
   country VARCHAR(20),
   address TEXT,
   FOREIGN KEY(user_role) REFERENCES aic_role
+    on delete cascade
 );
 
 
@@ -28,8 +29,10 @@ CREATE TABLE message (
   receiver TEXT NOT NULL,
   time timestamp NOT NULL,
   content TEXT NOT NULL,
-  FOREIGN KEY(sender) REFERENCES aic_user, 
+  FOREIGN KEY(sender) REFERENCES aic_user
+    on delete cascade, 
   FOREIGN KEY(receiver) REFERENCES aic_user
+    on delete cascade
 );
 
 CREATE TABLE company(
@@ -42,8 +45,10 @@ CREATE TABLE employee (
   username TEXT NOT NULL,
   company_id INT NOT NULL,
   title TEXT, 
-  FOREIGN KEY(username) REFERENCES aic_user, 
+  FOREIGN KEY(username) REFERENCES aic_user
+    on delete cascade, 
   FOREIGN KEY(company_id) REFERENCES company
+    on delete cascade
 );
 
 
