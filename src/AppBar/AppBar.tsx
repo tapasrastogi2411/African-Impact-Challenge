@@ -2,11 +2,9 @@ import React from 'react';
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import Badge from "@material-ui/core/Badge";
-import InputIcon from "@material-ui/icons/Input";
 import Logo from './LOGO.png'
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -30,13 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         title: {
-            color:"black",
+            color: "black",
             fontWeight: 600,
             [theme.breakpoints.up("sm")]: {
-              display: "block",
+                display: "block",
             },
-          },
-         
+        },
+
     })
 );
 function Appbar(props: any) {
@@ -45,7 +43,9 @@ function Appbar(props: any) {
     return (
         <AppBar position="fixed" className={classes.mainAppBar}>
             <Toolbar className={classes.root}>
-                <img src={Logo} className={classes.logo} />
+                <Link to='/'>
+                    <img src={Logo} className={classes.logo} />
+                </Link>
                 <Typography
                     className={classes.title}
                     variant="h6"
@@ -53,7 +53,6 @@ function Appbar(props: any) {
                 >
                     THE AFRICAN IMPACT CHALLENGE
         </Typography>
-
             </Toolbar>
         </AppBar>
     );

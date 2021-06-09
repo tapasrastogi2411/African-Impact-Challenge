@@ -10,23 +10,27 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import pic from './sample.jpg'
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-          
+
         },
         signUpBtn: {
             height: 50,
             width: 100,
             background: "#fcb040",
             color: "white",
-            marginRight: 40
+            marginRight: 40,
+            boxShadow: "0 3px 5px 0 rgb(0 0 0 / 13%)",
+            '&:hover': { background: "#e69113" },
         },
         logInBtn: {
             height: 50,
             width: 100,
             background: "#ffffff",
-            color: "black"
+            color: "black",
+            boxShadow: "0 3px 5px 0 rgb(0 0 0 / 13%)"
         },
         content: {
             width: 600,
@@ -45,7 +49,14 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
             marginBottom: 40,
             paddingRight: 85,
         },
+        pic: {
+            boxShadow: "0px 8px 2rem -6px #000000",
+            position: "absolute",
+            right: "200px",
+            width: "700px",
+            top: "300px",
 
+        }
     })
 );
 function MainPage(props: any) {
@@ -77,7 +88,7 @@ function MainPage(props: any) {
                         </Button>
                 </Grid>
             </Grid>
-            
+            <img src={pic} className={classes.pic}></img>
         </div >
 
     );
