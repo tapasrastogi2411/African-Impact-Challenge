@@ -93,9 +93,9 @@ As a founder/co-founder, I want to upload resources/files pertaining to my compa
 -   Only founders/co-founders of the company can perform this privileged action.
     
 
-As a partner, I want to see the entrepreneurs in the company and the resources/files posted.
+As a partner, I want to see the entrepreneurs in the company and the resources/files posted so that I can decide whether to partner with them.
 
--   Company profile has tabs to divide the information, such as members, mission statement, files, and etc.
+-   Company profile has tabs to divide the information, such as members, mission statement, files, etc.
 
 
 
@@ -224,8 +224,8 @@ As a partner, I want to set up a meeting with the entrepreneurs of a company eit
 -   Once the request is accepted, the meeting information is displayed on the entrepreneurs’ dashboard.
 
 
-As a user, I want to send messages and contact other users in the community, which includes partners, teachers, and other entrepreneurs.
+As a user, I want to send messages and contact other users in the community, which includes partners, teachers, and other entrepreneurs so that I can interact with them based on my needs.
 
 -   Users can search for the users they wish to contact.
     
--   Ability to directly message a user by visiting their profiles.
+-   Ability to directly message a user by visiting their profile.
