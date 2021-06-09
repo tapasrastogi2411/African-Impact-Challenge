@@ -51,5 +51,8 @@ CREATE TABLE employee (
     on delete cascade
 );
 
-
-
+-- Insert record for roles
+INSERT INTO aic_role VALUES 
+(1, 'Teacher'), 
+(2, 'Entrepreneur'), 
+(3, 'Partner');

@@ -1,8 +1,4 @@
 SET SEARCH_PATH to profile_schema,public;
-INSERT INTO aic_role VALUES 
-(1, 'Teacher'), 
-(2, 'Entrepreneur'), 
-(3, 'Partner');
 
 INSERT INTO aic_user VALUES 
 ('Teacher_1', 'teacher', 1, 'Ms', 'Diana', 'Butler', 'diana@aci.com', null, 'Canada', null), 
@@ -21,7 +17,5 @@ INSERT INTO company VALUES
 
 INSERT INTO employee VALUES 
 ('Entrepreneur_1', 1, 'Founder');
-
-
 
 
