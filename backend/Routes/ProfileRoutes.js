@@ -4,8 +4,9 @@ var auth = require('../Middleware/auth');
 const db = require('../db');
 
 
-router.post('/register/', function (req, res, next) {
-    var query = "INSERT INTO profile_schema.\"Company\"(company_id,name,address) VALUES (35,'J','K')";
+router.post('/register/:username', function (req, res, next) {
+    var query = "INSERT INTO profile_schema.\"Company\"(company_id,name,address) VALUES (60,'B','F')";
+    // uses JS promises
     db.query(query, [])
 		.then(pgRes => {
             res.status(200).json('');

@@ -3,12 +3,12 @@ DROP SCHEMA IF EXISTS profile_schema CASCADE;
 CREATE SCHEMA profile_schema;
 SET SEARCH_PATH to profile_schema,public;
 
-CREATE TABLE "Role" (
+CREATE TABLE aic_role (
   role_id INT PRIMARY KEY,
   role_name VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE "User" (
+CREATE TABLE aic_user (
   user_id INT PRIMARY KEY,
   password TEXT NOT NULL,
   username VARCHAR(20) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE "User" (
 );
 
 
-CREATE TABLE "Message" (
+CREATE TABLE message (
   sender_id INT NOT NULL,
   receiver_id INT NOT NULL,
   time timestamp NOT NULL,
@@ -33,13 +33,13 @@ CREATE TABLE "Message" (
   FOREIGN KEY(receiver_id) REFERENCES "User"
 );
 
-CREATE TABLE "Company"(
+CREATE TABLE company(
   company_id INT PRIMARY KEY,
   name TEXT NOT NULL,
   address TEXT
 );
 
-CREATE TABLE "Employee" (
+CREATE TABLE employee (
   user_id INT NOT NULL,
   company_id INT NOT NULL,
   title TEXT, 
