@@ -9,15 +9,14 @@ CREATE TABLE aic_role (
 );
 
 CREATE TABLE aic_user (
-  user_id INT PRIMARY KEY,
+  username TEXT PRIMARY KEY,
   password TEXT NOT NULL,
-  username VARCHAR(20) NOT NULL,
   user_role INT NOT NULL,
   honorifics VARCHAR(5),
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
-  email TEXT,
-  phone_number INT,
+  email TEXT,  
+  phone_number TEXT,
   country VARCHAR(20),
   address TEXT,
   FOREIGN KEY(user_role) REFERENCES aic_role
@@ -25,12 +24,12 @@ CREATE TABLE aic_user (
 
 
 CREATE TABLE message (
-  sender_id INT NOT NULL,
-  receiver_id INT NOT NULL,
+  sender TEXT NOT NULL,
+  receiver TEXT NOT NULL,
   time timestamp NOT NULL,
   content TEXT NOT NULL,
-  FOREIGN KEY(sender_id) REFERENCES aic_user, 
-  FOREIGN KEY(receiver_id) REFERENCES aic_user
+  FOREIGN KEY(sender) REFERENCES aic_user, 
+  FOREIGN KEY(receiver) REFERENCES aic_user
 );
 
 CREATE TABLE company(
@@ -40,10 +39,10 @@ CREATE TABLE company(
 );
 
 CREATE TABLE employee (
-  user_id INT NOT NULL,
+  username TEXT NOT NULL,
   company_id INT NOT NULL,
   title TEXT, 
-  FOREIGN KEY(user_id) REFERENCES aic_user, 
+  FOREIGN KEY(username) REFERENCES aic_user, 
   FOREIGN KEY(company_id) REFERENCES company
 );
 
