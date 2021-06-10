@@ -19,6 +19,7 @@ router.post('/register/', function (req, res, next) {
         });
 });
 
+
 /* Status response codes:
 400 = BadRequest - No user with the given user name
 401 = Unauthorized - Incorrect password has been provided for the given username
