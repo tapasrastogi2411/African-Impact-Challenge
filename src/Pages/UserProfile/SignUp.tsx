@@ -3,7 +3,11 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -32,7 +36,7 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
     },
     input: {
         background: "white",
-        borderRadius: "20px",
+        //borderRadius: "20px",
         width: 300
     },
     text: {
@@ -46,7 +50,11 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
 
 export default function SignUp(props: any) {
     const classes = useStyles();
+    const [role, setRole] = React.useState('');
 
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setRole(event.target.value as string);
+    };
     return (
         <Container component="main" maxWidth="md">
 
@@ -86,15 +94,23 @@ export default function SignUp(props: any) {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField
+                        <FormControl
                             variant="outlined"
-                            required
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
                             className={classes.input}
-                        />
+                            required>
+                            <InputLabel>Role</InputLabel>
+                            <Select
+                                label="Role"
+                                id="role"
+                                value={role}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
+                                <MenuItem value="Instructor">Instructor</MenuItem>
+                                <MenuItem value="Partner">Partner</MenuItem>
+                            </Select>
+                        </FormControl>
+
                     </Grid>
                     <Grid item>
                         <TextField
@@ -132,10 +148,10 @@ export default function SignUp(props: any) {
                     <Grid item>
                         <TextField
                             variant="outlined"
-                            name="field"
-                            label="Field"
-                            type="text"
-                            id="field"
+                            id="email"
+                            label="Email"
+                            name="email"
+                            autoComplete="email"
                             className={classes.input}
                         />
                     </Grid>
