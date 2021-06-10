@@ -21,9 +21,24 @@ router.get('/login/', auth, function (req, res) {
     res.send('login'); // placeholder
 });
 
-
 router.put('/update/', auth, function (req, res) {
-    res.send('update'); // placeholder
+    // if (!req.session.username) return res.status(400).end("Forbidden");
+    var whitelist = ["first_name", "last_name", "email", "phone_number", "country", "address"];
+    var data = JSON.parse(JSON.stringify(req.body, whitelist));
+    var updateString = Object.keys(data).map(key => `${key} = '${data[key]}'`).join(", ");
+
+    let query = `UPDATE profile_schema.aic_user
+                 SET ${updateString}
+                 WHERE username = '${req.body.username}'`;
+
+        db.query(query, [])
+        .then(pgRes => {
+            res.status(200).json('');
+        })
+        .catch(err => {
+            console.log(err.message);
+            res.status(500).end("Bad Query: Unable to update profile");
+        });
 });
 
 router.delete('/delete/', auth, function (req, res) {
