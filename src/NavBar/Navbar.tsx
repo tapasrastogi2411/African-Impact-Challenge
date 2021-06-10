@@ -36,8 +36,62 @@ const useStyles = makeStyles((theme) => ({
   },
 
   profilebutton: {
-    marginLeft: 0,
+    marginLeft: 25,
     alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  classesbutton: {
+    marginLeft: 20,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  dashboardButton: {
+    marginLeft: 5,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  discussionsButton: {
+    marginLeft: 5,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  calendarButton: {
+    marginLeft: 17,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  assignmentsButton: {
+    marginLeft: 5,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  gradesButton: {
+    marginLeft: 20,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  peopleButton: {
+    marginLeft: 20,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+  messagesButton: {
+    marginLeft: 10,
+    alignItems: "center",
+    textalign: "center",
+    display: "inlineblock",
+  },
+
+  rightIcon: {
+    marginTop: 77,
   },
 }));
 
@@ -67,6 +121,7 @@ export default function PersistentDrawerLeft() {
         onClick={navOpen}
         onMouseEnter={() => hoverOver}
         onMouseLeave={() => hoverOff}
+        className={classes.rightIcon}
       >
         {hover && <div>hovertext</div>}
         <ChevronRightIcon />
@@ -77,25 +132,40 @@ export default function PersistentDrawerLeft() {
           <ChevronLeftIcon className={classes.leftArrow} />
         </IconButton>
         <List>
-          <ListItem
-            button
-            className={classes.profilebutton}
-            alignItems="center"
-          >
-            Profile
+          <ListItem button>
+            <Typography className={classes.profilebutton}>Profile</Typography>
           </ListItem>
-          <ListItem button alignItems="center">
-            Dashboard
+          <ListItem button>
+            <Typography className={classes.dashboardButton}>
+              Dashboard
+            </Typography>
           </ListItem>
-          <ListItem button alignItems="center">
-            Classes
+          <ListItem button>
+            <Typography className={classes.classesbutton}>Classes</Typography>
           </ListItem>
-          <ListItem button>Discussions</ListItem>
-          <ListItem button>Calendar</ListItem>
-          <ListItem button>Assignments</ListItem>
-          <ListItem button>Grades</ListItem>
-          <ListItem button>People</ListItem>
-          <ListItem button>Messages</ListItem>
+          <ListItem button>
+            <Typography className={classes.discussionsButton}>
+              Discussions
+            </Typography>
+          </ListItem>
+          <ListItem button>
+            <Typography className={classes.calendarButton}>Calendar</Typography>
+          </ListItem>
+          <ListItem button>
+            <Typography className={classes.assignmentsButton}>
+              {" "}
+              Assignments
+            </Typography>
+          </ListItem>
+          <ListItem button>
+            <Typography className={classes.gradesButton}>Grades</Typography>
+          </ListItem>
+          <ListItem button>
+            <Typography className={classes.peopleButton}>People</Typography>
+          </ListItem>
+          <ListItem button>
+            <Typography className={classes.messagesButton}>Messages</Typography>
+          </ListItem>
         </List>
       </Drawer>
     </div>
