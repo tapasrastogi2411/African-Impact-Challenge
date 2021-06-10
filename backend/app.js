@@ -1,9 +1,11 @@
 var express = require('express');
 var app = express();
 var profile = require('./Routes/ProfileRoutes');
+var cors = require('cors');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors({origin:"http://localhost:3000", credentials:true,   }) );
 // middleware to handle profile-based routes
 app.use('/api/profile/', profile);
 
