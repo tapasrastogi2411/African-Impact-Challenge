@@ -3,7 +3,7 @@ import SignIn from "../UserProfile/LogIn";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Navbar from "../../NavigationBar/Navbar";
+
 import Appbar from "../../AppBar/AppBar";
 import Profilepage from "./Profilepage";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";

@@ -3,7 +3,7 @@ import SignIn from "../UserProfile/LogIn";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Navbar from "../../NavigationBar/Navbar";
+import Navbar from "../../NavBar/Navbar";
 import Appbar from "../../AppBar/AppBar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
