@@ -86,7 +86,16 @@ router.delete('/delete/', auth, function (req, res) {
         });
 });
 
+// (Added by Tapas) - For the API Logout Request
+router.get('/logout', auth, function (req, res) { 
 
+    req.session.destroy(function(err){
+        if(err) return res.status(500).end(err);
+        return res.end();
+
+    });
+
+});
 
 
 module.exports = router;
