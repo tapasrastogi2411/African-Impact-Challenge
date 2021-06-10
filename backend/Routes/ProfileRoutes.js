@@ -5,6 +5,7 @@ const db = require('../db');
 
 
 router.post('/register/', function (req, res, next) {
+
     var registerData = req.body;
     var mandatoryFields = ["username", "password", "user_role","first_name", "last_name"];
     var optionalFields = ["honorifics", "email", "phone_number", "country", "address"];
@@ -60,6 +61,7 @@ router.post('/register/', function (req, res, next) {
 		.then(pgRes => { // user successfully added to the db
             //console.log(pgRes);
             return res.status(201).json(''); // 201 Created. Any payload to send to the client?
+
         })
         .catch(err => { // user already exists or some other db error
             switch (err.message){
