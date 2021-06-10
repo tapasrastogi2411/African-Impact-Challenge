@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../Middleware/auth');
 const db = require('../db');
+const session = require('express-session');
+const path = require('path');
 
 
 router.post('/register/:username', function (req, res, next) {
@@ -17,8 +19,36 @@ router.post('/register/:username', function (req, res, next) {
         });
 });
 
-router.get('/login/', auth, function (req, res) {
-    res.send('login'); // placeholder
+// Middleware
+app.use(session({
+    secret: 'secret_key',
+    resave: false,
+    saveUninitialized: false
+}))
+
+router.post('/login/', auth, function (req, res) {
+    // check if user is already logged in
+    if(req.session.loggedIn){
+        res.status(200)
+    }
+    else{
+        // get the password and username from the request object
+        const { username, password } = req.body;
+        // Checking the database to authenticate the user
+        let query = `SELECT * FROM aic_user WHERE username='${username}' AND password='${password}'`
+        db.query(query, (err, result) => {
+            // return a 401 error if the query was unsuccessful
+            if (err) {
+                console.log(err)
+                res.status(401)
+            } else{
+                // create a session and return a 200 response if the query was successful
+                req.session.loggedIn = true
+                req.session.username = username
+                res.status(200)
+            }
+        })
+    }
 });
 
 
