@@ -3,6 +3,9 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import InputIcon from "@material-ui/icons/Input";
+
 import Logo from './LOGO.png'
 import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,7 +37,15 @@ const useStyles = makeStyles((theme: Theme) =>
                 display: "block",
             },
         },
-
+        btn: {
+            position: "absolute",
+            right: 40,
+            color: "black"
+        },
+        btnTxt: {
+            marginLeft: 5,
+            fontWeight: 500
+        }
     })
 );
 function Appbar(props: any) {
@@ -53,6 +64,16 @@ function Appbar(props: any) {
                 >
                     THE AFRICAN IMPACT CHALLENGE
         </Typography>
+                <IconButton
+                    //onClick={ToggleAler}
+                    className={classes.btn}
+                >
+                    <InputIcon />
+                    <Typography variant="button" noWrap className={classes.btnTxt}
+                    >
+                        Sign Out
+            </Typography>
+                </IconButton>
             </Toolbar>
         </AppBar>
     );

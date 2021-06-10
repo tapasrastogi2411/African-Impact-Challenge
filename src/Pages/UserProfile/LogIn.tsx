@@ -5,7 +5,7 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
@@ -35,7 +35,7 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
         background: "white",
         borderRadius: "20px"
     },
-    text:{
+    text: {
         fontWeight: 600,
         fontSize: 36,
     }
@@ -43,6 +43,27 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
 }));
 
 
+const CssTextField = withStyles({
+    root: {
+        '& label.Mui-focused': {
+            color: '#e69113',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#e69113',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                //borderColor: 'black',
+            },
+            '&:hover fieldset': {
+                borderColor: '#fcb040',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#e69113',
+            },
+        },
+    },
+})(TextField);
 
 export default function SignIn(props: any) {
     const classes = useStyles();
@@ -65,7 +86,7 @@ export default function SignIn(props: any) {
                 className={classes.form}
                 noValidate
             >
-                <TextField
+                <CssTextField
                     variant="outlined"
                     margin="normal"
                     required
@@ -76,7 +97,8 @@ export default function SignIn(props: any) {
                     autoComplete="username"
                     className={classes.input}
                 />
-                <TextField
+
+                <CssTextField
                     variant="outlined"
                     margin="normal"
                     required

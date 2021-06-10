@@ -9,7 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
@@ -46,7 +46,27 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
 
 }));
 
-
+const CssTextField = withStyles({
+    root: {
+        '& label.Mui-focused': {
+            color: '#e69113',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#e69113',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                //borderColor: 'black',
+            },
+            '&:hover fieldset': {
+                borderColor: '#fcb040',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#e69113',
+            },
+        },
+    },
+})(TextField);
 
 export default function SignUp(props: any) {
     const classes = useStyles();
@@ -83,7 +103,7 @@ export default function SignUp(props: any) {
                     spacing={3}>
 
                     <Grid item>
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             required
                             name="Full Name"
@@ -113,7 +133,7 @@ export default function SignUp(props: any) {
 
                     </Grid>
                     <Grid item>
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             required
                             id="username"
@@ -124,7 +144,7 @@ export default function SignUp(props: any) {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             required
                             name="password"
@@ -136,7 +156,7 @@ export default function SignUp(props: any) {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             name="phone_number"
                             label="Phone Number"
@@ -146,7 +166,7 @@ export default function SignUp(props: any) {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             id="email"
                             label="Email"
