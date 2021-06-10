@@ -12,7 +12,7 @@ app.use('/api/profile/', profile);
 var session = require('express-session');
 app.use(session({
     secret: 'keyboard cat',
-    resave: false,
+    resave: false, // we do not want to create a session for every request. it might be the same user
     saveUninitialized: true,
     cookie: { secure: true, sameSite: true }
 }));
