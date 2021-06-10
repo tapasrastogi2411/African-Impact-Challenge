@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../Middleware/auth');
 const db = require('../db');
+//const bcrypt = require("bcrypt"); // used for hashing and salting passwords
 
 
 router.post('/register/', function (req, res, next) {
@@ -67,7 +68,8 @@ router.post('/register/', function (req, res, next) {
             switch (err.message){
                 case "duplicate key value violates unique constraint \"aic_user_pkey\"":
                     return res.status(409).json({ err: 'Username already exists'});
-                
+                case "insert or update on table \"aic_user\" violates foreign key constraint \"aic_user_user_role_fkey\"":
+                    return res.status(400).json({ err: 'Invalid role'});
                 default:
                     console.log(err.message);
                     return res.status(500).json({ err: "Query error"});
