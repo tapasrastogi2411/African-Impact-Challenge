@@ -19,14 +19,11 @@ router.post('/register/:username', function (req, res, next) {
         });
 });
 
-// Middleware
-app.use(session({
-    secret: 'secret_key',
-    resave: false,
-    saveUninitialized: false
-}))
-
-router.post('/login/', auth, function (req, res) {
+/* Status response codes:
+400 = BadRequest - No user with the given user name
+401 = Unauthorized - Incorrect password has been provided for the given username
+200 = OK - Correct credentials have been provided */
+router.post('/login/', auth, async function (req, res) {
     // check if user is already logged in
     if(req.session.loggedIn){
         res.status(200)
@@ -35,21 +32,26 @@ router.post('/login/', auth, function (req, res) {
         // get the password and username from the request object
         const { username, password } = req.body;
         // Checking the database to authenticate the user
-        let query = `SELECT * FROM aic_user WHERE username='${username}' AND password='${password}'`
-        db.query(query, (err, result) => {
-            // return a 401 error if the query was unsuccessful
-            if (err) {
-                console.log(err)
+        let query = `SELECT * FROM aic_user WHERE username='${username}'`
+        const result = await db.query(query)
+        // if the query returned no rows (i.e no user with the given username) return a 400
+        if (result[0].length === 0){
+            res.status(400)
+        } else {
+            // check if the passwords match (the passwords in the database have been hashed)
+            const isMatch = await bcrypt.compare(password, result[0][0].password)
+            // return a 401 if passwords dont match
+            if(!isMatch){
                 res.status(401)
-            } else{
-                // create a session and return a 200 response if the query was successful
+            } else {
+                // create a session and return a 200 response
                 req.session.loggedIn = true
                 req.session.username = username
                 res.status(200)
             }
-        })
+        }
     }
-});
+})
 
 
 router.put('/update/', auth, function (req, res) {
