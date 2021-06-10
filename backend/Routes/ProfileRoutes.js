@@ -2,9 +2,15 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../Middleware/auth');
 const db = require('../db');
-//const bcrypt = require("bcrypt"); // used for hashing and salting passwords
+const bcrypt = require("bcrypt"); // used for hashing and salting passwords
 
-
+/*
+* HTTP Status codes used:
+* 201 -> Created, 
+* 400 -> Bad Request, 409 -> Resource Conflict, 
+* 500 -> Server Error
+*
+*/
 router.post('/register/', function (req, res, next) {
 
     var registerData = req.body;
@@ -42,10 +48,6 @@ router.post('/register/', function (req, res, next) {
         }
     }
 
-    //console.log(invalidMandatoryFields);
-    //console.log(invalidOptionalFields);
-    //console.log(userData);
-
     if (invalidMandatoryFields.length > 0 ||  invalidOptionalFields.length > 0) {
         return res.status(400).json({err:"Invalid mandatory or optional fields", mandatory: invalidMandatoryFields,
         optional: invalidOptionalFields, data: userData});
@@ -56,26 +58,32 @@ router.post('/register/', function (req, res, next) {
     var userSchema = "(username,password,user_role,honorifics,first_name,last_name,email,phone_number,country,address)";
     var preparedValues = "($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
     var query = "INSERT INTO profile_schema.aic_user" + userSchema + " VALUES" + preparedValues;
-    
-    // hash and salt passwords
-    db.query(query, userData)
-		.then(pgRes => { // user successfully added to the db
-            //console.log(pgRes);
-            return res.status(201).json(''); // 201 Created. Any payload to send to the client?
 
-        })
-        .catch(err => { // user already exists or some other db error
-            switch (err.message){
-                case "duplicate key value violates unique constraint \"aic_user_pkey\"":
-                    return res.status(409).json({ err: 'Username already exists'});
-                case "insert or update on table \"aic_user\" violates foreign key constraint \"aic_user_user_role_fkey\"":
-                    return res.status(400).json({ err: 'Invalid role'});
-                default:
-                    console.log(err.message);
-                    return res.status(500).json({ err: "Query error"});
-                    
-            }
-        });
+    bcrypt
+    .genSalt(5)
+    .then(salt => {
+        return bcrypt.hash(registerData['password'], salt);
+    })
+    .then(hash => {
+        // Store hash in DB
+        userData[1] = hash; // 2nd value in userData is password
+        return db.query(query, userData);
+    })
+    .then(pgRes => { // user successfully added to the db
+        //console.log(pgRes);
+        return res.status(201).json(''); // 201 Created. Any payload to send to the client?
+    })
+    .catch(err => { // user already exists or some other db error
+        switch (err.message){
+            case "duplicate key value violates unique constraint \"aic_user_pkey\"":
+                return res.status(409).json({ err: 'Username already exists'}); 
+            case "insert or update on table \"aic_user\" violates foreign key constraint \"aic_user_user_role_fkey\"":
+                return res.status(400).json({ err: 'Invalid role'}); 
+            default:
+                console.log(err.message);
+                return res.status(500).json({ err: "Query error"});  
+        }
+    });
 });
 
 router.get('/login/', auth, function (req, res) {
