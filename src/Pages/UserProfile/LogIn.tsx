@@ -10,7 +10,6 @@ import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 
-const ThemeColor = "#a0530d";
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     paper: {
@@ -67,7 +66,7 @@ const CssTextField = withStyles({
 
 export const SignInAjax = async (
     data: any,
-    setRedirect: any,
+    onSuccess: any,
 
     setError: any,
 ) => {
@@ -84,7 +83,7 @@ export const SignInAjax = async (
         if (response.status > 300 || response.status < 200) {
             throw responseData;
         }
-        setRedirect(true);
+        onSuccess();
     } catch (e) {
         console.log(e);
         setError(
@@ -95,45 +94,18 @@ export const SignInAjax = async (
 
 export default function SignIn(props: any) {
     const history = useHistory();
-
+    const onSuccess = () => {
+        history.push('/profile')
+    }
     const classes = useStyles();
-    const [formState, setFormState] = useState({ username: "", password: "" });
     const { register, handleSubmit } = useForm();
-    const [redirect, setRedirect] = React.useState(false);
-
     const [error, setError] = React.useState("");
 
-
     const onSubmit = ({ username, password }: any) => {
-
-        SignInAjax({ username, password }, setRedirect, setError);
-        //history.push("/profile")
-
+        SignInAjax({ username, password }, onSuccess, setError);
     };
 
-    const signinHandler = (event: any) => {
-        event.preventDefault();
-        fetch('https://localhost:8080/api/profile/login/', {
-            method: "POST",
-            headers: {
-                "accepts": "application/json",
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formState),
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(err => console.log("err"));
 
-    }
-
-    function updateUsername(value: any) {
-        setFormState(prevState => { return { ...prevState, username: value }; })
-    }
-
-    function updatePassword(value: any) {
-        setFormState(prevState => { return { ...prevState, password: value }; })
-    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -166,7 +138,6 @@ export default function SignIn(props: any) {
                     className={classes.input}
                     inputRef={register}
 
-                    onChange={e => updateUsername(e.target.value)}
                 />
 
                 <CssTextField
@@ -181,8 +152,6 @@ export default function SignIn(props: any) {
                     autoComplete="current-password"
                     className={classes.input}
                     inputRef={register}
-
-                    onChange={e => updatePassword(e.target.value)}
                 />
                 <Button
                     type="submit"

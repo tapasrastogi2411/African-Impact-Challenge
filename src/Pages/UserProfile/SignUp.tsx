@@ -74,7 +74,8 @@ const defaultError = {
     password: "",
 };
 
-const SignUpAjax = async (data: any) => {
+const SignUpAjax = async (data: any, onSuccess: any
+) => {
     try {
         var formdata = new FormData();
         formdata.append("username", data.username);
@@ -92,6 +93,8 @@ const SignUpAjax = async (data: any) => {
         if (response.status > 300 || response.status < 200) {
             throw responseData;
         }
+        onSuccess();
+
     } catch (e) {
         console.dir(e);
     }
@@ -104,6 +107,9 @@ export default function SignUp(props: any) {
     // const [role, setRole] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
+    const onSuccess = () => {
+        history.push('/login')
+    }
     // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     //     setRole(event.target.value as string);
     // };
@@ -133,15 +139,10 @@ export default function SignUp(props: any) {
         setError(newError);
         if (!haveError) {
             console.log({ username, email, full_name, password, role, phone_number });
-            try {
-                SignUpAjax(
-                    { username, email, full_name, password, role, phone_number },
-                );
-                history.push("/login")
+            SignUpAjax(
+                { username, email, full_name, password, role, phone_number }, onSuccess
+            );
 
-            } catch (error) {
-                console.log(error)
-            }
 
         }
     };
