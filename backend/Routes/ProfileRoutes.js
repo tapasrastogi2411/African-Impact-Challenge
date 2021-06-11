@@ -103,7 +103,7 @@ router.post('/login/', auth, async function (req, res) {
         // get the password and username from the request object
         const { username, password } = req.body;
         // Checking the database to authenticate the user
-        let query = `SELECT * FROM aic_user WHERE username='${username}'`
+        let query = `SELECT * FROM profile_schema.aic_user WHERE username='${username}'`
         const result = await db.query(query)
         // if the query returned no rows (i.e no user with the given username) return a 400
         if (result.rows.length === 0){
