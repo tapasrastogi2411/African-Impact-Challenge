@@ -2,7 +2,8 @@ import React from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import MainPage from "./MainPage/MainPage";
 import SignIn from "./UserProfile/LogIn";
-import SignUp from './UserProfile/SignUp'
+import SignUp from './UserProfile/SignUp';
+import ProfilePage from './ProfilePage/Profilepage';
 import {
     makeStyles,
     createStyles,
@@ -37,8 +38,9 @@ export default function Pages(props: any) {
             <Switch>
                 <Route exact path="/" component={MainPage} />
                 <Route exact path="/login" component={SignIn} />
-                <Route exact path="/signup" component={SignUp}>
-                </Route>
+                <Route exact path="/signup" component={SignUp}/>
+                <Route exact path="/profile" component={ProfilePage}/>
+
             </Switch>
 
         </div>

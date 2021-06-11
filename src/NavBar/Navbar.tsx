@@ -17,82 +17,36 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import { Grid } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from "react-router-dom";
 import Profilepage from "../Pages/ProfilePage/Profilepage";
-const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  drawerexpand: {
-    width: drawerWidth,
+  root: {
+    marginTop: 88,
+    background: "black"
+  },
+  list: {
+    width: 200,
     background: "#FFFFFF",
+    paddingTop: 120
   },
-  leftArrow: {
-    marginLeft: 70,
+  drawerContainer: {
+    overflow: "auto"
   },
+  btn: {
+    height: 50,
+    paddingLeft: 40,
+  },
+  txt: {
+    fontSize: 18
 
-  profilebutton: {
-    marginLeft: 25,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  classesbutton: {
-    marginLeft: 20,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  dashboardButton: {
-    marginLeft: 5,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  discussionsButton: {
-    marginLeft: 5,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  calendarButton: {
-    marginLeft: 17,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  assignmentsButton: {
-    marginLeft: 5,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  gradesButton: {
-    marginLeft: 20,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  peopleButton: {
-    marginLeft: 20,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
-  messagesButton: {
-    marginLeft: 10,
-    alignItems: "center",
-    textalign: "center",
-    display: "inlineblock",
-  },
+  }
 
-  rightIcon: {
-    marginTop: 77,
-  },
 }));
 
 export default function PersistentDrawerLeft() {
@@ -116,8 +70,8 @@ export default function PersistentDrawerLeft() {
     setHover(false);
   };
   return (
-    <div>
-      <IconButton
+    <Container >
+      {/* <IconButton
         onClick={navOpen}
         onMouseEnter={() => hoverOver}
         onMouseLeave={() => hoverOff}
@@ -125,49 +79,43 @@ export default function PersistentDrawerLeft() {
       >
         {hover && <div>hovertext</div>}
         <ChevronRightIcon />
-      </IconButton>
+      </IconButton> */}
 
-      <Drawer className={classes.drawerexpand} anchor="left" open={state}>
-        <IconButton onClick={navClose}>
+      <Drawer open variant="permanent">
+        {/* <IconButton onClick={navClose}>
           <ChevronLeftIcon className={classes.leftArrow} />
-        </IconButton>
-        <List>
-          <ListItem button>
-            <Typography className={classes.profilebutton}>Profile</Typography>
+        </IconButton> */}
+
+        <List className={classes.list}>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Profile</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.dashboardButton}>
-              Dashboard
-            </Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Dashboard</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.classesbutton}>Classes</Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Classes</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.discussionsButton}>
-              Discussions
-            </Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Discussions</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.calendarButton}>Calendar</Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Calendar</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.assignmentsButton}>
-              {" "}
-              Assignments
-            </Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Assignments</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.gradesButton}>Grades</Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Grades</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.peopleButton}>People</Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>People</Typography>
           </ListItem>
-          <ListItem button>
-            <Typography className={classes.messagesButton}>Messages</Typography>
+          <ListItem button className={classes.btn}>
+            <Typography className={classes.txt}>Messages</Typography>
           </ListItem>
         </List>
       </Drawer>
-    </div>
+    </Container>
   );
 }
