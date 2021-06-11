@@ -15,6 +15,8 @@ import List from "@material-ui/core/List";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import profilepic from "./profilepic.jpeg";
+import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,14 +53,14 @@ const useStyles = makeStyles((theme) => ({
         width: 960,
     },
     btn: {
-        margin: theme.spacing(3, 0, 2),
         backgroundColor: "#fcb040",
         color: "#ffffff",
         width: 180,
         '&:hover': { background: "#e69113" },
         marginLeft: 10,
-        borderRadius: 20,
-
+        marginBottom: 10,
+        marginTop: 10,
+        borderRadius: 20
     },
     relatedPic: {
         width: 100,
@@ -103,8 +105,16 @@ function UpdateProfile() {
                 <Divider className={classes.divider} />
                 <Grid xs={2} item alignItems="center" >
                     <img src={profilepic} className={classes.profilePic} />
-                    <Button className={classes.btn}>Save</Button>
-                    <Button className={classes.btn}>Delete</Button>
+                    <Button
+                        component={Link}
+                        to="/profile"
+                        startIcon={<SaveIcon />}
+                        className={classes.btn}>Save
+                    </Button>
+                    <Button
+                        startIcon={<DeleteIcon />}
+                        className={classes.btn}>Delete
+                    </Button>
 
                 </Grid>
                 <Grid

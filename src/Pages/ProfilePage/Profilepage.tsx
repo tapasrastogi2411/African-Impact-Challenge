@@ -4,17 +4,13 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
-import Appbar from "../../AppBar/AppBar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Avatar, Divider, Toolbar } from "@material-ui/core";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import List from "@material-ui/core/List";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+
 import profilepic from "./profilepic.jpeg";
+import ChatIcon from '@material-ui/icons/Chat';
+import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,14 +48,14 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "80%",
   },
   btn: {
-    margin: theme.spacing(3, 0, 2),
     backgroundColor: "#fcb040",
     color: "#ffffff",
     width: 180,
     '&:hover': { background: "#e69113" },
     marginLeft: 10,
     borderRadius: 20,
-
+    marginBottom: 10,
+    marginTop: 10,
   },
   relatedPic: {
     width: 100,
@@ -81,10 +77,13 @@ function Profilepage() {
         <Grid item xs={12}>
           <Typography variant="h4">Username</Typography>
         </Grid>
+
+
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <img src={profilepic} className={classes.profilePic} />
-          <Button className={classes.btn}>Message</Button>
+          <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
+          <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
 
         </Grid>
         <Grid
