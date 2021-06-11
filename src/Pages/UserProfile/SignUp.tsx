@@ -68,7 +68,8 @@ const CssTextField = withStyles({
 const defaultError = {
     username: "",
     email: "",
-    full_name: "",
+    first_name: "",
+    last_name: "",
     phone_number: "",
     role: "",
     password: "",
@@ -81,7 +82,8 @@ const SignUpAjax = async (data: any, onSuccess: any
         formdata.append("username", data.username);
         formdata.append("password", data.password);
         formdata.append("phone_number", data.phone_number);
-        formdata.append("full_name", data.full_name);
+        formdata.append("first_name", data.first_name);
+        formdata.append("last_name", data.first_name);
         formdata.append("role", data.role);
         formdata.append("email", data.email);
         const response = await fetch('https://localhost:8080/api/profile/signup/', {
@@ -113,7 +115,7 @@ export default function SignUp(props: any) {
     // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     //     setRole(event.target.value as string);
     // };
-    const onSubmit = ({ username, email, full_name, password, role, phone_number }: any) => {
+    const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number }: any) => {
         const newError = { ...defaultError };
         if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
             newError.username =
@@ -124,8 +126,13 @@ export default function SignUp(props: any) {
         if (email && !email.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
             newError.email = "Please enter a valid email";
         }
-        if (full_name && full_name.match(/[^a-zA-Z\s]/i)) {
-            newError.full_name =
+        if (first_name && first_name.match(/[^a-zA-Z\s]/i)) {
+            newError.first_name =
+                "Name may contain only letters";
+        }
+
+        if (last_name && last_name.match(/[^a-zA-Z\s]/i)) {
+            newError.last_name =
                 "Name may contain only letters";
         }
         if (!password || password.length < 8) {
@@ -138,9 +145,9 @@ export default function SignUp(props: any) {
         );
         setError(newError);
         if (!haveError) {
-            console.log({ username, email, full_name, password, role, phone_number });
+            console.log({ username, email, first_name, password, role, phone_number });
             SignUpAjax(
-                { username, email, full_name, password, role, phone_number }, onSuccess
+                { username, email, first_name, password, role, phone_number }, onSuccess
             );
 
 
@@ -177,19 +184,36 @@ export default function SignUp(props: any) {
 
                     <Grid item>
                         <CssTextField
-                            error={!!error.full_name}
-                            helperText={error.full_name}
+                            error={!!error.first_name}
+                            helperText={error.first_name}
                             variant="outlined"
                             required
-                            name="full_name"
-                            label="Full Name"
+                            name="first_name"
+                            label="First Name"
                             type="text"
-                            id="full_name"
+                            id="first_name"
                             className={classes.input}
                             inputRef={register({ required: true })}
 
                         />
                     </Grid>
+
+                    <Grid item>
+                        <CssTextField
+                            error={!!error.last_name}
+                            helperText={error.last_name}
+                            variant="outlined"
+                            required
+                            name="last_name"
+                            label="Last Name"
+                            type="text"
+                            id="last_name"
+                            className={classes.input}
+                            inputRef={register({ required: true })}
+
+                        />
+                    </Grid>
+
                     <Grid item>
                         <FormControl
                             variant="outlined"
