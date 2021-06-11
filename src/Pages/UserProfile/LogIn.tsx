@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
@@ -67,6 +67,31 @@ const CssTextField = withStyles({
 
 export default function SignIn(props: any) {
     const classes = useStyles();
+    const [formState, setFormState] = useState({username: "", password: ""});
+
+    const signinHandler = (event: any) => {
+        event.preventDefault();
+        fetch('https://localhost:8080/api/profile/login/', {
+            method: "POST",
+            headers:{
+                "accepts":"application/json",
+                'Content-Type': 'application/json'
+            },        
+            body: JSON.stringify(formState),
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.log("err"));
+        
+    }
+
+    function updateUsername(value: any) {
+        setFormState(prevState => { return {...prevState, username: value}; })
+    }
+
+    function updatePassword(value: any) {
+        setFormState(prevState => { return {...prevState, password: value}; })
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -83,6 +108,7 @@ export default function SignIn(props: any) {
                 {"Don't have an account? Sign Up"}
             </Link>
             <form
+                onSubmit = {signinHandler}
                 className={classes.form}
                 noValidate
             >
@@ -96,6 +122,7 @@ export default function SignIn(props: any) {
                     name="username"
                     autoComplete="username"
                     className={classes.input}
+                    onChange={e => updateUsername(e.target.value)}
                 />
 
                 <CssTextField
@@ -109,6 +136,7 @@ export default function SignIn(props: any) {
                     id="password"
                     autoComplete="current-password"
                     className={classes.input}
+                    onChange={e => updatePassword(e.target.value)}
                 />
                 <Button
                     type="submit"
