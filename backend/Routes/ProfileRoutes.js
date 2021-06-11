@@ -95,33 +95,33 @@ router.post('/register/', function (req, res, next) {
 401 = Unauthorized - Incorrect password has been provided for the given username
 200 = OK - Correct credentials have been provided */
 router.post('/login/', auth, async function (req, res) {
-    // check if user is already logged in
-    if(req.session.loggedIn){
-        res.status(200)
-    }
-    else{
+    // // check if user is already logged in
+    // if(req.session.loggedIn){
+    //     res.status(200)
+    // }
+    // else{
         // get the password and username from the request object
         const { username, password } = req.body;
         // Checking the database to authenticate the user
         let query = `SELECT * FROM aic_user WHERE username='${username}'`
         const result = await db.query(query)
         // if the query returned no rows (i.e no user with the given username) return a 400
-        if (result[0].length === 0){
-            res.status(400)
+        if (result.rows.length === 0){
+            return res.status(400).end('Invalid username')
         } else {
             // check if the passwords match (the passwords in the database have been hashed)
-            const isMatch = await bcrypt.compare(password, result[0][0].password)
+            const isMatch = await bcrypt.compare(password, result.rows[0].password)
             // return a 401 if passwords dont match
             if(!isMatch){
-                res.status(401)
+                return res.status(401).end('Invalid password')
             } else {
                 // create a session and return a 200 response
                 req.session.loggedIn = true
                 req.session.username = username
-                res.status(200)
+                return res.status(200)
             }
         }
-    }
+    // }
 })
 
 router.put('/update/', auth, function (req, res) {
