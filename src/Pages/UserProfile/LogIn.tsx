@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
-import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
+import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 
 const ThemeColor = "#a0530d";
 
@@ -65,74 +65,32 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
-export const SignInAjax = async (
-    data: any,
-    setRedirect: any,
-
-    setError: any,
-) => {
-    try {
-        var formdata = new FormData();
-        formdata.append("username", data.username);
-        formdata.append("password", data.password);
-        const response = await fetch('https://localhost:8080/api/profile/login/', {
-            method: "post",
-            body: formdata,
-            credentials: "include",
-        });
-        const responseData = await response.json();
-        if (response.status > 300 || response.status < 200) {
-            throw responseData;
-        }
-        setRedirect(true);
-    } catch (e) {
-        console.log(e);
-        setError(
-            "Password does not match user name"
-        );
-    }
-};
-
 export default function SignIn(props: any) {
-    const history = useHistory();
-
     const classes = useStyles();
-    const [formState, setFormState] = useState({ username: "", password: "" });
-    const { register, handleSubmit } = useForm();
-    const [redirect, setRedirect] = React.useState(false);
-
-    const [error, setError] = React.useState("");
-
-
-    const onSubmit = ({ username, password }: any) => {
-
-        SignInAjax({ username, password }, setRedirect, setError);
-        //history.push("/profile")
-
-    };
+    const [formState, setFormState] = useState({username: "", password: ""});
 
     const signinHandler = (event: any) => {
         event.preventDefault();
         fetch('https://localhost:8080/api/profile/login/', {
             method: "POST",
-            headers: {
-                "accepts": "application/json",
+            headers:{
+                "accepts":"application/json",
                 'Content-Type': 'application/json'
-            },
+            },        
             body: JSON.stringify(formState),
         })
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(err => console.log("err"));
-
+        
     }
 
     function updateUsername(value: any) {
-        setFormState(prevState => { return { ...prevState, username: value }; })
+        setFormState(prevState => { return {...prevState, username: value}; })
     }
 
     function updatePassword(value: any) {
-        setFormState(prevState => { return { ...prevState, password: value }; })
+        setFormState(prevState => { return {...prevState, password: value}; })
     }
 
     return (
@@ -150,7 +108,7 @@ export default function SignIn(props: any) {
                 {"Don't have an account? Sign Up"}
             </Link>
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit = {signinHandler}
                 className={classes.form}
                 noValidate
             >
@@ -164,8 +122,6 @@ export default function SignIn(props: any) {
                     name="username"
                     autoComplete="username"
                     className={classes.input}
-                    inputRef={register}
-
                     onChange={e => updateUsername(e.target.value)}
                 />
 
@@ -180,8 +136,6 @@ export default function SignIn(props: any) {
                     id="password"
                     autoComplete="current-password"
                     className={classes.input}
-                    inputRef={register}
-
                     onChange={e => updatePassword(e.target.value)}
                 />
                 <Button
@@ -198,8 +152,6 @@ export default function SignIn(props: any) {
                     href="#"
                     variant="body2"
                     color="textSecondary"
-                    onClick={(e: any) => e.preventDefault()}
-
                 >
                     Forgot password?
                     </Link>
