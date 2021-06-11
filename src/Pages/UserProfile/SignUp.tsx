@@ -11,7 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 
 const ThemeColor = "#a0530d";
@@ -86,7 +86,7 @@ const SignUpAjax = async (data: any, dispatchSignUp: any) => {
         formdata.append("full_name", data.full_name);
         formdata.append("role", data.role);
         formdata.append("email", data.email);
-        const response = await fetch(`${process.env.REACT_APP_HOSTAPI}/signup`, {
+        const response = await fetch('https://localhost:8080/api/profile/signup/', {
             method: "post",
             body: formdata,
             credentials: "include",
@@ -102,10 +102,11 @@ const SignUpAjax = async (data: any, dispatchSignUp: any) => {
 };
 
 export default function SignUp(props: any) {
+
     const classes = useStyles();
     const [role, setRole] = React.useState('');
     const { changePage, dispatchSignUp } = props;
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setRole(event.target.value as string);
@@ -121,15 +122,15 @@ export default function SignUp(props: any) {
         if (email && !email.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
             newError.email = "Please enter a valid email";
         }
-        if (full_name && full_name.match(/[^a-z]/i)) {
+        if (full_name && full_name.match(/[^a-zA-Z\s]/i)) {
             newError.full_name =
-                "Display name may contain only letters";
+                "Name may contain only letters";
         } else if (
             full_name &&
             (full_name.length < 6 || full_name.length > 28)
         ) {
             newError.full_name =
-                "Display name must be between 6 and 28 characters long";
+                "Name must be between 6 and 28 characters long";
         }
         if (!password || password.length < 8) {
             newError.password = password
@@ -179,14 +180,17 @@ export default function SignUp(props: any) {
 
                     <Grid item>
                         <CssTextField
+                            error={!!error.full_name}
+                            helperText={error.full_name}
                             variant="outlined"
                             required
-                            name="Full Name"
+                            name="full_name"
                             label="Full Name"
                             type="text"
                             id="full_name"
                             className={classes.input}
                             inputRef={register({ required: true })}
+
                         />
                     </Grid>
                     <Grid item>
@@ -194,19 +198,18 @@ export default function SignUp(props: any) {
                             variant="outlined"
                             className={classes.input}
                             required>
-                            <InputLabel>Role</InputLabel>
-                            <Select
-                                label="Role"
-                                id="role"
-                                value={role}
-                                onChange={handleChange}
-                                inputRef={register({ required: true })}
-
-                            >
-                                <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
-                                <MenuItem value="Instructor">Instructor</MenuItem>
-                                <MenuItem value="Partner">Partner</MenuItem>
-                            </Select>
+                            <Controller
+                                as={
+                                    <CssTextField select required variant="outlined" label="Role">
+                                        <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
+                                        <MenuItem value="Instructor">Instructor</MenuItem>
+                                        <MenuItem value="Partner">Partner</MenuItem>
+                                    </CssTextField>
+                                }
+                                name="role"
+                                control={control}
+                                defaultValue=""
+                            />
                         </FormControl>
 
                     </Grid>
@@ -241,14 +244,13 @@ export default function SignUp(props: any) {
                     </Grid>
                     <Grid item>
                         <CssTextField
-                            variant="outlined"
                             name="phone_number"
+                            variant="outlined"
                             label="Phone Number"
                             type="text"
                             id="phone_number"
                             className={classes.input}
                             inputRef={register}
-
                         />
                     </Grid>
                     <Grid item>
@@ -259,6 +261,7 @@ export default function SignUp(props: any) {
                             name="email"
                             autoComplete="email"
                             className={classes.input}
+                            // {...register("email")}
                             inputRef={register}
 
                         />
