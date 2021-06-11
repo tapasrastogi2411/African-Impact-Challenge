@@ -17,7 +17,6 @@ const path = require('path');
 router.post('/register/', function (req, res, next) {
 
     var registerData = req.body;
-    console.log(registerData);
     //console.log(registerData);
     var mandatoryFields = ["username", "password", "user_role","first_name", "last_name"];
     var optionalFields = ["honorifics", "email", "phone_number", "country", "address"];
@@ -59,7 +58,7 @@ router.post('/register/', function (req, res, next) {
     } 
 
     // all 10 fields are provided and they have the correct names
-    console.log(userData[2]);
+    //console.log(userData[2]);
     userData[2] = parseInt(userData[2]);
 
     var userSchema = "(username,password,user_role,honorifics,first_name,last_name,email,phone_number,country,address)";
