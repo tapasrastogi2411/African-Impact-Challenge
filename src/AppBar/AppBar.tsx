@@ -57,9 +57,21 @@ function Appbar(props: any) {
     }
     const classes = useStyles();
 
-    function ToggleAlert() {
-        
-        onSuccess();
+    function logoutUser() {
+        fetch('https://localhost:8080/api/profile/logout', {
+            method: 'GET', 
+        })
+        .then(() => {
+            onSuccess();
+        })
+
+            /*
+            const response = await fetch('https://localhost:8080/api/profile/logout', {
+                method: "GET",
+            });
+            const responseData = await response.json();
+            onSuccess();
+            */
     }
 
     return (
@@ -76,7 +88,7 @@ function Appbar(props: any) {
                     THE AFRICAN IMPACT CHALLENGE
         </Typography>
                 <IconButton
-                    onClick={ToggleAlert}
+                    onClick={logoutUser}
                     className={classes.btn}
                 >
                     <InputIcon />
