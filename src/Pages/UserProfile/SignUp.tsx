@@ -13,6 +13,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Controller, useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
+import CountrySelect from  './countries';
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     fst: {
         paddingLeft: 147
@@ -73,6 +74,8 @@ const defaultError = {
     phone_number: "",
     role: "",
     password: "",
+    honorifics: "",
+    address: "",
 };
 
 const SignUpAjax = async (data: any, onSuccess: any
@@ -83,9 +86,11 @@ const SignUpAjax = async (data: any, onSuccess: any
         formdata.append("password", data.password);
         formdata.append("phone_number", data.phone_number);
         formdata.append("first_name", data.first_name);
-        formdata.append("last_name", data.first_name);
+        formdata.append("last_name", data.last_name);
         formdata.append("role", data.role);
         formdata.append("email", data.email);
+        formdata.append("honorifics", data.honorifics);
+        formdata.append("address", data.address);
         const response = await fetch('https://localhost:8080/api/profile/signup/', {
             method: "post",
             body: formdata,
@@ -115,7 +120,7 @@ export default function SignUp(props: any) {
     // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     //     setRole(event.target.value as string);
     // };
-    const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number }: any) => {
+    const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number, honorifics, address }: any) => {
         const newError = { ...defaultError };
         if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
             newError.username =
@@ -145,9 +150,9 @@ export default function SignUp(props: any) {
         );
         setError(newError);
         if (!haveError) {
-            console.log({ username, email, first_name, password, role, phone_number });
+            console.log({ username, email, first_name, last_name, password, role, phone_number, honorifics, address });
             SignUpAjax(
-                { username, email, first_name, password, role, phone_number }, onSuccess
+                { username, email, first_name, last_name, password, role, phone_number, honorifics, address }, onSuccess
             );
 
 
@@ -212,6 +217,26 @@ export default function SignUp(props: any) {
                             inputRef={register({ required: true })}
 
                         />
+                    </Grid>
+
+                    <Grid item>
+                        <FormControl
+                            variant="outlined"
+                            className={classes.input}
+                            >
+                            
+                            <Controller
+                                as={
+                                    <CssTextField select variant="outlined" label="Honorifics">
+                                        <MenuItem value="Mr">Mr</MenuItem>
+                                        <MenuItem value="Ms">Ms</MenuItem>
+                                    </CssTextField>
+                                }
+                                name="honorifics"
+                                control={control}
+                                defaultValue=""
+                            />
+                        </FormControl>
                     </Grid>
 
                     <Grid item>
@@ -284,6 +309,22 @@ export default function SignUp(props: any) {
                             className={classes.input}
                             inputRef={register}
 
+                        />
+                    </Grid>
+
+                    <Grid item>
+                            <CountrySelect />
+                    </Grid>
+
+                    <Grid item>
+                        <TextField
+                            variant="outlined"
+                            name="address"
+                            label="Address"
+                            id="address"
+                            autoComplete="address"
+                            className={classes.input}
+                            inputRef={register}
                         />
                     </Grid>
 
