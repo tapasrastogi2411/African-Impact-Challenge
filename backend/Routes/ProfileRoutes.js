@@ -17,6 +17,7 @@ const path = require('path');
 router.post('/register/', function (req, res, next) {
 
     var registerData = req.body;
+    console.log(registerData);
     //console.log(registerData);
     var mandatoryFields = ["username", "password", "user_role","first_name", "last_name"];
     var optionalFields = ["honorifics", "email", "phone_number", "country", "address"];

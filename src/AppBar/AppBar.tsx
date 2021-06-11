@@ -57,6 +57,7 @@ function Appbar(props: any) {
     }
     const classes = useStyles();
 
+    // session should be destroyed and user taken back to the login page
     function logoutUser() {
         fetch('https://localhost:8080/api/profile/logout', {
             method: 'GET', 
@@ -64,14 +65,6 @@ function Appbar(props: any) {
         .then(() => {
             onSuccess();
         })
-
-            /*
-            const response = await fetch('https://localhost:8080/api/profile/logout', {
-                method: "GET",
-            });
-            const responseData = await response.json();
-            onSuccess();
-            */
     }
 
     return (

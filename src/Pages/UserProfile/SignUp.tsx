@@ -87,13 +87,13 @@ const SignUpAjax = async (data: any, onSuccess: any
         formdata.append("phone_number", data.phone_number);
         formdata.append("first_name", data.first_name);
         formdata.append("last_name", data.last_name);
-        
+        console.log(data.role);
         if (data.role == "Entrepreneur") {
-            formdata.append("user_role", "0");
+            formdata.append("user_role", "2");
         } else if (data.role == "Instructor") {
             formdata.append("user_role", "1");
         } else {
-            formdata.append("user_role", "2");
+            formdata.append("user_role", "3");
         }
         
         formdata.append("email", data.email);
