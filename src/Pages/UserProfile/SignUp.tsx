@@ -68,13 +68,87 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
+const defaultError = {
+    username: "",
+    email: "",
+    full_name: "",
+    phone_number: "",
+    role: "",
+    password: "",
+};
+
+const SignUpAjax = async (data: any, dispatchSignUp: any) => {
+    try {
+        var formdata = new FormData();
+        formdata.append("username", data.username);
+        formdata.append("password", data.password);
+        formdata.append("phone_number", data.phone_number);
+        formdata.append("full_name", data.full_name);
+        formdata.append("role", data.role);
+        formdata.append("email", data.email);
+        const response = await fetch(`${process.env.REACT_APP_HOSTAPI}/signup`, {
+            method: "post",
+            body: formdata,
+            credentials: "include",
+        });
+        const responseData = await response.json();
+        if (response.status > 300 || response.status < 200) {
+            throw responseData;
+        }
+        dispatchSignUp(responseData);
+    } catch (e) {
+        console.dir(e);
+    }
+};
+
 export default function SignUp(props: any) {
     const classes = useStyles();
     const [role, setRole] = React.useState('');
-
+    const { changePage, dispatchSignUp } = props;
+    const { register, handleSubmit } = useForm();
+    const [error, setError] = React.useState(defaultError);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setRole(event.target.value as string);
     };
+    const onSubmit = ({ username, email, full_name, password, role, phone_number }: any) => {
+        const newError = { ...defaultError };
+        if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
+            newError.username =
+                "User name may contain only letters, numbers, and @/./+/-/_ characters";
+        } else if (username.length < 6 || username.length > 28) {
+            newError.username = "User name must be between 6 and 28 characters long";
+        }
+        if (email && !email.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
+            newError.email = "Please enter a valid email";
+        }
+        if (full_name && full_name.match(/[^a-z]/i)) {
+            newError.full_name =
+                "Display name may contain only letters";
+        } else if (
+            full_name &&
+            (full_name.length < 6 || full_name.length > 28)
+        ) {
+            newError.full_name =
+                "Display name must be between 6 and 28 characters long";
+        }
+        if (!password || password.length < 8) {
+            newError.password = password
+                ? "Password must be at least 8 characters long"
+                : "Password is required";
+        }
+        const haveError = Object.values(newError).find(
+            (el: String) => el.length > 0
+        );
+        setError(newError);
+        if (!haveError) {
+            console.log({ username, email, full_name, password, role, phone_number });
+            SignUpAjax(
+                { username, email, full_name, password, role, phone_number },
+                dispatchSignUp
+            );
+        }
+    };
+
     return (
         <Container component="main" maxWidth="md">
 
@@ -95,6 +169,7 @@ export default function SignUp(props: any) {
             <form
                 className={classes.form}
                 noValidate
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <Grid
                     container
@@ -109,8 +184,9 @@ export default function SignUp(props: any) {
                             name="Full Name"
                             label="Full Name"
                             type="text"
-                            id="full-name"
+                            id="full_name"
                             className={classes.input}
+                            inputRef={register({ required: true })}
                         />
                     </Grid>
                     <Grid item>
@@ -124,6 +200,8 @@ export default function SignUp(props: any) {
                                 id="role"
                                 value={role}
                                 onChange={handleChange}
+                                inputRef={register({ required: true })}
+
                             >
                                 <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
                                 <MenuItem value="Instructor">Instructor</MenuItem>
@@ -134,6 +212,8 @@ export default function SignUp(props: any) {
                     </Grid>
                     <Grid item>
                         <CssTextField
+                            error={!!error.username}
+                            helperText={error.username}
                             variant="outlined"
                             required
                             id="username"
@@ -141,6 +221,8 @@ export default function SignUp(props: any) {
                             name="username"
                             autoComplete="username"
                             className={classes.input}
+                            inputRef={register({ required: true })}
+
                         />
                     </Grid>
                     <Grid item>
@@ -153,6 +235,8 @@ export default function SignUp(props: any) {
                             id="password"
                             autoComplete="current-password"
                             className={classes.input}
+                            inputRef={register({ required: true })}
+
                         />
                     </Grid>
                     <Grid item>
@@ -163,6 +247,8 @@ export default function SignUp(props: any) {
                             type="text"
                             id="phone_number"
                             className={classes.input}
+                            inputRef={register}
+
                         />
                     </Grid>
                     <Grid item>
@@ -173,6 +259,8 @@ export default function SignUp(props: any) {
                             name="email"
                             autoComplete="email"
                             className={classes.input}
+                            inputRef={register}
+
                         />
                     </Grid>
 
