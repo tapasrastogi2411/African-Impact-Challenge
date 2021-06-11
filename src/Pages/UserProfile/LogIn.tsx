@@ -74,10 +74,19 @@ export const SignInAjax = async (
         var formdata = new FormData();
         formdata.append("username", data.username);
         formdata.append("password", data.password);
+
+        // convert formData to JSON since that is what the server looks for
+        var object:any = {};
+        formdata.forEach(function(value: any, key: any){
+            object[key] = value;
+        });
+
         const response = await fetch('https://localhost:8080/api/profile/login/', {
-            method: "post",
-            body: formdata,
-            credentials: "include",
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(object),
         });
         const responseData = await response.json();
         if (response.status > 300 || response.status < 200) {

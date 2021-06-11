@@ -121,7 +121,7 @@ router.post('/login/', auth, async function (req, res) {
                 // create a session and return a 200 response
                 req.session.loggedIn = true
                 req.session.username = username
-                return res.status(200)
+                return res.status(200).json("");
             }
         }
     // }
