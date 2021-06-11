@@ -6,9 +6,6 @@ var cors = require('cors');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin:"http://localhost:3000", credentials:true,   }) );
-// middleware to handle profile-based routes
-app.use('/api/profile/', profile);
-
 
 //Enabling sessions
 var session = require('express-session');
@@ -18,6 +15,9 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: true, sameSite: true }
 }));
+
+// middleware to handle profile-based routes
+app.use('/api/profile/', profile);
 
 //Configure application to use https 
 const fs = require('fs');
