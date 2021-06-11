@@ -82,7 +82,6 @@ const SignUpAjax = async (data: any, onSuccess: any
 ) => {
     try {
         var formdata = new FormData();
-        console.log(data);
         formdata.append("username", data.username);
         formdata.append("password", data.password);
         formdata.append("phone_number", data.phone_number);
@@ -102,6 +101,7 @@ const SignUpAjax = async (data: any, onSuccess: any
         formdata.append("address", data.address);
         formdata.append("country", "");
         
+        // convert formData to JSON since that is what the server looks for
         var object:any = {};
         formdata.forEach(function(value: any, key: any){
             object[key] = value;
