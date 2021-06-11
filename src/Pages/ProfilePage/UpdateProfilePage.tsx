@@ -5,15 +5,12 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import Appbar from "../../AppBar/AppBar";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Divider } from "@material-ui/core";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import List from "@material-ui/core/List";
+import TextField from "@material-ui/core/TextField";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   profileDivider: {
     marginTop: 45,
@@ -27,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     transform: "translate(-50%, -50%)",
   },
   profileDivider2: {
-    marginTop: 60,
+    marginTop: 0,
     width: "85%",
     color: "#000000",
     background: "#000000",
@@ -62,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 300,
   },
   locationTitle: {
-    marginTop: -70,
+    marginTop: -100,
     marginLeft: 715,
     fontWeight: 600,
     fontSize: 25,
@@ -74,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
   numberTitle: {
     marginLeft: 400,
-    marginTop: 120,
+    marginTop: 160,
     fontWeight: 600,
     fontSize: 25,
   },
@@ -85,16 +82,16 @@ const useStyles = makeStyles((theme) => ({
   },
   msgButton: {
     marginLeft: 110,
-    bottom: -10,
+    bottom: 85,
     width: 85,
   },
   deleteButton: {
-    top: 10,
+    top: -85,
     left: 3,
     width: 85,
   },
   updateButton: {
-    top: 10,
+    top: -85,
     width: 85,
     left: 5,
   },
@@ -102,11 +99,11 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     fontSize: 25,
     marginLeft: 715,
-    marginTop: -170,
+    marginTop: -235,
   },
   lastNameInfo: {
     marginLeft: 715,
-    marginTop: 15,
+    marginTop: 5,
     fontWeight: 300,
   },
 }));
@@ -118,6 +115,28 @@ const themeDark = createMuiTheme({
     },
   },
 });
+
+const CssTextField = withStyles({
+  root: {
+    "& label.Mui-focused": {
+      color: "#e69113",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#e69113",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        //borderColor: 'black',
+      },
+      "&:hover fieldset": {
+        borderColor: "#fcb040",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#e69113",
+      },
+    },
+  },
+})(TextField);
 
 function Profilepage() {
   const classes = useStyles();
@@ -133,32 +152,62 @@ function Profilepage() {
             <Typography className={classes.firstNameTitle}>
               Firstname
             </Typography>
-            <Typography className={classes.firstNameInfo}>John</Typography>
+            <CssTextField
+              variant="outlined"
+              required
+              id="firstname"
+              label="First Name"
+              name="firstname"
+              autoComplete="firstname"
+              className={classes.firstNameInfo}
+            />
           </Grid>
-
           <Grid>
             <Typography className={classes.emailTitle}>Email</Typography>
-            <Typography className={classes.emailInfo}>
-              temp@email.com
-            </Typography>
+            <CssTextField
+              variant="outlined"
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              className={classes.emailInfo}
+            />
           </Grid>
           <Grid>
             <Typography className={classes.locationTitle}>Address</Typography>
-            <Typography className={classes.locationInfo}>
-              219 Temp Ave road
-            </Typography>
+            <CssTextField
+              variant="outlined"
+              id="Address"
+              label="Address"
+              name="Address"
+              autoComplete="Address"
+              className={classes.locationInfo}
+            />
           </Grid>
           <Grid>
             <Typography className={classes.lastNameTitle}>Last Name</Typography>
-            <Typography className={classes.lastNameInfo}>
-              219 Temp Ave road
-            </Typography>
+            <CssTextField
+              variant="outlined"
+              required
+              id="lastname"
+              label="Last Name"
+              name="lastname"
+              autoComplete="lastname"
+              className={classes.lastNameInfo}
+            />
           </Grid>
           <Grid>
             <Typography className={classes.numberTitle}>
               Phone Number
             </Typography>
-            <Typography className={classes.numberInfo}>4169992111</Typography>
+            <CssTextField
+              variant="outlined"
+              name="phone_number"
+              label="Phone Number"
+              type="text"
+              id="phone_number"
+              className={classes.numberInfo}
+            />
           </Grid>
 
           <Button
@@ -180,7 +229,7 @@ function Profilepage() {
             color="primary"
             className={classes.updateButton}
           >
-            Update
+            Confirm
           </Button>
           <Divider className={classes.profileDivider2} />
         </Grid>

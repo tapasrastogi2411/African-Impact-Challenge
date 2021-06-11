@@ -1,24 +1,15 @@
 import React from "react";
-import SignIn from "../UserProfile/LogIn";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-
-import Appbar from "../../AppBar/AppBar";
-import Profilepage from "./Profilepage";
+import UpdateProfilePage from "./UpdateProfilePage";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Divider } from "@material-ui/core";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import List from "@material-ui/core/List";
 import profilepic from "./profilepic.jpeg";
 import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
   userNameTitle: {
-    marginTop: -345,
+    marginTop: -440,
     marginLeft: 110,
     fontWeight: 600,
     fontSize: 25,
@@ -36,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 110,
     fontWeight: 600,
     fontSize: 25,
-    marginTop: 67,
+    marginTop: 100,
   },
   avatar1name: {
     marginLeft: 140,
@@ -60,7 +51,7 @@ function EntrepreunerPage() {
   const classes = useStyles();
   return (
     <div>
-      <Profilepage />
+      <UpdateProfilePage />
       <Grid>
         <Typography className={classes.userNameTitle}>Username</Typography>
         <img src={profilepic} className={classes.profilePicture} />
@@ -76,11 +67,5 @@ function EntrepreunerPage() {
     </div>
   );
 }
-/*
-<Grid>
-          <Typography className={classes.companyTitle}>Role</Typography>
-          <Typography className={classes.companyInfo}>Entrepreuner</Typography>
-        </Grid>
-*/
 
 export default EntrepreunerPage;
