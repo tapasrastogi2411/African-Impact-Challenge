@@ -12,9 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Controller, useForm } from "react-hook-form";
-import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
-
-const ThemeColor = "#a0530d";
+import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     fst: {
@@ -77,7 +75,7 @@ const defaultError = {
     password: "",
 };
 
-const SignUpAjax = async (data: any, dispatchSignUp: any) => {
+const SignUpAjax = async (data: any) => {
     try {
         var formdata = new FormData();
         formdata.append("username", data.username);
@@ -95,22 +93,21 @@ const SignUpAjax = async (data: any, dispatchSignUp: any) => {
         if (response.status > 300 || response.status < 200) {
             throw responseData;
         }
-        dispatchSignUp(responseData);
     } catch (e) {
         console.dir(e);
     }
 };
 
 export default function SignUp(props: any) {
+    const history = useHistory();
 
     const classes = useStyles();
-    const [role, setRole] = React.useState('');
-    const { changePage, dispatchSignUp } = props;
+    // const [role, setRole] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setRole(event.target.value as string);
-    };
+    // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    //     setRole(event.target.value as string);
+    // };
     const onSubmit = ({ username, email, full_name, password, role, phone_number }: any) => {
         const newError = { ...defaultError };
         if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
@@ -125,12 +122,6 @@ export default function SignUp(props: any) {
         if (full_name && full_name.match(/[^a-zA-Z\s]/i)) {
             newError.full_name =
                 "Name may contain only letters";
-        } else if (
-            full_name &&
-            (full_name.length < 6 || full_name.length > 28)
-        ) {
-            newError.full_name =
-                "Name must be between 6 and 28 characters long";
         }
         if (!password || password.length < 8) {
             newError.password = password
@@ -143,10 +134,16 @@ export default function SignUp(props: any) {
         setError(newError);
         if (!haveError) {
             console.log({ username, email, full_name, password, role, phone_number });
-            SignUpAjax(
-                { username, email, full_name, password, role, phone_number },
-                dispatchSignUp
-            );
+            try {
+                SignUpAjax(
+                    { username, email, full_name, password, role, phone_number },
+                );
+                history.push("/login")
+
+            } catch (error) {
+                console.log(error)
+            }
+
         }
     };
 
@@ -261,7 +258,6 @@ export default function SignUp(props: any) {
                             name="email"
                             autoComplete="email"
                             className={classes.input}
-                            // {...register("email")}
                             inputRef={register}
 
                         />
