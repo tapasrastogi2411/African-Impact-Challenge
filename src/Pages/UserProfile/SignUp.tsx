@@ -82,19 +82,37 @@ const SignUpAjax = async (data: any, onSuccess: any
 ) => {
     try {
         var formdata = new FormData();
+        console.log(data);
         formdata.append("username", data.username);
         formdata.append("password", data.password);
         formdata.append("phone_number", data.phone_number);
         formdata.append("first_name", data.first_name);
         formdata.append("last_name", data.last_name);
-        formdata.append("role", data.role);
+        
+        if (data.role == "Entrepreneur") {
+            formdata.append("user_role", "0");
+        } else if (data.role == "Instructor") {
+            formdata.append("user_role", "1");
+        } else {
+            formdata.append("user_role", "2");
+        }
+        
         formdata.append("email", data.email);
         formdata.append("honorifics", data.honorifics);
         formdata.append("address", data.address);
-        const response = await fetch('https://localhost:8080/api/profile/signup/', {
-            method: "post",
-            body: formdata,
-            credentials: "include",
+        formdata.append("country", "");
+        
+        var object:any = {};
+        formdata.forEach(function(value: any, key: any){
+            object[key] = value;
+        });
+
+        const response = await fetch('https://localhost:8080/api/profile/register/', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(object),
         });
         const responseData = await response.json();
         if (response.status > 300 || response.status < 200) {
