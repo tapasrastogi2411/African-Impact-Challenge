@@ -167,8 +167,6 @@ export default function SignIn(props: any) {
                     href="#"
                     variant="body2"
                     color="textSecondary"
-                    onClick={(e: any) => e.preventDefault()}
-
                 >
                     Forgot password?
                     </Link>
