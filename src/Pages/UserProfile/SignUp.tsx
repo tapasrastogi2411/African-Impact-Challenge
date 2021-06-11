@@ -13,7 +13,6 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Controller, useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
-
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     fst: {
         paddingLeft: 147

@@ -70,13 +70,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const themeDark = createMuiTheme({
-  palette: {
-    background: {
-      default: "#F2F2F7",
-    },
-  },
-});
 
 function Profilepage() {
   const classes = useStyles();

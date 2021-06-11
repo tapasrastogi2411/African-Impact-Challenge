@@ -4,6 +4,7 @@ import MainPage from "./MainPage/MainPage";
 import SignIn from "./UserProfile/LogIn";
 import SignUp from './UserProfile/SignUp';
 import ProfilePage from './ProfilePage/Profilepage';
+import Update from './ProfilePage/UpdateProfile';
 import {
     makeStyles,
     createStyles,
@@ -40,6 +41,7 @@ export default function Pages(props: any) {
                 <Route exact path="/login" component={SignIn} />
                 <Route exact path="/signup" component={SignUp}/>
                 <Route exact path="/profile" component={ProfilePage}/>
+                <Route exact path="/update" component={Update}/>
 
             </Switch>
 
