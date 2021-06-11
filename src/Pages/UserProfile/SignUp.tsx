@@ -13,6 +13,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Controller, useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
+import CountrySelect from  './countries';
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     fst: {
         paddingLeft: 147
@@ -68,10 +69,13 @@ const CssTextField = withStyles({
 const defaultError = {
     username: "",
     email: "",
-    full_name: "",
+    first_name: "",
+    last_name: "",
     phone_number: "",
     role: "",
     password: "",
+    honorifics: "",
+    address: "",
 };
 
 const SignUpAjax = async (data: any, onSuccess: any
@@ -81,13 +85,34 @@ const SignUpAjax = async (data: any, onSuccess: any
         formdata.append("username", data.username);
         formdata.append("password", data.password);
         formdata.append("phone_number", data.phone_number);
-        formdata.append("full_name", data.full_name);
-        formdata.append("role", data.role);
+        formdata.append("first_name", data.first_name);
+        formdata.append("last_name", data.last_name);
+        
+        if (data.role == "Entrepreneur") {
+            formdata.append("user_role", "0");
+        } else if (data.role == "Instructor") {
+            formdata.append("user_role", "1");
+        } else {
+            formdata.append("user_role", "2");
+        }
+        
         formdata.append("email", data.email);
-        const response = await fetch('https://localhost:8080/api/profile/signup/', {
-            method: "post",
-            body: formdata,
-            credentials: "include",
+        formdata.append("honorifics", data.honorifics);
+        formdata.append("address", data.address);
+        formdata.append("country", "");
+        
+        // convert formData to JSON since that is what the server looks for
+        var object:any = {};
+        formdata.forEach(function(value: any, key: any){
+            object[key] = value;
+        });
+
+        const response = await fetch('https://localhost:8080/api/profile/register/', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(object),
         });
         const responseData = await response.json();
         if (response.status > 300 || response.status < 200) {
@@ -113,7 +138,7 @@ export default function SignUp(props: any) {
     // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     //     setRole(event.target.value as string);
     // };
-    const onSubmit = ({ username, email, full_name, password, role, phone_number }: any) => {
+    const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number, honorifics, address }: any) => {
         const newError = { ...defaultError };
         if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
             newError.username =
@@ -124,8 +149,13 @@ export default function SignUp(props: any) {
         if (email && !email.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
             newError.email = "Please enter a valid email";
         }
-        if (full_name && full_name.match(/[^a-zA-Z\s]/i)) {
-            newError.full_name =
+        if (first_name && first_name.match(/[^a-zA-Z\s]/i)) {
+            newError.first_name =
+                "Name may contain only letters";
+        }
+
+        if (last_name && last_name.match(/[^a-zA-Z\s]/i)) {
+            newError.last_name =
                 "Name may contain only letters";
         }
         if (!password || password.length < 8) {
@@ -138,9 +168,9 @@ export default function SignUp(props: any) {
         );
         setError(newError);
         if (!haveError) {
-            console.log({ username, email, full_name, password, role, phone_number });
+            console.log({ username, email, first_name, last_name, password, role, phone_number, honorifics, address });
             SignUpAjax(
-                { username, email, full_name, password, role, phone_number }, onSuccess
+                { username, email, first_name, last_name, password, role, phone_number, honorifics, address }, onSuccess
             );
 
 
@@ -177,19 +207,56 @@ export default function SignUp(props: any) {
 
                     <Grid item>
                         <CssTextField
-                            error={!!error.full_name}
-                            helperText={error.full_name}
+                            error={!!error.first_name}
+                            helperText={error.first_name}
                             variant="outlined"
                             required
-                            name="full_name"
-                            label="Full Name"
+                            name="first_name"
+                            label="First Name"
                             type="text"
-                            id="full_name"
+                            id="first_name"
                             className={classes.input}
                             inputRef={register({ required: true })}
 
                         />
                     </Grid>
+
+                    <Grid item>
+                        <CssTextField
+                            error={!!error.last_name}
+                            helperText={error.last_name}
+                            variant="outlined"
+                            required
+                            name="last_name"
+                            label="Last Name"
+                            type="text"
+                            id="last_name"
+                            className={classes.input}
+                            inputRef={register({ required: true })}
+
+                        />
+                    </Grid>
+
+                    <Grid item>
+                        <FormControl
+                            variant="outlined"
+                            className={classes.input}
+                            >
+                            
+                            <Controller
+                                as={
+                                    <CssTextField select variant="outlined" label="Honorifics">
+                                        <MenuItem value="Mr">Mr</MenuItem>
+                                        <MenuItem value="Ms">Ms</MenuItem>
+                                    </CssTextField>
+                                }
+                                name="honorifics"
+                                control={control}
+                                defaultValue=""
+                            />
+                        </FormControl>
+                    </Grid>
+
                     <Grid item>
                         <FormControl
                             variant="outlined"
@@ -260,6 +327,22 @@ export default function SignUp(props: any) {
                             className={classes.input}
                             inputRef={register}
 
+                        />
+                    </Grid>
+
+                    <Grid item>
+                            <CountrySelect />
+                    </Grid>
+
+                    <Grid item>
+                        <TextField
+                            variant="outlined"
+                            name="address"
+                            label="Address"
+                            id="address"
+                            autoComplete="address"
+                            className={classes.input}
+                            inputRef={register}
                         />
                     </Grid>
 
