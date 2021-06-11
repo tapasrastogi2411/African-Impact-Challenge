@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InputIcon from "@material-ui/icons/Input";
 
 import Logo from './LOGO.png'
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -51,7 +51,21 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 function Appbar(props: any) {
+    const history = useHistory();
+    const onSuccess = () => {
+        history.push('/login')
+    }
     const classes = useStyles();
+
+    // session should be destroyed and user taken back to the login page
+    function logoutUser() {
+        fetch('https://localhost:8080/api/profile/logout', {
+            method: 'GET', 
+        })
+        .then(() => {
+            onSuccess();
+        })
+    }
 
     return (
         <AppBar position="fixed" className={classes.mainAppBar}>
@@ -67,7 +81,7 @@ function Appbar(props: any) {
                     THE AFRICAN IMPACT CHALLENGE
         </Typography>
                 <IconButton
-                    //onClick={ToggleAler}
+                    onClick={logoutUser}
                     className={classes.btn}
                 >
                     <InputIcon />

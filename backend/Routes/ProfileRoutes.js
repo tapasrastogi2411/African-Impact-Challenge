@@ -58,7 +58,7 @@ router.post('/register/', function (req, res, next) {
     } 
 
     // all 10 fields are provided and they have the correct names
-    console.log(userData[2]);
+    //console.log(userData[2]);
     userData[2] = parseInt(userData[2]);
 
     var userSchema = "(username,password,user_role,honorifics,first_name,last_name,email,phone_number,country,address)";
@@ -121,6 +121,7 @@ router.post('/login/', auth, async function (req, res) {
                 // create a session and return a 200 response
                 req.session.loggedIn = true
                 req.session.username = username
+                console.log(req.session);
                 return res.status(200).json("");
             }
         }
@@ -161,11 +162,9 @@ router.delete('/delete/', auth, function (req, res) {
 
 // (Added by Tapas) - For the API Logout Request
 router.get('/logout', auth, function (req, res) { 
-
-    req.session.destroy(function(err){
+    req.session.destroy(function(err) {
         if(err) return res.status(500).end(err);
         return res.end();
-
     });
 
 });
