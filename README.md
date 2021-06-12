@@ -13,14 +13,10 @@ More information about the African Impact Challenge can be found here: https://w
     - Express.js
     - React
     - Node.js
-   
-- Testing tools and frameworks used are:
-	- Mocha
-		- JavaScript testing framework	
-	- Chai.js
-		- A flexible and extensive TDD and BDD assertion library  
-	- Sinon.js	
-		- A JavaScript library which gives additional functionality to testing frameworks such as Mocha. It allows the user to create test spies, fakes, stubs, mocks and more.   
+  
+- Other technologies used are:
+    - material-ui
+    - Typescript 
 
 ### Build Instructions
 To build and run the project do the following:
@@ -47,30 +43,27 @@ Now, to actually build the project first start by cloning  the repo and navigate
 	$ git clone https://github.com/UTSCCSCC01/ResilientDevs/
 	$ cd ResilientDevs/
 	
-Then, run 
+To run the front-end do: 
 
-	$ npm init
+	$ cd frontend
+	$ npm install
+	$ npm run
 
-which will generate a package.json file containing all the config information for the project.
+To run the back-end do:
 
-To install Express simply do:
-
-	$  npm install express --save
-
-To install React do:
-
-	$  npm install --save react
-	$  npm install --save react-dom
+	$ cd backend
+	$ node app.js
 	
+
+To initialize the Postgresql database do:
+
+	$ First, create a database in Postgresql with name=aic, username=postgres, password=postgres
+	$ cd backend/db/schema/
+	$ psql -d aic -f profile-schema.sql
+	$ psql -d aic -f sample_data.sql
+
+
 	
-Conveniently, the testing tools can also be installed using npm:
-
-	$ npm install mocha
-	$ npm install --save-dev chai
-	$ npm install sinon
-
-
-
 
 ## Contribution Process 
 
@@ -82,6 +75,11 @@ The contribution process is as follows:
 	2) After the feature is implemented after passing all the test cases, a pull request into "develop" is created. 
 	3) One of our group members will be responsible to review the code and accept the pull request. If a conflict occurs, the code reviewer and members involved in the conflict will communicate to resolve the issue.
 	4) At the end of the sprint, "main" branch will pull from "develop"
+	
+
+## Project Notes
+
+So far, the frontend of the project displays nicely for wide monitors (not laptops or mobile phones). In future development we will make this more flexible.
 
 
 
