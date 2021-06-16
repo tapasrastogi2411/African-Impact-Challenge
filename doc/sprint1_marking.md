@@ -258,16 +258,14 @@ Please correct me if I'm wrong, but I was unable to find any documentation.
   - 8 marks = features presented work flawlessly
     - 1 mark removed for each error or missing records on Jira
 
-  Your Mark: 0 / 10
-
-Mark pending from Demo TA.
+  Your Mark: 10 / 10
 
 ---
 
 
 ## Total Mark
 
-73 / 89
+83 / 89
 
 Loved the system design doc! Great work
 
