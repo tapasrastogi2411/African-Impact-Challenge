@@ -65,7 +65,7 @@ Your Mark: 3
     - 1 mark  = two or more stories in Jira Backlog do not follow the template
     - 0 marks = the majority of stories in Jira Backlog do not follow the template or no stories at all
 
-    Your Mark: 1
+    Your Mark: 2
 
     **Stories missing the "so that..." clause: TT-39, TT-43**
 
@@ -101,7 +101,7 @@ Your Mark: 3
 
     Your Mark: 2
 
-  User Stories Total Mark: 9 / 10
+  User Stories Total Mark: 10 / 10
 
 ---
 
@@ -237,9 +237,9 @@ Total Marks: 10/10
     - 1 mark = documentation has been created, but portions of the codebase are un-documented or the documentation is vague/not helpful
   - 0 marks = documentation has not been created
 
-  Your Mark: 0 / 3
+  Your Mark: 2 / 3
 
-Please correct me if I'm wrong, but I was unable to find any documentation.
+No documentation for frontend
 
 
 ---
@@ -265,7 +265,7 @@ Please correct me if I'm wrong, but I was unable to find any documentation.
 
 ## Total Mark
 
-83 / 89
+86 / 89
 
 Loved the system design doc! Great work
 
