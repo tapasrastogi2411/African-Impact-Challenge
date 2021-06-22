@@ -107,7 +107,7 @@ const SignUpAjax = async (data: any, onSuccess: any
             object[key] = value;
         });
 
-        const response = await fetch('https://localhost:8080/api/profile/register/', {
+        const response = await fetch('http://localhost:8080/api/profile/register/', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
