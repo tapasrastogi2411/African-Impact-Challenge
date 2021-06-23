@@ -7,7 +7,6 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -134,7 +133,7 @@ export default function SignUp(props: any) {
     
     const history = useHistory();
     const classes = useStyles();
-    // const [role, setRole] = React.useState('');
+    const [role, setRole] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
     const onSuccess = () => {
@@ -144,13 +143,24 @@ export default function SignUp(props: any) {
     //     setRole(event.target.value as string);
     // };
 
-    var validate = (e: {target: {name: String, value: String }}) => {
+    var validate = (e: {target: {name: String, value: String, id: String, innerText: String }}) => {
         
         console.log(e);
-        // console.log(error.first_name == "");
         const newError = { ...defaultError };
-        var name = e.target.name;
-        var value = e.target.value;
+        var name;
+        var value;
+        // no validation needed for country
+        // just need to extract country name to send to the server
+        if (e.target.id.includes("country")) {
+            name = "country";
+            var country = e.target.innerText.split("(")[0];
+            value = country.split("\n")[1];
+
+        } else {
+            name = e.target.name;
+            value = e.target.value;
+        }
+       
         
         switch(name) {
             case 'first_name':
@@ -183,55 +193,45 @@ export default function SignUp(props: any) {
                 }
                 break;
             
-
-
             default:
                 break;
     
         };
-        // console.log(newError);
+       
         
         setError(newError);
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
         );
-        /*
-        if (haveError) {
-            errVal = true;
-        } else {
-            errVal = false;
-        }
-        */
-        
-        
-        
+         
     }
+
+    const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value);
+    }
+
     // only do submission based validation: unique username
     const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number, honorifics, address }: any) => {
         const newError = { ...defaultError };
-        if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
-            newError.username =
-                "User name may contain only letters, numbers, and @/./+/-/_ characters";
-        } else if (username.length < 6 || username.length > 28) {
-            newError.username = "User name must be between 6 and 28 characters long";
+        console.log(role);
+        
+        if (!first_name) {
+            newError.first_name = "First name is required"
         }
-        if (email && !email.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
-            newError.email = "Please enter a valid email";
+        if (!last_name) {
+            newError.last_name = "Last name is required"
         }
-        if (first_name && first_name.match(/[^a-zA-Z\s]/i)) {
-            newError.first_name =
-                "Name may contain only letters";
+        if (!role) {
+
+            newError.role = "Role is required"
+        }
+        if (!username) {
+            newError.username = "Username is required"
+        }
+        if (!password) {
+            newError.password = "Password is required"
         }
 
-        if (last_name && last_name.match(/[^a-zA-Z\s]/i)) {
-            newError.last_name =
-                "Name may contain only letters";
-        }
-        if (!password || password.length < 8) {
-            newError.password = password
-                ? "Password must be at least 8 characters long"
-                : "Password is required";
-        }
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
         );
@@ -245,6 +245,8 @@ export default function SignUp(props: any) {
             );
         }
     };
+
+   
 
     return (
         <Container component="main" maxWidth="md">
@@ -333,18 +335,26 @@ export default function SignUp(props: any) {
                         <FormControl
                             variant="outlined"
                             className={classes.input}
-                            required>
+                            
+                            >
                             <Controller
                                 as={
-                                    <CssTextField select required variant="outlined" label="Role">
+                                    <CssTextField select required variant="outlined" label="Role" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => handleSelect(e)}
+                                
+
+                                    >
                                         <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
                                         <MenuItem value="Instructor">Instructor</MenuItem>
                                         <MenuItem value="Partner">Partner</MenuItem>
                                     </CssTextField>
+                                    
                                 }
                                 name="role"
                                 control={control}
                                 defaultValue=""
+                                
+                                
+                                
                             />
                         </FormControl>
 
@@ -410,7 +420,12 @@ export default function SignUp(props: any) {
                     </Grid>
 
                     <Grid item>
-                            <CountrySelect />
+                        
+                        <CountrySelect
+                            onChange={validate}
+                        />
+                    
+                        
                     </Grid>
 
                     <Grid item>
@@ -431,6 +446,7 @@ export default function SignUp(props: any) {
                             variant="contained"
                             size="large"
                             className={classes.submit}
+                            onClick={onSubmit}
                         >
                             Sign Up
                         </Button>
