@@ -77,6 +77,14 @@ const defaultError = {
     address: "",
 };
 
+const defaultReqFields = {
+    username: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+    role: ""
+}
+
 
 
 const SignUpAjax = async (data: any, onSuccess: any
@@ -136,6 +144,7 @@ export default function SignUp(props: any) {
     const [role, setRole] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
+    const [reqFields, setReqFields] = React.useState(defaultReqFields)
     const onSuccess = () => {
         history.push('/login')
     }
@@ -145,10 +154,9 @@ export default function SignUp(props: any) {
 
     var validate = (e: {target: {name: String, value: String, id: String, innerText: String }}) => {
         
-        console.log(e);
-        const newError = { ...defaultError };
+        const newError = { ...error };
         var name;
-        var value;
+        var value: any;
         // no validation needed for country
         // just need to extract country name to send to the server
         if (e.target.id.includes("country")) {
@@ -164,32 +172,58 @@ export default function SignUp(props: any) {
         
         switch(name) {
             case 'first_name':
+                setReqFields(prevState => {
+                     return {...prevState, first_name: value }
+                });
+
                 if (value.match(/[^a-zA-Z\s]/i)) {
                     newError.first_name =
                         "First name may contain only letters";
+                } else {
+                    newError.first_name =
+                        "";
+
                 }
                 break;
             case 'last_name':
+                setReqFields(prevState => {
+                    return {...prevState, last_name: value }
+               });
                 if (value.match(/[^a-zA-Z\s]/i)) {
                     newError.last_name =
                         "Last name may contain only letters";
+                } else {
+                    newError.last_name =
+                        "";
                 }
                 break;
             case 'username':
+                setReqFields(prevState => {
+                    return {...prevState, username: value }
+               });
                 if (value.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
                     newError.username = "User name may contain only letters, numbers, and @/./+/-/_ characters";
+                } else {
+                    newError.username = "";
                 }
                 break;
 
             case 'password':
+                setReqFields(prevState => {
+                    return {...prevState, password: value }
+               });
                 if (value && value.length < 8) {
                     newError.password = "Password must be at least 8 characters long";
+                } else {
+                    newError.password = "";
                 }
                 break;
 
             case 'email':
                 if (!value.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
                     newError.email = "Please enter a valid email";
+                } else {
+                    newError.email = "";
                 }
                 break;
             
@@ -206,31 +240,42 @@ export default function SignUp(props: any) {
          
     }
 
-    const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+    
+    const handleSelect = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+        var selectedRole = e.currentTarget.innerText;
+        setRole(selectedRole);
+        setReqFields(prevState => { // redundant because of the above role state
+            return {...prevState, role: selectedRole }
+       });
+       if (selectedRole != "") {
+           error.role = "";
+       }
     }
 
     // only do submission based validation: unique username
-    const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number, honorifics, address }: any) => {
-        const newError = { ...defaultError };
+    const onSubmit = ({ username, email, first_name, last_name, password, phone_number, honorifics, address }: any) => {
+        const newError = { ...error };  // the errors from dynamic validation are kept from before
+        // only submit if the required fields are non-empty and there are no other validation errors
+        // console.log(reqFields.first_name);
         console.log(role);
-        
-        if (!first_name) {
+
+        if (reqFields.first_name == "") {
             newError.first_name = "First name is required"
         }
-        if (!last_name) {
+        if (reqFields.last_name == "") {
             newError.last_name = "Last name is required"
         }
-        if (!role) {
-
-            newError.role = "Role is required"
-        }
-        if (!username) {
+        if (reqFields.username == "") {
             newError.username = "Username is required"
         }
-        if (!password) {
+        if (reqFields.password == "") {
             newError.password = "Password is required"
         }
+        if (role == "") {
+            newError.role = "Role is required"
+        } 
+        
+       
 
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
@@ -275,7 +320,7 @@ export default function SignUp(props: any) {
                     alignItems="center"
                     justify="center"
                     spacing={3}>
-
+                        
                     <Grid item>
                         <CssTextField
                             error={error.first_name == "" ? false: true}
@@ -288,7 +333,7 @@ export default function SignUp(props: any) {
                             type="text"
                             id="first_name"
                             className={classes.input}
-                            inputRef={register({ required: true })}
+                            //inputRef={register({ required: true })}
                             onChange={validate}
 
                         />
@@ -339,13 +384,12 @@ export default function SignUp(props: any) {
                             >
                             <Controller
                                 as={
-                                    <CssTextField select required variant="outlined" label="Role" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => handleSelect(e)}
-                                
+                                    <CssTextField select required variant="outlined" label="Role" error={error.role == "" ? false: true} helperText={error.role} 
 
                                     >
-                                        <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
-                                        <MenuItem value="Instructor">Instructor</MenuItem>
-                                        <MenuItem value="Partner">Partner</MenuItem>
+                                        <MenuItem  onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleSelect(e)} value="Entrepreneur">Entrepreneur</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleSelect(e)} value="Instructor">Instructor</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleSelect(e)} value="Partner">Partner</MenuItem>
                                     </CssTextField>
                                     
                                 }
