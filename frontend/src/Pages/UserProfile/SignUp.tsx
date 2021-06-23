@@ -78,6 +78,8 @@ const defaultError = {
     address: "",
 };
 
+
+
 const SignUpAjax = async (data: any, onSuccess: any
 ) => {
     try {
@@ -107,7 +109,7 @@ const SignUpAjax = async (data: any, onSuccess: any
             object[key] = value;
         });
 
-        const response = await fetch('https://localhost:8080/api/profile/register/', {
+        const response = await fetch('http://localhost:8080/api/profile/register/', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -125,9 +127,12 @@ const SignUpAjax = async (data: any, onSuccess: any
     }
 };
 
-export default function SignUp(props: any) {
-    const history = useHistory();
 
+
+//var errVal = false;
+export default function SignUp(props: any) {
+    
+    const history = useHistory();
     const classes = useStyles();
     // const [role, setRole] = React.useState('');
     const { register, handleSubmit, control } = useForm();
@@ -138,6 +143,50 @@ export default function SignUp(props: any) {
     // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     //     setRole(event.target.value as string);
     // };
+
+    var validate = (e: {target: {name: String, value: String }}) => {
+        
+        console.log(e);
+        // console.log(error.first_name == "");
+        const newError = { ...defaultError };
+        var name = e.target.name;
+        var value = e.target.value;
+        
+        switch(name) {
+            case 'first_name':
+                if (value.match(/[^a-zA-Z\s]/i)) {
+                    newError.first_name =
+                        "First name may contain only letters";
+                }
+                break;
+            case 'last_name':
+                if (value.match(/[^a-zA-Z\s]/i)) {
+                    newError.last_name =
+                        "Last name may contain only letters";
+                }
+                break;
+
+            default:
+                break;
+    
+        };
+        // console.log(newError);
+        
+        setError(newError);
+        const haveError = Object.values(newError).find(
+            (el: String) => el.length > 0
+        );
+        /*
+        if (haveError) {
+            errVal = true;
+        } else {
+            errVal = false;
+        }
+        */
+        
+        
+        
+    }
     const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number, honorifics, address }: any) => {
         const newError = { ...defaultError };
         if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
@@ -166,14 +215,14 @@ export default function SignUp(props: any) {
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
         );
+        // console.log(newError);
         setError(newError);
+        
         if (!haveError) {
             console.log({ username, email, first_name, last_name, password, role, phone_number, honorifics, address });
             SignUpAjax(
                 { username, email, first_name, last_name, password, role, phone_number, honorifics, address }, onSuccess
             );
-
-
         }
     };
 
@@ -207,8 +256,9 @@ export default function SignUp(props: any) {
 
                     <Grid item>
                         <CssTextField
-                            error={!!error.first_name}
+                            error={error.first_name == "" ? false: true}
                             helperText={error.first_name}
+                            
                             variant="outlined"
                             required
                             name="first_name"
@@ -217,13 +267,14 @@ export default function SignUp(props: any) {
                             id="first_name"
                             className={classes.input}
                             inputRef={register({ required: true })}
+                            onChange={validate}
 
                         />
                     </Grid>
 
                     <Grid item>
                         <CssTextField
-                            error={!!error.last_name}
+                            error={error.last_name == "" ? false: true}
                             helperText={error.last_name}
                             variant="outlined"
                             required
@@ -233,6 +284,7 @@ export default function SignUp(props: any) {
                             id="last_name"
                             className={classes.input}
                             inputRef={register({ required: true })}
+                            onChange={validate}
 
                         />
                     </Grid>

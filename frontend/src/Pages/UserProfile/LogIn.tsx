@@ -81,7 +81,7 @@ export const SignInAjax = async (
             object[key] = value;
         });
 
-        const response = await fetch('https://localhost:8080/api/profile/login/', {
+        const response = await fetch('http://localhost:8080/api/profile/login/', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

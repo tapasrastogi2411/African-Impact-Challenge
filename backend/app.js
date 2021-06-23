@@ -29,7 +29,16 @@ var config = {
         cert: certificate
 };
 
+
 const PORT = 8080;
+
+/*
 https.createServer(config, app).listen(PORT, function () {
     console.log('HTTPS on port %s', PORT);
 });
+*/
+
+
+app.listen(PORT, function () {
+    console.log('HTTP on port '+PORT);
+}); 
