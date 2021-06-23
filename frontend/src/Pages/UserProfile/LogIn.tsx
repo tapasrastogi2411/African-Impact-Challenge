@@ -9,6 +9,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
+import Alert from '@material-ui/lab/Alert';
 
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
@@ -37,7 +38,11 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
     text: {
         fontWeight: 600,
         fontSize: 36,
-    }
+    },
+
+    registration: {
+        marginTop: 10,
+    },
 
 }));
 
@@ -114,6 +119,16 @@ export default function SignIn(props: any) {
         SignInAjax({ username, password }, onSuccess, setError);
     };
 
+    const renderRegAlert = () => {
+        if (props.regVal == "true") {
+            return <Alert variant="standard" severity="success" className={classes.registration}>
+                        User successfully registered! 
+                    </Alert>
+        } else {
+            return "";
+        }
+    }
+
 
 
     return (
@@ -130,11 +145,14 @@ export default function SignIn(props: any) {
             >
                 {"Don't have an account? Sign Up"}
             </Link>
+
+            
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className={classes.form}
                 noValidate
             >
+                
                 <CssTextField
                     variant="outlined"
                     margin="normal"
@@ -170,7 +188,7 @@ export default function SignIn(props: any) {
                     className={classes.submit}
                 >
                     Log In
-          </Button>
+                </Button>
 
                 <Link
                     href="#"
@@ -178,9 +196,15 @@ export default function SignIn(props: any) {
                     color="textSecondary"
                 >
                     Forgot password?
-                    </Link>
+                </Link>
+
+                
 
             </form>
+
+            {renderRegAlert()}
+
+            
         </Container>
     );
 }
