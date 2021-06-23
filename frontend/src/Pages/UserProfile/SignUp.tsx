@@ -165,6 +165,25 @@ export default function SignUp(props: any) {
                         "Last name may contain only letters";
                 }
                 break;
+            case 'username':
+                if (value.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
+                    newError.username = "User name may contain only letters, numbers, and @/./+/-/_ characters";
+                }
+                break;
+
+            case 'password':
+                if (value && value.length < 8) {
+                    newError.password = "Password must be at least 8 characters long";
+                }
+                break;
+
+            case 'email':
+                if (!value.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
+                    newError.email = "Please enter a valid email";
+                }
+                break;
+            
+
 
             default:
                 break;
@@ -187,6 +206,7 @@ export default function SignUp(props: any) {
         
         
     }
+    // only do submission based validation: unique username
     const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number, honorifics, address }: any) => {
         const newError = { ...defaultError };
         if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
@@ -215,7 +235,7 @@ export default function SignUp(props: any) {
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
         );
-        // console.log(newError);
+        
         setError(newError);
         
         if (!haveError) {
@@ -331,7 +351,7 @@ export default function SignUp(props: any) {
                     </Grid>
                     <Grid item>
                         <CssTextField
-                            error={!!error.username}
+                            error={error.username == "" ? false: true}
                             helperText={error.username}
                             variant="outlined"
                             required
@@ -341,11 +361,14 @@ export default function SignUp(props: any) {
                             autoComplete="username"
                             className={classes.input}
                             inputRef={register({ required: true })}
+                            onChange={validate}
 
                         />
                     </Grid>
                     <Grid item>
                         <CssTextField
+                            error={error.password == "" ? false: true}
+                            helperText={error.password}
                             variant="outlined"
                             required
                             name="password"
@@ -355,6 +378,7 @@ export default function SignUp(props: any) {
                             autoComplete="current-password"
                             className={classes.input}
                             inputRef={register({ required: true })}
+                            onChange={validate}
 
                         />
                     </Grid>
@@ -371,6 +395,8 @@ export default function SignUp(props: any) {
                     </Grid>
                     <Grid item>
                         <CssTextField
+                            error={error.email == "" ? false: true}
+                            helperText={error.email}
                             variant="outlined"
                             id="email"
                             label="Email"
@@ -378,6 +404,7 @@ export default function SignUp(props: any) {
                             autoComplete="email"
                             className={classes.input}
                             inputRef={register}
+                            onChange={validate}
 
                         />
                     </Grid>
