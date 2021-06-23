@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Profilepage() {
+function Profilepage(props: any) {
   const classes = useStyles();
   return (
     <div >

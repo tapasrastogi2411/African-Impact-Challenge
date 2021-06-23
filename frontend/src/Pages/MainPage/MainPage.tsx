@@ -61,6 +61,7 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
 );
 function MainPage(props: any) {
     const classes = useStyles();
+    props.regHandler("false"); 
 
     return (
         <div className={classes.root}>
@@ -88,7 +89,7 @@ function MainPage(props: any) {
                         </Button>
                 </Grid>
             </Grid>
-            <img src={pic} className={classes.pic}></img>
+            {/* <img src={pic} className={classes.pic}></img> */}
         </div >
 
     );

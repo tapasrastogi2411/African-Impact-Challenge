@@ -28,8 +28,6 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
         color: "#ffffff",
         width: 300,
         '&:hover': { background: "#e69113" },
-
-
     },
     input: {
         background: "white",
@@ -78,7 +76,7 @@ const defaultError = {
 };
 
 // honorifics and role tracked separately
-const defaultReqFields = {
+const defaultFieldData = {
     username: "",
     password: "",
     first_name: "",
@@ -88,9 +86,6 @@ const defaultReqFields = {
     address: "",
     country: ""
 }
-
-
-
 
 
 
@@ -105,25 +100,26 @@ export default function SignUp(props: any) {
     const [honorifics, setHonorifics] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
-    const [reqFields, setReqFields] = React.useState(defaultReqFields)
+    const [fieldData, setFieldData] = React.useState(defaultFieldData)
+
+    props.regHandler("false");
 
     const onSuccess = () => { // successful response from the server -> user added to the db
         history.push('/login'); 
+        props.regHandler("true");
+
+        // call pages handler and tell it login success
     }
 
     const SignUpAjax = async (data: any, onSuccess: any
         ) => {
             try{
-            
-                //console.log("SignupAjax");
-                // console.log(data);
                 var formdata = new FormData();
                 formdata.append("username", data.username);
                 formdata.append("password", data.password);
                 formdata.append("phone_number", data.phone_number);
                 formdata.append("first_name", data.first_name);
                 formdata.append("last_name", data.last_name);
-                // console.log(data.role);
                 if (data.roleData == "Entrepreneur") {
                     formdata.append("user_role", "2");
                 } else if (data.roleData == "Instructor") {
@@ -176,7 +172,7 @@ export default function SignUp(props: any) {
         };
     
     
-    var validate = (e: {target: {name: String, value: String, id: String, innerText: String }}) => {
+    var validateAndSetField = (e: {target: {name: String, value: String, id: String, innerText: String }}) => {
         
         const newError = { ...error };
         var name;
@@ -195,7 +191,7 @@ export default function SignUp(props: any) {
         
         switch(name) {
             case 'first_name':
-                setReqFields(prevState => {
+                setFieldData(prevState => {
                      return {...prevState, first_name: value }
                 });
 
@@ -209,7 +205,7 @@ export default function SignUp(props: any) {
                 }
                 break;
             case 'last_name':
-                setReqFields(prevState => {
+                setFieldData(prevState => {
                     return {...prevState, last_name: value }
                });
                 if (value.match(/[^a-zA-Z\s]/i)) {
@@ -221,7 +217,7 @@ export default function SignUp(props: any) {
                 }
                 break;
             case 'username':
-                setReqFields(prevState => {
+                setFieldData(prevState => {
                     return {...prevState, username: value }
                });
                 if (value.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
@@ -232,7 +228,7 @@ export default function SignUp(props: any) {
                 break;
 
             case 'password':
-                setReqFields(prevState => {
+                setFieldData(prevState => {
                     return {...prevState, password: value }
                });
                 if (value && value.length < 8) {
@@ -243,7 +239,7 @@ export default function SignUp(props: any) {
                 break;
 
             case 'email':
-                setReqFields(prevState => {
+                setFieldData(prevState => {
                     return {...prevState, email: value }
                });
 
@@ -255,19 +251,19 @@ export default function SignUp(props: any) {
                 break;
             
             case 'country':
-                setReqFields(prevState => {
+                setFieldData(prevState => {
                     return {...prevState, country: value }
                });
                break;
             
             case 'address':
-                setReqFields(prevState => {
+                setFieldData(prevState => {
                     return {...prevState, address: value }
                });
                break;
 
             case 'phone_number':
-            setReqFields(prevState => {
+            setFieldData(prevState => {
                 return {...prevState, phone_number: value }
             });
             break;
@@ -298,7 +294,6 @@ export default function SignUp(props: any) {
     const handleHonorifics = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
         var selectedHonorific = e.currentTarget.innerText;
         setHonorifics(selectedHonorific);
-        
     }
 
     // only do submission based validation: unique username
@@ -306,41 +301,32 @@ export default function SignUp(props: any) {
         const newError = { ...error };  // the errors from dynamic validation are kept from before
         // only submit if the required fields are non-empty and there are no other validation errors
         
-        
 
-        if (reqFields.first_name == "") {
+        if (fieldData.first_name == "") {
             newError.first_name = "First name is required"
         }
-        if (reqFields.last_name == "") {
+        if (fieldData.last_name == "") {
             newError.last_name = "Last name is required"
         }
-        if (reqFields.username == "") {
+        if (fieldData.username == "") {
             newError.username = "Username is required"
         }
-        if (reqFields.password == "") {
+        if (fieldData.password == "") {
             newError.password = "Password is required"
         }
         if (role == "") {
             newError.role = "Role is required"
         } 
         
-       
-
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
         );
 
-        //console.log(reqFields);
-        //console.log(honorifics);
-        //console.log(role);
-        
         setError(newError);
-        // honorifics, role
+       
         if (!haveError) {
-            // on success reset fields and errors to ""
-            var combinedFields = {...reqFields, honorificsData: honorifics, roleData: role}
+            var combinedFields = {...fieldData, honorificsData: honorifics, roleData: role}
             
-            // console.log({ username, email, first_name, last_name, password, role, phone_number, honorifics, address });
             SignUpAjax(
                 combinedFields, onSuccess
             );
@@ -390,7 +376,7 @@ export default function SignUp(props: any) {
                             id="first_name"
                             className={classes.input}
                             //inputRef={register({ required: true })}
-                            onChange={validate}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
@@ -407,7 +393,7 @@ export default function SignUp(props: any) {
                             id="last_name"
                             className={classes.input}
                             inputRef={register({ required: true })}
-                            onChange={validate}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
@@ -471,7 +457,7 @@ export default function SignUp(props: any) {
                             autoComplete="username"
                             className={classes.input}
                             inputRef={register({ required: true })}
-                            onChange={validate}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
@@ -488,7 +474,7 @@ export default function SignUp(props: any) {
                             autoComplete="current-password"
                             className={classes.input}
                             inputRef={register({ required: true })}
-                            onChange={validate}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
@@ -501,7 +487,7 @@ export default function SignUp(props: any) {
                             id="phone_number"
                             className={classes.input}
                             inputRef={register}
-                            onChange={validate}
+                            onChange={validateAndSetField}
                         />
                     </Grid>
                     <Grid item>
@@ -515,7 +501,7 @@ export default function SignUp(props: any) {
                             autoComplete="email"
                             className={classes.input}
                             inputRef={register}
-                            onChange={validate}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
@@ -523,7 +509,7 @@ export default function SignUp(props: any) {
                     <Grid item>
                         
                         <CountrySelect
-                            onChange={validate}
+                            onChange={validateAndSetField}
                         />
                     
                         
@@ -538,7 +524,7 @@ export default function SignUp(props: any) {
                             autoComplete="address"
                             className={classes.input}
                             inputRef={register}
-                            onChange={validate}
+                            onChange={validateAndSetField}
                         />
                     </Grid>
 
