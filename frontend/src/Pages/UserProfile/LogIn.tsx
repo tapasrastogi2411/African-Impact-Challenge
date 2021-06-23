@@ -119,7 +119,7 @@ export default function SignIn(props: any) {
         SignInAjax({ username, password }, onSuccess, setError);
     };
 
-    const renderAlert = () => {
+    const renderRegAlert = () => {
         if (props.regVal == "true") {
             return <Alert variant="standard" severity="success" className={classes.registration}>
                         User successfully registered! 
@@ -202,7 +202,7 @@ export default function SignIn(props: any) {
 
             </form>
 
-            {renderAlert()}
+            {renderRegAlert()}
 
             
         </Container>

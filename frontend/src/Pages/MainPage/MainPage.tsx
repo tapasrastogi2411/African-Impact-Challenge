@@ -89,7 +89,7 @@ function MainPage(props: any) {
                         </Button>
                 </Grid>
             </Grid>
-            {/* <img src={pic} className={classes.pic}></img> */}
+            <img src={pic} className={classes.pic}></img>
         </div >
 
     );
