@@ -77,81 +77,105 @@ const defaultError = {
     address: "",
 };
 
+// honorifics and role tracked separately
 const defaultReqFields = {
     username: "",
     password: "",
     first_name: "",
     last_name: "",
-    role: ""
+    email: "",
+    phone_number: "",
+    address: "",
+    country: ""
 }
 
 
 
-const SignUpAjax = async (data: any, onSuccess: any
-) => {
-    try {
-        var formdata = new FormData();
-        formdata.append("username", data.username);
-        formdata.append("password", data.password);
-        formdata.append("phone_number", data.phone_number);
-        formdata.append("first_name", data.first_name);
-        formdata.append("last_name", data.last_name);
-        // console.log(data.role);
-        if (data.role == "Entrepreneur") {
-            formdata.append("user_role", "2");
-        } else if (data.role == "Instructor") {
-            formdata.append("user_role", "1");
-        } else {
-            formdata.append("user_role", "3");
-        }
-        
-        formdata.append("email", data.email);
-        formdata.append("honorifics", data.honorifics);
-        formdata.append("address", data.address);
-        formdata.append("country", "");
-        
-        // convert formData to JSON since that is what the server looks for
-        var object:any = {};
-        formdata.forEach(function(value: any, key: any){
-            object[key] = value;
-        });
-
-        const response = await fetch('http://localhost:8080/api/profile/register/', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-              },
-            body: JSON.stringify(object),
-        });
-        const responseData = await response.json();
-        if (response.status > 300 || response.status < 200) {
-            throw responseData;
-        }
-        onSuccess();
-
-    } catch (e) {
-        console.dir(e);
-    }
-};
 
 
 
-//var errVal = false;
+
+// when user first enters the signup page, all data should be cleared/reset
+// this is done when the component is re-rendered after visiting the page
 export default function SignUp(props: any) {
     
     const history = useHistory();
     const classes = useStyles();
     const [role, setRole] = React.useState('');
+    const [honorifics, setHonorifics] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
     const [reqFields, setReqFields] = React.useState(defaultReqFields)
-    const onSuccess = () => {
-        history.push('/login')
-    }
-    // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    //     setRole(event.target.value as string);
-    // };
 
+    const onSuccess = () => { // successful response from the server -> user added to the db
+        history.push('/login'); 
+    }
+
+    const SignUpAjax = async (data: any, onSuccess: any
+        ) => {
+            try{
+            
+                //console.log("SignupAjax");
+                // console.log(data);
+                var formdata = new FormData();
+                formdata.append("username", data.username);
+                formdata.append("password", data.password);
+                formdata.append("phone_number", data.phone_number);
+                formdata.append("first_name", data.first_name);
+                formdata.append("last_name", data.last_name);
+                // console.log(data.role);
+                if (data.roleData == "Entrepreneur") {
+                    formdata.append("user_role", "2");
+                } else if (data.roleData == "Instructor") {
+                    formdata.append("user_role", "1");
+                } else {
+                    formdata.append("user_role", "3");
+                }
+                
+                formdata.append("email", data.email);
+                formdata.append("honorifics", data.honorificsData);
+                formdata.append("address", data.address);
+                formdata.append("country", data.country);
+                
+                // convert formData to JSON since that is what the server looks for
+                var object:any = {};
+                formdata.forEach(function(value: any, key: any){
+                    object[key] = value;
+                });
+        
+                const response = await fetch('http://localhost:8080/api/profile/register/', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                      },
+                    body: JSON.stringify(object),
+                });
+                const responseData = await response.json();
+                const newError = { ...error };
+                console.log(response);
+
+                if (response.status == 201) {
+                    onSuccess();
+                } else {
+
+                    if (response.status == 409) { // username already exists
+                        newError.username = "Username already exists";
+                        setError(newError);
+
+                    } else if (response.status == 500) {
+                        console.log("Server error");
+                    } else {
+                        console.log("Unknown status code recieved from server");
+                    }
+                    
+                }
+            } catch(e) {
+                console.log("Unhandled promise");
+            }
+                
+        };
+    
+    
     var validate = (e: {target: {name: String, value: String, id: String, innerText: String }}) => {
         
         const newError = { ...error };
@@ -163,7 +187,6 @@ export default function SignUp(props: any) {
             name = "country";
             var country = e.target.innerText.split("(")[0];
             value = country.split("\n")[1];
-
         } else {
             name = e.target.name;
             value = e.target.value;
@@ -220,6 +243,10 @@ export default function SignUp(props: any) {
                 break;
 
             case 'email':
+                setReqFields(prevState => {
+                    return {...prevState, email: value }
+               });
+
                 if (!value.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
                     newError.email = "Please enter a valid email";
                 } else {
@@ -227,6 +254,25 @@ export default function SignUp(props: any) {
                 }
                 break;
             
+            case 'country':
+                setReqFields(prevState => {
+                    return {...prevState, country: value }
+               });
+               break;
+            
+            case 'address':
+                setReqFields(prevState => {
+                    return {...prevState, address: value }
+               });
+               break;
+
+            case 'phone_number':
+            setReqFields(prevState => {
+                return {...prevState, phone_number: value }
+            });
+            break;
+
+
             default:
                 break;
     
@@ -244,20 +290,23 @@ export default function SignUp(props: any) {
     const handleSelect = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
         var selectedRole = e.currentTarget.innerText;
         setRole(selectedRole);
-        setReqFields(prevState => { // redundant because of the above role state
-            return {...prevState, role: selectedRole }
-       });
        if (selectedRole != "") {
            error.role = "";
        }
     }
 
+    const handleHonorifics = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+        var selectedHonorific = e.currentTarget.innerText;
+        setHonorifics(selectedHonorific);
+        
+    }
+
     // only do submission based validation: unique username
-    const onSubmit = ({ username, email, first_name, last_name, password, phone_number, honorifics, address }: any) => {
+    const onSubmit = ({ username, email, first_name, last_name, password, phone_number, address }: any) => {
         const newError = { ...error };  // the errors from dynamic validation are kept from before
         // only submit if the required fields are non-empty and there are no other validation errors
-        // console.log(reqFields.first_name);
-        console.log(role);
+        
+        
 
         if (reqFields.first_name == "") {
             newError.first_name = "First name is required"
@@ -280,13 +329,20 @@ export default function SignUp(props: any) {
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
         );
+
+        //console.log(reqFields);
+        //console.log(honorifics);
+        //console.log(role);
         
         setError(newError);
-        
+        // honorifics, role
         if (!haveError) {
-            console.log({ username, email, first_name, last_name, password, role, phone_number, honorifics, address });
+            // on success reset fields and errors to ""
+            var combinedFields = {...reqFields, honorificsData: honorifics, roleData: role}
+            
+            // console.log({ username, email, first_name, last_name, password, role, phone_number, honorifics, address });
             SignUpAjax(
-                { username, email, first_name, last_name, password, role, phone_number, honorifics, address }, onSuccess
+                combinedFields, onSuccess
             );
         }
     };
@@ -365,8 +421,8 @@ export default function SignUp(props: any) {
                             <Controller
                                 as={
                                     <CssTextField select variant="outlined" label="Honorifics">
-                                        <MenuItem value="Mr">Mr</MenuItem>
-                                        <MenuItem value="Ms">Ms</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleHonorifics(e)} value="Mr">Mr</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleHonorifics(e)} value="Ms">Ms</MenuItem>
                                     </CssTextField>
                                 }
                                 name="honorifics"
@@ -445,6 +501,7 @@ export default function SignUp(props: any) {
                             id="phone_number"
                             className={classes.input}
                             inputRef={register}
+                            onChange={validate}
                         />
                     </Grid>
                     <Grid item>
@@ -481,6 +538,7 @@ export default function SignUp(props: any) {
                             autoComplete="address"
                             className={classes.input}
                             inputRef={register}
+                            onChange={validate}
                         />
                     </Grid>
 
