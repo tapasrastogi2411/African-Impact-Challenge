@@ -43,6 +43,11 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
     registration: {
         marginTop: 10,
     },
+    error: {
+        backgroundColor: "#FF7F7F",
+        fontWeight: 800,
+        marginTop: theme.spacing(1),
+    }
 
 }));
 
@@ -69,41 +74,62 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
+// userErr/passErr = username/password not provided
+// backendErr = username already taken or invalid password
+const defaultErr = {userErr: "", passErr: "", backendErr: "false"};
+
 export const SignInAjax = async (
     data: any,
     onSuccess: any,
-
     setError: any,
 ) => {
     try {
-        var formdata = new FormData();
-        formdata.append("username", data.username);
-        formdata.append("password", data.password);
-
-        // convert formData to JSON since that is what the server looks for
-        var object:any = {};
-        formdata.forEach(function(value: any, key: any){
-            object[key] = value;
-        });
-
-        const response = await fetch('http://localhost:8080/api/profile/login/', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-              },
-            body: JSON.stringify(object),
-        });
-        const responseData = await response.json();
-        if (response.status > 300 || response.status < 200) {
-            throw responseData;
+        var newErr = {... defaultErr};
+        var errFlag = false;
+        if (data.username == "") {
+            errFlag = true;
+            newErr.userErr = "Username is required";
         }
-        onSuccess();
-    } catch (e) {
+        if (data.password == "") {
+            errFlag = true;
+            newErr.passErr = "Password is required";
+        }
+
+        setError(newErr);
+
+
+        if (errFlag == false){
+            var formdata = new FormData();
+            formdata.append("username", data.username);
+            formdata.append("password", data.password);
+
+            // convert formData to JSON since that is what the server looks for
+            var object:any = {};
+            formdata.forEach(function(value: any, key: any){
+                object[key] = value;
+            });
+
+            const response = await fetch('http://localhost:8080/api/profile/login/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(object),
+            });
+            const responseData = await response.json();
+            if (response.status > 300 || response.status < 200) {
+                throw responseData;
+            }
+            onSuccess();
+        }
+        
+        
+    } catch (e) { // username or password is invalid
         console.log(e);
-        setError(
-            "Password does not match user name"
-        );
-    }
+        setError( (prevState:Object) => {
+            return { ...prevState, backendErr:"true" } 
+            });
+    } 
 };
 
 export default function SignIn(props: any) {
@@ -113,12 +139,24 @@ export default function SignIn(props: any) {
     }
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
-    const [error, setError] = React.useState("");
+    const [error, setError] = React.useState(defaultErr); 
 
     const onSubmit = ({ username, password }: any) => {
         SignInAjax({ username, password }, onSuccess, setError);
     };
 
+
+    
+    const renderError = () => {
+        if (error.backendErr == "true") {
+            return <Alert variant="filled" severity="error" className={classes.error}>
+                        Invalid username or password
+                    </Alert>
+        }
+    }
+    
+    // If user successfully registered and is taken to login page, regVal prop is set to true
+    // -> render the alert 
     const renderRegAlert = () => {
         if (props.regVal == "true") {
             return <Alert variant="standard" severity="success" className={classes.registration}>
@@ -154,6 +192,8 @@ export default function SignIn(props: any) {
             >
                 
                 <CssTextField
+                    error={error.userErr == "" ? false: true}
+                    helperText={error.userErr}
                     variant="outlined"
                     margin="normal"
                     required
@@ -164,10 +204,12 @@ export default function SignIn(props: any) {
                     autoComplete="username"
                     className={classes.input}
                     inputRef={register}
-
+                    onInput={() => setError( prevState => {return { ...prevState, userErr:"", backendErr: "false" } } )}
                 />
 
                 <CssTextField
+                    error={error.passErr == "" ? false: true}
+                    helperText={error.passErr}
                     variant="outlined"
                     margin="normal"
                     required
@@ -179,7 +221,9 @@ export default function SignIn(props: any) {
                     autoComplete="current-password"
                     className={classes.input}
                     inputRef={register}
+                    onInput={() => setError( prevState => {return { ...prevState, passErr:"", backendErr: "false"} } )}
                 />
+                {renderError()}
                 <Button
                     type="submit"
                     fullWidth
