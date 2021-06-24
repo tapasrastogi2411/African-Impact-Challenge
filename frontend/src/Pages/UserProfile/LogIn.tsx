@@ -74,6 +74,8 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
+// userErr/passErr = username/password not provided
+// backendErr = username already taken or invalid password
 const defaultErr = {userErr: "", passErr: "", backendErr: "false"};
 
 export const SignInAjax = async (
@@ -153,8 +155,8 @@ export default function SignIn(props: any) {
         }
     }
     
-    
-
+    // If user successfully registered and is taken to login page, regVal prop is set to true
+    // -> render the alert 
     const renderRegAlert = () => {
         if (props.regVal == "true") {
             return <Alert variant="standard" severity="success" className={classes.registration}>
