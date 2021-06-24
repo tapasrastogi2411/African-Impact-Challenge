@@ -69,13 +69,15 @@ const useStyles = makeStyles((theme) => ({
 
 function Profilepage(props: any) {
   const classes = useStyles();
+  const userData: {username: any} = props.userDataProp;
+  console.log(userData);
   return (
     <div >
       <Navbar></Navbar>
 
       <Grid container className={classes.root}>
         <Grid item xs={12}>
-          <Typography variant="h4">Username</Typography>
+          <Typography variant="h4">{userData.username}</Typography>
         </Grid>
 
 

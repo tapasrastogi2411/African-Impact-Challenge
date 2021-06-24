@@ -112,6 +112,7 @@ router.post('/login/', auth, async function (req, res) {
         if (result.rows.length === 0){
             return res.status(400).end('Invalid username')
         } else {
+            
             // check if the passwords match (the passwords in the database have been hashed)
             const isMatch = await bcrypt.compare(password, result.rows[0].password)
             // return a 401 if passwords dont match
@@ -121,8 +122,9 @@ router.post('/login/', auth, async function (req, res) {
                 // create a session and return a 200 response
                 req.session.loggedIn = true
                 req.session.username = username
-                console.log(req.session);
-                return res.status(200).json("");
+                var userData = result.rows[0]; // prevent password from getting sent (although it's hashed+salted)
+                // console.log(req.session);
+                return res.status(200).json(userData);
             }
         }
     // }
