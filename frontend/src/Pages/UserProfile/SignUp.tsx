@@ -394,7 +394,6 @@ export default function SignUp(props: any) {
                             className={classes.input}
                             inputRef={register({ required: true })}
                             onChange={validateAndSetField}
-
                         />
                     </Grid>
 

@@ -12,6 +12,7 @@ import profilepic from "./profilepic.jpeg";
 import ChatIcon from '@material-ui/icons/Chat';
 import EditIcon from '@material-ui/icons/Edit';
 import BusinessIcon from '@material-ui/icons/Business';
+import CreateCompany from './CreateCompany';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,9 +100,8 @@ function Profilepage(props: any) {
       <Grid container className={classes.root}>
 
       <Grid item xs={12} >
-        <Button startIcon={<BusinessIcon />} className={classes.companyBtn}>Create Company </Button>
+        <CreateCompany /> 
         
-
       </Grid>
 
         <Grid item xs={12}>
