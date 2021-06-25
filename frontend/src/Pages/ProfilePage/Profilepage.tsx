@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   profilePic: {
     width: 200,
-    marginTop: 20,
+    marginTop: 5,
     borderRadius: 5
   },
   info: {
@@ -42,6 +42,12 @@ const useStyles = makeStyles((theme) => ({
   category: {
     fontSize: 22,
     fontWeight: 700
+  },
+  role: {
+    fontSize: 22,
+    fontWeight: 700,
+    width: 200,
+    display: "block",
   },
   about: {
     marginBottom: 30,
@@ -66,15 +72,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
+ 
 function Profilepage(props: any) {
   const classes = useStyles();
-  const userData: {username: any} = props.userDataProp;
+  const userData = props.userDataProp;
   console.log(userData);
   return (
     <div >
       <Navbar></Navbar>
-
       <Grid container className={classes.root}>
         <Grid item xs={12}>
           <Typography variant="h4">{userData.username}</Typography>
@@ -83,6 +88,7 @@ function Profilepage(props: any) {
 
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
+        <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography> 
           <img src={profilepic} className={classes.profilePic} />
           <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
           <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
@@ -96,33 +102,32 @@ function Profilepage(props: any) {
           direction="row"
           className={classes.info}>
           <Grid item xs={4}>
+            <Typography className={classes.category}>Honorifics</Typography>
+            <Typography >{userData.honorifics}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography className={classes.category}>First Name</Typography>
+            <Typography >{userData.first_name}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography className={classes.category}>Last Name</Typography>
+            <Typography >{userData.last_name}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography className={classes.category}>Phone Number</Typography>
+            <Typography >{userData.phone_number}</Typography>
+          </Grid>
+          <Grid item xs={4}>
             <Typography className={classes.category}>Email</Typography>
-            <Typography >user.name@mail.com</Typography>
+            <Typography >{userData.email} </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography className={classes.category}>Organization</Typography>
-            <Typography >Sample Inc.</Typography>
+            <Typography className={classes.category}>Address</Typography>
+            <Typography >{userData.address}</Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography className={classes.category}>Location</Typography>
-            <Typography >Toronto</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Site</Typography>
-            <Typography >userNameBlog.com</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Number</Typography>
-            <Typography >+1-647-123-5588</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Birthday</Typography>
-            <Typography >March 9th</Typography>
-          </Grid>
-          <Grid item xs={12} className={classes.about}>
-            <Typography className={classes.category}>About</Typography>
-            <Typography >Anon is the co-founder and chief investment officer of Startupbootcamp AfriTech. He is also a venture capital principal at Nedbank, a managing partner at Launch Africa VC and the founder of Cactus advisors.  Anon advises us on our strategy for the African Impact Challenge
-            </Typography>
+            <Typography className={classes.category}>Country</Typography>
+            <Typography >{userData.country}</Typography>
           </Grid>
         </Grid>
         <Divider className={classes.divider} />

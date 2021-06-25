@@ -103,30 +103,52 @@ router.post('/login/', auth, async function (req, res) {
     //     res.status(200)
     // }
     // else{
-        // get the password and username from the request object
-        const { username, password } = req.body;
-        // Checking the database to authenticate the user
-        let query = `SELECT * FROM profile_schema.aic_user WHERE username='${username}'`
-        const result = await db.query(query)
-        // if the query returned no rows (i.e no user with the given username) return a 400
-        if (result.rows.length === 0){
-            return res.status(400).end('Invalid username')
-        } else {
-            
-            // check if the passwords match (the passwords in the database have been hashed)
-            const isMatch = await bcrypt.compare(password, result.rows[0].password)
-            // return a 401 if passwords dont match
-            if(!isMatch){
-                return res.status(401).end('Invalid password')
+
+        try {
+            // get the password and username from the request object
+            const { username, password } = req.body;
+            // Checking the database to authenticate the user
+            let query = `SELECT * FROM profile_schema.aic_user WHERE username='${username}'`
+            const result = await db.query(query)
+            // if the query returned no rows (i.e no user with the given username) return a 400
+            if (result.rows.length === 0){
+                return res.status(400).end('Invalid username')
             } else {
-                // create a session and return a 200 response
-                req.session.loggedIn = true
-                req.session.username = username
-                var userData = result.rows[0]; // prevent password from getting sent (although it's hashed+salted)
-                // console.log(req.session);
-                return res.status(200).json(userData);
+                // check if the passwords match (the passwords in the database have been hashed)
+                const isMatch = await bcrypt.compare(password, result.rows[0].password)
+                // return a 401 if passwords dont match
+                if(!isMatch){
+                    return res.status(401).end('Invalid password')
+                } else {
+                    // create a session and return a 200 response
+                    req.session.loggedIn = true
+                    req.session.username = username
+                    var userData = result.rows[0]; // prevent password from getting sent (although it's hashed+salted)
+                    // console.log(req.session);
+                    console.log(userData);
+                    if (userData["user_role"] == 1) {
+                        userData["user_role"] = "Teacher";
+                    } else if (userData["user_role"] == 2) {
+                        userData["user_role"] = "Entrepreneur";
+                    } else {
+                        userData["user_role"] = "Partner";
+                    }
+
+                    for (const property in userData) {
+                        if (userData[property] == 'null') {
+                            userData[property] = "Not Provided";
+                        }
+                    }
+                    delete userData["password"];
+                    console.log(userData);
+                    return res.status(200).json(userData);
+                }
             }
+            
+        } catch (error) {
+            console.log(error);
         }
+        
     // }
 })
 
