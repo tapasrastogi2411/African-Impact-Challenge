@@ -120,7 +120,8 @@ export const SignInAjax = async (
             if (response.status > 300 || response.status < 200) {
                 throw responseData;
             }
-            onSuccess();
+            // console.log(response);
+            onSuccess(responseData);
         }
         
         
@@ -134,8 +135,11 @@ export const SignInAjax = async (
 
 export default function SignIn(props: any) {
     const history = useHistory();
-    const onSuccess = () => {
-        history.push('/profile')
+    const onSuccess = (responseData: any) => {
+        history.push('/profile');
+        console.log(responseData);
+        // get user data from server and pass it to the handler
+        props.updateUserDataHandler(responseData); 
     }
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
