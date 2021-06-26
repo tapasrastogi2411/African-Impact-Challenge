@@ -100,7 +100,7 @@ export default function SignUp(props: any) {
     const [honorifics, setHonorifics] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
-    const [fieldData, setFieldData] = React.useState(defaultFieldData)
+    const [fieldData, setFieldData] = React.useState(defaultFieldData);
 
     props.regHandler("false");
 

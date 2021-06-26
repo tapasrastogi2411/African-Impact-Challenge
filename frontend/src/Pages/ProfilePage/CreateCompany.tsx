@@ -16,7 +16,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import { borders } from '@material-ui/system';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +35,32 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: 10,
       paddingRight: 10,
     },
+    createLeftBtn: {
+        backgroundColor: "#fcb040",
+        borderRadius: 10,
+        color: "#ffffff",
+        '&:hover': { background: "#e69113" },
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        marginRight: 20,
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    createRightBtn: {
+        backgroundColor: "#fcb040",
+        borderRadius: 10,
+        color: "#ffffff",
+        '&:hover': { background: "#e69113" },
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        marginRight: 338,
+        marginTop: 20,
+        marginBottom: 20,
+    },
 
     industry: {
         width: "177px",
@@ -50,9 +77,29 @@ const useStyles = makeStyles((theme) => ({
     aboutText: {
         marginTop: "20px"
     },
+    error: {
+        color: "red"
+    },
 
 
   }));
+
+
+const defaultError = {
+    companyName: "",
+    companyAddress: "",
+    industry: "",
+    size: "",
+    about: ""
+};
+
+const defaultFieldData = {
+    companyName: "",
+    companyAddress: "",
+    industry: "",
+    size: "",
+    about: ""
+};
 
 
 
@@ -60,6 +107,8 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateCompany(props: any) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [error, setError] = React.useState(defaultError);
+    const [fieldData, setFieldData] = React.useState(defaultFieldData);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
   
     const handleClickOpen = () => {
@@ -67,7 +116,73 @@ export default function CreateCompany(props: any) {
     };
   
     const handleClose = () => {
-      setOpen(false);
+        setFieldData(defaultFieldData);
+        setError(defaultError);
+        setOpen(false);
+    };
+
+    const validate = (data: {companyName:any, companyAddress:any, industry:any, size:any, about:any}) => {
+        const newError = { ...defaultError };
+        // console.log(data);
+        if (data.companyName == "") {
+            newError.companyName = "Company name is required";
+        }
+        if (data.industry == "") {
+            newError.industry = "Industry is required";
+        }
+        setError(newError);
+    };
+
+    var setField = (e: any) => {
+        const newData = { ...defaultFieldData };
+        var name = e.target.name;
+        var value = e.target.value;
+        //console.log(e);
+        //console.log(name);
+        //console.log(value);
+
+        switch(name) {
+            case 'companyName':
+                setFieldData(prevState => {
+                    return {...prevState, companyName: value }
+               });
+                setError(prevState => {
+                    return {...prevState, companyName: "" }
+                });
+                break;
+            
+            case 'companyAddress':
+                setFieldData(prevState => {
+                    return {...prevState, companyAddress: value }
+               });
+                break;
+            
+            case 'about':
+                setFieldData(prevState => {
+                    return {...prevState, about: value }
+                });
+                break;
+            case 'industry-select':
+                setFieldData(prevState => {
+                    return {...prevState, industry: value }
+                });
+
+                setError(prevState => {
+                    return {...prevState, industry: "" }
+                    });
+                break;
+            case 'size-select':
+                setFieldData(prevState => {
+                    return {...prevState, size: value }
+                });
+                setError(prevState => {
+                    return {...prevState, size: "" }
+                    });
+                break;
+
+            default:
+                break;
+        }
     };
 
     return(
@@ -75,7 +190,12 @@ export default function CreateCompany(props: any) {
             <Button startIcon={<BusinessIcon />} className={classes.companyBtn} onClick={handleClickOpen} aria-labelledby="form-dialog-title">Create Company </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="sm" scroll="body" >
                 <DialogTitle id="form-dialog-title" style={{background:"#f2f6fa"}}>Create Company</DialogTitle>
-                <DialogContent className={classes.card} style={{ overflow: "hidden", background:"#f2f6fa"}}>
+                
+                    <form
+                        noValidate
+                        onSubmit={(e) => {validate(fieldData)}}
+                    >
+                        <DialogContent className={classes.card} style={{ overflow: "hidden", background:"#f2f6fa"}}>
                         <Grid
                         container
                         spacing={4}>
@@ -83,53 +203,62 @@ export default function CreateCompany(props: any) {
                             <Grid item>
                                 <TextField
                                     variant="standard"
-                                    name="name"
+                                    name="companyName"
                                     label="Company Name"
-                                    id="name"
+                                    id="companyName"
+                                    required
+                                    onChange={(e) => {setField(e)}}
+                                    error={error.companyName == "" ? false: true}
+                                    helperText={error.companyName}
                                 />
                             </Grid>
 
                             <Grid item>
                                 <TextField
                                     variant="standard"
-                                    name="address"
+                                    name="companyAddress"
                                     label="Company Address"
-                                    id="address"
+                                    id="companyAddress"
+                                    onChange={(e) => {setField(e)}}
                                 />
                             </Grid>
 
-                            <Grid item>
-                                <FormControl className={classes.industry}>
-                                    <InputLabel id="industry-select-label">Industry</InputLabel>
+                            <Grid item  >
+                                <FormControl className={classes.industry} error={error.industry != "" && true}>
+                                    <InputLabel id="industry-select-label" required >Industry</InputLabel>
                                     <Select
                                         labelId="industry-select-label"
                                         id="industry-select"
-                                        value=""
+                                        name="industry-select"
+                                        value={fieldData.industry}
+                                        onChange={(e: any) => setField(e)}
+                                       
                                         >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
+                                        
+                                        <MenuItem value="energy">Energy</MenuItem>
+                                        <MenuItem value="manufacturing">Manufacturing</MenuItem>
+                                        <MenuItem value="technology">Technology</MenuItem>
+                                        <MenuItem value="aerospace">Aerospace</MenuItem>
+                                        <MenuItem value="construction">Construction</MenuItem>
+                                        <MenuItem value="other">Other</MenuItem>
                                     </Select>
+                                    {error.industry != "" && <FormHelperText > Industry is required </FormHelperText>} 
                                 </FormControl>
                             </Grid>
 
                             <Grid item>
-                                <FormControl className={classes.companySize}>
-                                    <InputLabel id="industry-select-label">Size</InputLabel>
+                                <FormControl className={classes.companySize} >
+                                    <InputLabel id="size-select-label"># of Employees</InputLabel>
                                     <Select
-                                        labelId="industry-select-label"
-                                        id="industry-select"
-                                        value=""
+                                        labelId="size-select-label"
+                                        id="size-select"
+                                        value={fieldData.size}
+                                        onChange={(e: any) => setField(e)}
+                                        name="size-select"
                                         >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
+                                        <MenuItem value={10}>0 - 3</MenuItem>
+                                        <MenuItem value={20}>4 - 8</MenuItem>
+                                        <MenuItem value={30}>{'>'} 8</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -150,26 +279,32 @@ export default function CreateCompany(props: any) {
                                         id="about"
                                         multiline
                                         rowsMax={4}
+                                        onChange={(e) => {setField(e)}}
                                     />
                                 </FormControl>
                             </Grid>
-
-    
                         </Grid>
-                    
+                    </DialogContent>
+                    <DialogActions style={{background:"#f2f6fa"}}>
+                        <div >
+                            <Button onClick={handleClose}  className={classes.createLeftBtn}>
+                                Cancel
+                            </Button>
+                            <Button onClick={(e) => validate(fieldData)} className={classes.createRightBtn}>
+                                Create
+                            </Button>
 
+                        </div>
+                        
+                        
+                 </DialogActions>
+                 </form>
 
+                
 
-                </DialogContent>
+                
 
-                <DialogActions style={{background:"#f2f6fa"}}>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Create
-                    </Button>
-                </DialogActions>
+            
 
             </Dialog>
 
