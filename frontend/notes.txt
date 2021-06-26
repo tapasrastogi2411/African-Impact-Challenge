@@ -1,0 +1,1 @@
+Convert dialogue form to a new page form with a similar style to the sign-up page

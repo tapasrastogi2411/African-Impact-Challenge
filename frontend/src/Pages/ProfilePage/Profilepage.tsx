@@ -101,7 +101,6 @@ function Profilepage(props: any) {
 
       <Grid item xs={12} >
         <CreateCompany /> 
-        
       </Grid>
 
         <Grid item xs={12}>

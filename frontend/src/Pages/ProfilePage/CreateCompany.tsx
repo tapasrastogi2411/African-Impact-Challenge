@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import { borders } from '@material-ui/system';
+import { useForm } from "react-hook-form";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateCompany(props: any) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
   
     const handleClickOpen = () => {
       setOpen(true);
