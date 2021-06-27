@@ -5,7 +5,7 @@ var cors = require('cors');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({origin:"http://localhost:3000", credentials:true,   }) );
+app.use(cors({origin:"http://localhost:3000", credentials:true }) );
 
 //Enabling sessions
 var session = require('express-session');
@@ -13,7 +13,7 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false, // we do not want to create a session for every request. it might be the same user
     saveUninitialized: true,
-    cookie: { secure: true, sameSite: true }
+    cookie: {sameSite: true }, // removed secure=true since not using http 
 }));
 
 // middleware to handle profile-based routes

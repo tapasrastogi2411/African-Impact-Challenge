@@ -18,6 +18,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { borders } from '@material-ui/system';
 import { useForm, Controller } from "react-hook-form";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { SignInAjax } from '../UserProfile/LogIn';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -102,7 +103,39 @@ const defaultFieldData = {
 };
 
 
+const createCompanyAjax = (data: any) => {
+    
+    var formdata = new FormData();
+    formdata.append("companyName", data.companyName);
+    formdata.append("companyAddress", data.companyAddress);
+    formdata.append("industry", data.industry);
+    formdata.append("size", data.size);
+    formdata.append("about", data.about);
 
+    // convert formData to JSON since that is what the server looks for
+    var object:any = {};
+    formdata.forEach(function(value: any, key: any){
+        object[key] = value;
+    });
+
+    fetch('http://localhost:8080/api/profile/createCompany/', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            },
+        body: JSON.stringify(object),
+        credentials: 'same-origin',
+        
+    })
+    .then(response => {
+        console.log(response);
+    })
+    .catch(err => {
+        console.log("error");
+    })
+        
+    
+}
 
 export default function CreateCompany(props: any) {
     const classes = useStyles();
@@ -131,6 +164,14 @@ export default function CreateCompany(props: any) {
             newError.industry = "Industry is required";
         }
         setError(newError);
+        const haveError = Object.values(newError).find(
+            (el: String) => el.length > 0
+        );
+
+        if (!haveError) {
+            createCompanyAjax(fieldData);
+        }
+
     };
 
     var setField = (e: any) => {

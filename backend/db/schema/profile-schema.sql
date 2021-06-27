@@ -38,7 +38,10 @@ CREATE TABLE message (
 CREATE TABLE company(
   company_id INT PRIMARY KEY,
   name TEXT NOT NULL,
-  address TEXT
+  address TEXT,
+  industry VARCHAR(20) NOT NULL,
+  size VARCHAR(20),
+  bio VARCHAR(100)
 );
 
 CREATE TABLE employee (

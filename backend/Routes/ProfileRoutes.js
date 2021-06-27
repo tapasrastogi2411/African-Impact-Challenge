@@ -93,6 +93,16 @@ router.post('/register/', function (req, res, next) {
 });
 
 
+router.post('/createCompany/', function (req, res, next) {
+    var registerData = req.body;
+    // console.log(registerData);
+    console.log(req.session.id);
+    console.log(req.session.username);
+    console.log(req.session.loggedIn);
+    return res.status(200).json("Success");  
+
+});
+
 /* Status response codes:
 400 = BadRequest - No user with the given user name
 401 = Unauthorized - Incorrect password has been provided for the given username
@@ -123,6 +133,7 @@ router.post('/login/', auth, async function (req, res) {
                     // create a session and return a 200 response
                     req.session.loggedIn = true
                     req.session.username = username
+                    console.log(req.session.id);
                     var userData = result.rows[0]; // prevent password from getting sent (although it's hashed+salted)
                     // console.log(req.session);
                     console.log(userData);
@@ -141,6 +152,8 @@ router.post('/login/', auth, async function (req, res) {
                     }
                     delete userData["password"];
                     console.log(userData);
+                    
+                    // res.header('Access-control-Allow-Origin', 'http://localhost:3000');
                     return res.status(200).json(userData);
                 }
             }

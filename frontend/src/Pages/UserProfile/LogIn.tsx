@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 
+const axios = require('axios');
+
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     paper: {
@@ -78,7 +80,7 @@ const CssTextField = withStyles({
 // backendErr = username already taken or invalid password
 const defaultErr = {userErr: "", passErr: "", backendErr: "false"};
 
-export const SignInAjax = async (
+export const SignInAjax =  async (
     data: any,
     onSuccess: any,
     setError: any,
@@ -109,19 +111,52 @@ export const SignInAjax = async (
                 object[key] = value;
             });
 
+            /*
+
+            fetch('http://localhost:8080/api/profile/login/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    credentials: 'include',
+                    mode: 'cors',
+                },
+                body: JSON.stringify(object),
+            })
+                .then(response => {
+                    const responseData = response.json();
+                    if (response.status > 300 || response.status < 200) {
+                        console.log(response);
+                        setError( (prevState:Object) => {
+                            return { ...prevState, backendErr:"true" } 
+                        });
+                    } else {
+                        console.log(response);
+                        onSuccess(responseData);
+                    }
+                })
+                .catch(err => {
+                    console.log("error");
+                })
+                */
+
+                
             const response = await fetch('http://localhost:8080/api/profile/login/', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
+                    credentials: 'include',
+                    mode: 'cors',
                 },
                 body: JSON.stringify(object),
             });
+            
             const responseData = await response.json();
-            if (response.status > 300 || response.status < 200) {
-                throw responseData;
-            }
-            // console.log(response);
-            onSuccess(responseData);
+           if (response.status > 300 || response.status < 200) {
+               throw responseData;
+           }
+           console.log(response);
+           onSuccess(responseData);
+           
         }
         
         
