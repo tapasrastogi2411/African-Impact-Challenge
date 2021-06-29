@@ -1,3 +1,6 @@
+DROP DATABASE aic IF EXISTS aic CASCADE;
+CREATE DATABASE aic;
+
 -- Profile Schema
 DROP SCHEMA IF EXISTS profile_schema CASCADE;
 CREATE SCHEMA profile_schema;
