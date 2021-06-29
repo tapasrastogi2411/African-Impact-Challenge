@@ -56,3 +56,17 @@ INSERT INTO aic_role VALUES
 (1, 'Teacher'), 
 (2, 'Entrepreneur'), 
 (3, 'Partner');
+
+-- Post Schema
+DROP SCHEMA IF EXISTS post_schema CASCADE;
+CREATE SCHEMA post_schema;
+SET SEARCH_PATH to post_schema;
+
+
+CREATE TABLE PostFile (
+  file_path TEXT PRIMARY KEY,
+  file_type TEXT NOT NULL, 
+  upload_date timestamp NOT NULL, 
+  upload_user TEXT not NULL, 
+  description TEXT
+);
