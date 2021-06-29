@@ -98,7 +98,7 @@ router.post('/createCompany/', function (req, res, next) {
     // console.log(registerData);
     console.log(req.session.id);
     console.log(req.session.username);
-    console.log(req.session.loggedIn);
+    //console.log(req.session.loggedIn);
     return res.status(200).json("Success");  
 
 });
@@ -152,8 +152,6 @@ router.post('/login/', auth, async function (req, res) {
                     }
                     delete userData["password"];
                     console.log(userData);
-                    
-                    // res.header('Access-control-Allow-Origin', 'http://localhost:3000');
                     return res.status(200).json(userData);
                 }
             }

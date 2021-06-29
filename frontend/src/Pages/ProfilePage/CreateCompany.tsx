@@ -124,7 +124,8 @@ const createCompanyAjax = (data: any) => {
             'Content-Type': 'application/json',
             },
         body: JSON.stringify(object),
-        credentials: 'same-origin',
+        credentials: 'include',
+        mode: 'cors',
         
     })
     .then(response => {
