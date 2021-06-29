@@ -62,11 +62,22 @@ DROP SCHEMA IF EXISTS post_schema CASCADE;
 CREATE SCHEMA post_schema;
 SET SEARCH_PATH to post_schema;
 
+CREATE TABLE PostCategory(
+  category_id INT PRIMARY KEY, 
+  category_name TEXT NOT NULL
+);
 
 CREATE TABLE PostFile (
   file_path TEXT PRIMARY KEY,
-  file_type TEXT NOT NULL, 
+  category INT,
   upload_date timestamp NOT NULL, 
   upload_user TEXT not NULL, 
-  description TEXT
+  description TEXT, 
+
+  FOREIGN KEY(category) REFERENCES PostCategory
+    on delete restrict
 );
+
+INSERT INTO PostCategory VALUES 
+(1, 'Reading'), 
+(2, 'Video')
