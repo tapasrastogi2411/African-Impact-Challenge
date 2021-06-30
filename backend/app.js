@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 var profile = require('./Routes/ProfileRoutes');
+var course = require('./Routes/CoursesRoutes');
+app.use('/uploads', express.static('uploads'));
 var cors = require('cors');
 
 app.use(express.json());
@@ -18,6 +20,7 @@ app.use(session({
 
 // middleware to handle profile-based routes
 app.use('/api/profile/', profile);
+app.use('/api/course/', course);
 
 //Configure application to use https 
 const fs = require('fs');
