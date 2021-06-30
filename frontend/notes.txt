@@ -1,0 +1,11 @@
+
+Ideas
+    Convert dialogue form to a new page form with a similar style to the sign-up page
+
+
+Notes
+
+To-Do 
+    - figure out how the client can save session cookie in browser and send it back in
+    future requests. Note that the server sends and tracks it correctly. 
+        

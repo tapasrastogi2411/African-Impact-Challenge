@@ -27,6 +27,7 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
 
 
 // updated when user logs in
+// maybe don't need this
 const defaultUserData = {
     username: "",
     user_role: "",
@@ -37,7 +38,10 @@ const defaultUserData = {
     phone_number: "",
     country: "",
     address: "",
+    showCompanyBtn: true,
 }
+
+
 
 export default function Pages(props: any) {
     const classes = useStyles();
@@ -45,12 +49,19 @@ export default function Pages(props: any) {
 
     const [reg, setReg] = React.useState("false");
     const [userData, setUserData] = React.useState(defaultUserData);
+    const [showCompanyCreateBtn, setShowCompanyCreateBtn] = React.useState(false);
+
     const updateReg = (val:string) => {
         setReg(val);
     };
 
     const updateUserData = (newUserData: any) => {
         setUserData(newUserData);
+        console.log(newUserData);
+    }
+
+    const setCompanyCreateBtn = (show: boolean) => {
+        setShowCompanyCreateBtn(show);
     }
 
 
@@ -58,9 +69,9 @@ export default function Pages(props: any) {
         <div className={classes.root}>
             <Switch>
                 <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
-                <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData} />}  />
+                <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData} setCompanyCreateBtnHandler={setCompanyCreateBtn} />}  />
                 <Route exact path="/signup" render={() => <SignUp regHandler={updateReg} />} />
-                <Route exact path="/profile" render={() => <ProfilePage userDataProp={userData} />}   />
+                <Route exact path="/profile" render={() => <ProfilePage setCompanyCreateBtnHandler={setCompanyCreateBtn} showCreateCompanyBtn={showCompanyCreateBtn} userDataProp={userData} />}   />
                 <Route exact path="/update" component={Update}/>
 
             </Switch>

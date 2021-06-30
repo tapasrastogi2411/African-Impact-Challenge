@@ -34,20 +34,33 @@ CREATE TABLE message (
   FOREIGN KEY(receiver) REFERENCES aic_user
     on delete cascade
 );
-
+-- avoid enumerated types
+-- consider whether domain is final or not
 CREATE TABLE company(
-  company_id INT PRIMARY KEY,
-  name TEXT NOT NULL,
-  address TEXT
+  company_name TEXT PRIMARY KEY, -- each company must have a unique name
+  address TEXT,
+  industry VARCHAR(20) NOT NULL,
+  size VARCHAR(20),
+  bio VARCHAR(100),
+  creator TEXT, -- should also be unique in our app
+  FOREIGN KEY (creator) REFERENCES aic_user(username)
 );
+
+CREATE TABLE works_for(
+  username TEXT PRIMARY KEY, -- a user can work for only one company
+  company_name TEXT,
+  FOREIGN KEY(username) references aic_user,
+  FOREIGN KEY(company_name) references company
+);
+
 
 CREATE TABLE employee (
   username TEXT NOT NULL,
-  company_id INT NOT NULL,
+  company_name TEXT NOT NULL,
   title TEXT, 
   FOREIGN KEY(username) REFERENCES aic_user
     on delete cascade, 
-  FOREIGN KEY(company_id) REFERENCES company
+  FOREIGN KEY(company_name) REFERENCES company
     on delete cascade
 );
 
