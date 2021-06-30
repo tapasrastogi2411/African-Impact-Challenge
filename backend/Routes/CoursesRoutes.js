@@ -8,7 +8,7 @@ var upload = require('../Middleware/upload');
 //fields([{name:'readings'},{name: 'videos'}, {name:'assignments'}])
 
 router.post('/upload', auth, upload.any(), function (req, res) { 
-    req.session.username = "Aaron JACOB"; //uncomment this for testing
+    // req.session.username = "Aaron JACOB"; //uncomment this for testing
 
     if(req.files.length === 0) {
         return res.status(400).end();
