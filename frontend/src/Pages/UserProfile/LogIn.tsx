@@ -111,34 +111,6 @@ export const SignInAjax =  async (
                 object[key] = value;
             });
 
-            /*
-
-            fetch('http://localhost:8080/api/profile/login/', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    credentials: 'include',
-                    mode: 'cors',
-                },
-                body: JSON.stringify(object),
-            })
-                .then(response => {
-                    const responseData = response.json();
-                    if (response.status > 300 || response.status < 200) {
-                        console.log(response);
-                        setError( (prevState:Object) => {
-                            return { ...prevState, backendErr:"true" } 
-                        });
-                    } else {
-                        console.log(response);
-                        onSuccess(responseData);
-                    }
-                })
-                .catch(err => {
-                    console.log("error");
-                })
-                */
-
                 
             const response = await fetch('http://localhost:8080/api/profile/login/', {
                 method: "POST",
@@ -170,12 +142,45 @@ export const SignInAjax =  async (
 
 export default function SignIn(props: any) {
     const history = useHistory();
-    const onSuccess = (responseData: any) => {
+    // get user data from server and pass it to the handler
+    const onSuccess = (responseData: any) => {  
         history.push('/profile');
         console.log(responseData);
-        // get user data from server and pass it to the handler
+
+        // get company membership 
+        checkUserInCompany(responseData);
         props.updateUserDataHandler(responseData); 
+
+        
     }
+    const checkUserInCompany = (responseData: any) => {
+        fetch('http://localhost:8080/api/profile/inCompany/', {
+          method: "GET",
+          credentials: 'include',
+          mode: 'cors',
+        })
+        .then(response => { // if company exists then show view company button
+            // console.log(response);
+            // setShowCompanyCreate(false);
+            if (response.status == 200) {
+                props.updateCompanyBtnHandler(false);
+                //responseData['showCompanyBtn'] = false;
+            } else {
+                props.updateCompanyBtnHandler(true);
+                //responseData['showCompanyBtn'] = true;
+            }
+
+            
+            
+        })
+        .catch(err => { 
+            console.log("error");
+            responseData['showCompanyBtn'] = false;
+            props.updateUserDataHandler(responseData); 
+        })
+    }
+
+
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
     const [error, setError] = React.useState(defaultErr); 

@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     error: {
         color: "red"
     },
-
+    
 
   }));
 
@@ -103,44 +103,11 @@ const defaultFieldData = {
 };
 
 
-const createCompanyAjax = (data: any) => {
-    
-    var formdata = new FormData();
-    formdata.append("companyName", data.companyName);
-    formdata.append("companyAddress", data.companyAddress);
-    formdata.append("industry", data.industry);
-    formdata.append("size", data.size);
-    formdata.append("about", data.about);
 
-    // convert formData to JSON since that is what the server looks for
-    var object:any = {};
-    formdata.forEach(function(value: any, key: any){
-        object[key] = value;
-    });
-
-    fetch('http://localhost:8080/api/profile/createCompany/', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            },
-        body: JSON.stringify(object),
-        credentials: 'include',
-        mode: 'cors',
-        
-    })
-    .then(response => {
-        console.log(response);
-    })
-    .catch(err => {
-        console.log("error");
-    })
-        
-    
-}
 
 export default function CreateCompany(props: any) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(props.dialogOpen);
     const [error, setError] = React.useState(defaultError);
     const [fieldData, setFieldData] = React.useState(defaultFieldData);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -154,6 +121,41 @@ export default function CreateCompany(props: any) {
         setError(defaultError);
         setOpen(false);
     };
+
+    const createCompanyAjax = (data: any) => {
+    
+        var formdata = new FormData();
+        formdata.append("companyName", data.companyName);
+        formdata.append("companyAddress", data.companyAddress);
+        formdata.append("industry", data.industry);
+        formdata.append("size", data.size);
+        formdata.append("about", data.about);
+    
+        // convert formData to JSON since that is what the server looks for
+        var object:any = {};
+        formdata.forEach(function(value: any, key: any){
+            object[key] = value;
+        });
+    
+        fetch('http://localhost:8080/api/profile/createCompany/', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            body: JSON.stringify(object),
+            credentials: 'include',
+            mode: 'cors',
+        })
+        .then(response => { // company creation successful
+            console.log(response);
+            setOpen(false);
+            props.changeBtnVisibility(false);
+        })
+        .catch(err => { // company name is already taken
+            console.log("error");
+        })
+            
+    }
 
     const validate = (data: {companyName:any, companyAddress:any, industry:any, size:any, about:any}) => {
         const newError = { ...defaultError };
@@ -228,8 +230,8 @@ export default function CreateCompany(props: any) {
     };
 
     return(
-        <div >
-            <Button startIcon={<BusinessIcon />} className={classes.companyBtn} onClick={handleClickOpen} aria-labelledby="form-dialog-title">Create Company </Button>
+        <div > 
+            <Button style={props.hide ? {display: "None"} : {}} startIcon={<BusinessIcon />} className={classes.companyBtn} onClick={handleClickOpen}   aria-labelledby="form-dialog-title" >Create Company </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="sm" scroll="body" >
                 <DialogTitle id="form-dialog-title" style={{background:"#f2f6fa"}}>Create Company</DialogTitle>
                 

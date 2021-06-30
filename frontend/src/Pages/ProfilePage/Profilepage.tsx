@@ -88,20 +88,58 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+var showCreateCompanyBtn=true; // set via http request
+
+
  
 function Profilepage(props: any) {
+  // console.log("RENDER");
   const classes = useStyles();
-  const userData = props.userDataProp;
-  console.log(userData);
+  var userData = props.userDataProp;
+  //var showCompanyBtn = userData.showCompanyBtn;
+  const [showCompanyCreate, setShowCompanyCreate] = React.useState(false);
+  
+  //console.log("IN PROFILE PAGE");
+  //console.log(props.showCompanyBtn);
+  //console.log(showCompanyCreate);
+  // console.log(props.showCompanyBtn);
+  const handleBtnVisibility = (showCompanyCreate: boolean) => {
+    setShowCompanyCreate(showCompanyCreate);
+  };
+
+  /*
+  const checkUserInCompany = () => {
+      fetch('http://localhost:8080/api/profile/inCompany/', {
+        method: "GET",
+        credentials: 'include',
+        mode: 'cors',
+      })
+      .then(response => { // if company exists then show view company button
+          console.log(response);
+          setShowCompanyCreate(false);
+      })
+      .catch(err => { 
+          console.log("error");
+      })
+  }
+  checkUserInCompany();
+  */
+
   return (
     <div >
       <Navbar></Navbar>
-
+      
       <Grid container className={classes.root}>
 
-      <Grid item xs={12} >
-        <CreateCompany /> 
-      </Grid>
+        {props.showCompanyBtn == true ? <Grid item xs={12} >
+        <CreateCompany changeBtnVisibility={props.handler} />  
+      </Grid> : <Grid item xs={12} >
+        <Button startIcon={<BusinessIcon />} className={classes.companyBtn}  >View Company </Button>
+      </Grid>}
+
+      
+
+      
 
         <Grid item xs={12}>
           <Typography variant="h4">{userData.username}</Typography>

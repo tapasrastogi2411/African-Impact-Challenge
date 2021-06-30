@@ -93,13 +93,81 @@ router.post('/register/', function (req, res, next) {
 });
 
 
-router.post('/createCompany/', function (req, res, next) {
-    var registerData = req.body;
-    // console.log(registerData);
-    console.log(req.session.id);
+router.get('/inCompany/', auth, function (req, res, next) {
+
+    var inCompany = "SELECT * FROM profile_schema.works_for WHERE username=$1";
+    db.query(inCompany, [req.session.username])
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) {
+            return res.status(200).json('');
+        }
+        return res.status(404).json('');
+    })
+    .catch(err => {
+        console.log(err.message);
+        return res.status(500).json('');
+    });
+    
+
+
+
+});
+
+router.post('/createCompany/', auth, function (req, res, next) {
+    
+    var orderedFields = ["companyName", "companyAddress", "industry", "size", "about"];
+    var orderedValues = []; // values to be inserted into db
+    for (var key of orderedFields) {
+        var value = req.body[key];
+        if (value == "") {
+            orderedValues.push("null");
+        } else {
+            orderedValues.push(value);
+        }
+    }
+    
+    if (!req.session.username) {
+        return res.status(500).json("Username is null");
+    } 
     console.log(req.session.username);
-    //console.log(req.session.loggedIn);
-    return res.status(200).json("Success");  
+    orderedValues.push(req.session.username);
+    console.log(orderedFields);
+    console.log(orderedValues);
+
+    
+    var companyExists = "SELECT * FROM profile_schema.company WHERE company_name=$1";
+    // first check if the company already exists in the db
+    db.query(companyExists, [req.body['companyName']])
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) {
+            throw new Error("Company name already exists");
+        }
+        // add the company to the db
+        var insertCompany = "INSERT INTO profile_schema.company VALUES ($1,$2,$3,$4,$5,$6)";
+        return db.query(insertCompany, orderedValues);
+    })
+    .then(pgRes => {
+        // add username,company to works_for
+        var worksFor = "INSERT INTO profile_schema.works_for VALUES($1,$2)";
+        return db.query(worksFor, [req.session.username, req.body['companyName']]);
+    })
+    .then(pgRes => {
+        res.status(201).json("Company added");
+
+    })
+    .catch(err => {
+        console.log(err.message);
+        switch(err.message) {
+            case "Company name already exists":
+                res.status(409).json("Company name already exists");
+                break;
+
+            default:
+                res.status(500).json({ error: err.message});
+                break;
+        }
+
+    })
 
 });
 
