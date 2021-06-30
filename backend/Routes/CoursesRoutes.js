@@ -47,7 +47,6 @@ router.post('/upload', auth, upload.any(), function (req, res) {
         .catch(e => {
             console.error(e.stack);
             return res.status(500);
-            //
         })
 });
 
