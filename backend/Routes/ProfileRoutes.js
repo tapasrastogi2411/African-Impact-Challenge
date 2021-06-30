@@ -124,6 +124,15 @@ router.get('/getCompany/', auth, function (req, res, next) {
     })
     .then(pgRes => { // extract company data and send to client
         var companyDataJson = pgRes.rows[0];
+        for (var key in companyDataJson) {
+            var value = companyDataJson[key];
+            if (value == "null") {
+                companyDataJson[key] = "Not Provided";
+            } else { // capitalize first letter
+                value = value.charAt(0).toUpperCase() + value.slice(1);
+                companyDataJson[key] = value;
+            }
+        }
         return res.status(200).json(companyDataJson);
     })
     .catch(err => {

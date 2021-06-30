@@ -14,7 +14,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import BusinessIcon from '@material-ui/icons/Business';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-
+import tims from "./tims.jpeg";
+import building from "./building.png";
+import member from "./member.jpg";
+import founder from "./founder.jpg";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   info: {
     marginTop: 3,
-    marginLeft: 15,
+    marginLeft: 60,
     maxWidth: 1100
   },
   category: {
@@ -84,6 +87,11 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
     height: "auto"
   },
+  relatedPicFounder: {
+    width: 100,
+    height: "auto",
+    marginTop: 2
+  },
   relatedUser: {
     marginRight: 40
   }
@@ -112,7 +120,7 @@ function CompanyPage(props: any) {
 
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
-          <img src={profilepic} className={classes.profilePic} />
+          <img src={building} className={classes.profilePic} />
           <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
         </Grid>
         <Grid
@@ -120,7 +128,7 @@ function CompanyPage(props: any) {
           container
           spacing={3}
           xs={10}
-          direction="row"
+          direction="column"
           className={classes.info}>
 
           <Grid item xs={4}>
@@ -142,16 +150,19 @@ function CompanyPage(props: any) {
             <Typography variant="h5">Members</Typography>
           </Grid>
           <Grid item className={classes.relatedUser}>
-            <Avatar src={profilepic} className={classes.relatedPic} />
-            <Typography align="center">User1</Typography>
+          <Typography align="center">Founder</Typography>
+            <Avatar src={founder} className={classes.relatedPicFounder} />
+            <Typography align="center">{companyData.creator}</Typography>
           </Grid>
           <Grid item className={classes.relatedUser}>
-            <Avatar src={profilepic} className={classes.relatedPic} />
-            <Typography align="center">User2</Typography>
+          <Typography align="center">Member</Typography>
+            <Avatar src={member} className={classes.relatedPic} />
+            <Typography align="center">Aaron1999</Typography>
           </Grid>
           <Grid item className={classes.relatedUser}>
-            <Avatar src={profilepic} className={classes.relatedPic} />
-            <Typography align="center">User3</Typography>
+          <Typography align="center">Member</Typography>
+            <Avatar src={member} className={classes.relatedPic} />
+            <Typography align="center">Jason2002</Typography>
           </Grid>
         </Grid>
 
