@@ -5,15 +5,10 @@ const db = require('../db');
 const path = require('path');
 var upload = require('../upload.js');
 
-router.get('/getVidReadings', auth, function(req, res) {
+//fields([{name:'readings'},{name: 'videos'}, {name:'assignments'}])
 
-});
-
-router.post('/postVideo', auth, upload.single('videos'), function (req, res) { 
-    console.log(req.file.path);
+router.post('/upload', auth, upload.any(), function (req, res) { 
     req.session.username = "Aaron JACOB";
-    // INSERT INTO post_schema.postfile VALUES ('uploads/assignments/hello.pdf', 1, '2021-06-22 18:50:40', 'Aaron Tan', 'hihi');
-
     var currentdate = new Date(); 
     var datetime = currentdate.getFullYear() + "-" 
             + (currentdate.getMonth()+1) + "-"
@@ -25,7 +20,7 @@ router.post('/postVideo', auth, upload.single('videos'), function (req, res) {
     var postfileSchema = "(file_path, category, upload_date, upload_user, description)";
     var preparedValues = "($1,$2,$3,$4,$5)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.file.path, 1, datetime, req.session.username, 'sda']   
+    var values = [req.files[0].path, 1, datetime, req.session.username, 'sda']   
 
     db
         .query(query, values)
@@ -36,16 +31,5 @@ router.post('/postVideo', auth, upload.single('videos'), function (req, res) {
 
     // res.json({hi: 1231});
 });
-
-router.post('/postReading', auth, upload.single('readings'), function (req, res) { 
-    console.log(req.file.path);
-    // res.json({hi: 1231});
-});
-
-router.post('/postAssignment', auth, upload.single('assignments'), function (req, res) { 
-    console.log(req.file.path);
-    // res.json({hi: 1231});
-});
-
 
 module.exports = router;
