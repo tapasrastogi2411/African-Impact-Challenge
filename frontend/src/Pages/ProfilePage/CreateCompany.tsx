@@ -151,6 +151,7 @@ export default function CreateCompany(props: any) {
             if (response.status == 201) {
                 setOpen(false);
                 props.setCompanyCreateBtnHandler(false);
+                props.setSnackbar(); 
             } else {
                 const newError = { ...error };
                 newError.companyName = "Company name is already taken";
