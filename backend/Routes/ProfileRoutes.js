@@ -108,9 +108,28 @@ router.get('/inCompany/', auth, function (req, res, next) {
         return res.status(500).json('');
     });
     
+});
 
+router.get('/getCompany/', auth, function (req, res, next) {
 
-
+    var inCompany = "SELECT * FROM profile_schema.works_for WHERE username=$1";
+    db.query(inCompany, [req.session.username])
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) { // get company data
+            var companyName = pgRes.rows[0].company_name;
+            var companyDataQuery = "SELECT * FROM profile_schema.company WHERE company_name=$1";
+            return db.query(companyDataQuery, [companyName]);
+        }
+        return res.status(404).json('');
+    })
+    .then(pgRes => { // extract company data and send to client
+        var companyDataJson = pgRes.rows[0];
+        return res.status(200).json(companyDataJson);
+    })
+    .catch(err => {
+        console.log(err.message);
+        return res.status(500).json('');
+    });
 });
 
 router.post('/createCompany/', auth, function (req, res, next) {

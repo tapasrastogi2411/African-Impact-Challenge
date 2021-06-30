@@ -8,11 +8,10 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Avatar, Divider, Toolbar } from "@material-ui/core";
 
-import profilepic from "./profilepic.jpeg";
+import profilepic from "../ProfilePage/profilepic.jpeg";
 import ChatIcon from '@material-ui/icons/Chat';
 import EditIcon from '@material-ui/icons/Edit';
 import BusinessIcon from '@material-ui/icons/Business';
-import CreateCompany from './CreateCompany';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
@@ -91,78 +90,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
-function Profilepage(props: any) {
+
+function CompanyPage(props: any) {
   
   const classes = useStyles();
-  var userData = props.userDataProp;
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [companyData, setCompanyData] = React.useState("");
+  const companyData = props.companyData;
 
-  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
-  }
-  const handleOpenSnackbar = () => {
-    setOpenSnackbar(true);
-  }
-
-  const getCompanyData = () => {
-    fetch('http://localhost:8080/api/profile/getCompany/', {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                },
-            credentials: 'include',
-            mode: 'cors',
-        })
-        .then(response => { // company creation successful
-            return response.json();
-        })
-        .then(responseJson => {
-          console.log(responseJson);
-          setCompanyData(responseJson)
-          props.updateCompanyData(responseJson);
-        })
-        .catch(err => { // company name is already taken
-            console.log("error"); 
-        })
-  }
+  
 
   return (
     <div >
       <Navbar></Navbar>
-      
+
       <Grid container className={classes.root}>
-
-        {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 
-        : <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button>
-      </Grid>}
-
-        <Grid>
-          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>
-            <Alert severity="success" onClose={handleCloseSnackbar}>
-              Company successfully created!
-            </Alert>
-          </Snackbar>
-        </Grid>
-        
-
+    
         <Grid item xs={12}>
-          <Typography variant="h4">{userData.username}</Typography>
+          <Typography variant="h4">{companyData.company_name}</Typography>
         </Grid>
 
 
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
-          <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography> 
           <img src={profilepic} className={classes.profilePic} />
-          <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
           <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
         </Grid>
         <Grid
@@ -172,39 +122,24 @@ function Profilepage(props: any) {
           xs={10}
           direction="row"
           className={classes.info}>
+
           <Grid item xs={4}>
-            <Typography className={classes.category}>Honorifics</Typography>
-            <Typography >{userData.honorifics}</Typography>
+            <Typography className={classes.category}>Company Address</Typography>
+            <Typography >{companyData.address}</Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography className={classes.category}>First Name</Typography>
-            <Typography >{userData.first_name}</Typography>
+            <Typography className={classes.category}>Industry</Typography>
+            <Typography >{companyData.industry}</Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography className={classes.category}>Last Name</Typography>
-            <Typography >{userData.last_name}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Phone Number</Typography>
-            <Typography >{userData.phone_number}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Email</Typography>
-            <Typography >{userData.email} </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Address</Typography>
-            <Typography >{userData.address}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Country</Typography>
-            <Typography >{userData.country}</Typography>
+            <Typography className={classes.category}>About</Typography>
+            <Typography >{companyData.bio}</Typography>
           </Grid>
         </Grid>
         <Divider className={classes.divider} />
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Typography variant="h5">Related Users</Typography>
+            <Typography variant="h5">Members</Typography>
           </Grid>
           <Grid item className={classes.relatedUser}>
             <Avatar src={profilepic} className={classes.relatedPic} />
@@ -219,9 +154,16 @@ function Profilepage(props: any) {
             <Typography align="center">User3</Typography>
           </Grid>
         </Grid>
+
+        <Divider className={classes.divider} />
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h5">Resources</Typography>
+          </Grid>
+        </Grid>
       </Grid>
     </div>
   );
 }
 
-export default Profilepage;
+export default CompanyPage;
