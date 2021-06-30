@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Avatar, Divider, Toolbar } from "@material-ui/core";
+import { Avatar, Container, Divider, Toolbar } from "@material-ui/core";
 
 import profilepic from "../ProfilePage/profilepic.jpeg";
 import ChatIcon from '@material-ui/icons/Chat';
@@ -18,6 +18,9 @@ import tims from "./tims.jpeg";
 import building from "./building.png";
 import member from "./member.jpg";
 import founder from "./founder.jpg";
+import AddIcon from '@material-ui/icons/Add';
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -37,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   profilePic: {
     width: 200,
-    marginTop: 5,
+    marginTop: 25,
     borderRadius: 5
   },
   info: {
@@ -83,6 +86,15 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 10,
     paddingRight: 10,
   },
+  invBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 150,
+    '&:hover': { background: "#e69113" },
+    borderRadius: 20,
+    marginLeft: 1000,
+  },
+
   relatedPic: {
     width: 100,
     height: "auto"
@@ -113,9 +125,21 @@ function CompanyPage(props: any) {
 
       <Grid container className={classes.root}>
     
-        <Grid item xs={12}>
-          <Typography variant="h4">{companyData.company_name}</Typography>
+        <Grid container>
+            <Grid item xs={12}>
+                    
+                    <Button startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Typography variant="h4">{companyData.company_name}</Typography>
+            </Grid>
+            
         </Grid>
+
+
+      
+        
 
 
         <Divider className={classes.divider} />
