@@ -159,24 +159,17 @@ export default function SignIn(props: any) {
           credentials: 'include',
           mode: 'cors',
         })
-        .then(response => { // if company exists then show view company button
-            // console.log(response);
-            // setShowCompanyCreate(false);
+        .then(response => { // if company exists then show view company button/hide create company button
             if (response.status == 200) {
-                props.updateCompanyBtnHandler(false);
-                //responseData['showCompanyBtn'] = false;
+                props.setCompanyCreateBtnHandler(false); // hide
             } else {
-                props.updateCompanyBtnHandler(true);
-                //responseData['showCompanyBtn'] = true;
+                props.setCompanyCreateBtnHandler(true); // show
             }
 
-            
-            
         })
         .catch(err => { 
             console.log("error");
-            responseData['showCompanyBtn'] = false;
-            props.updateUserDataHandler(responseData); 
+            props.setCompanyCreateBtnHandler(false); // hide
         })
     }
 

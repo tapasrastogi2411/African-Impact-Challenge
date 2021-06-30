@@ -148,17 +148,23 @@ export default function CreateCompany(props: any) {
         })
         .then(response => { // company creation successful
             console.log(response);
-            setOpen(false);
-            props.changeBtnVisibility(false);
+            if (response.status == 201) {
+                setOpen(false);
+                props.setCompanyCreateBtnHandler(false);
+            } else {
+                const newError = { ...error };
+                newError.companyName = "Company name is already taken";
+                setError(newError);
+            }
         })
         .catch(err => { // company name is already taken
-            console.log("error");
+            console.log("error"); 
         })
             
     }
 
     const validate = (data: {companyName:any, companyAddress:any, industry:any, size:any, about:any}) => {
-        const newError = { ...defaultError };
+        const newError = { ...error };
         // console.log(data);
         if (data.companyName == "") {
             newError.companyName = "Company name is required";
@@ -231,7 +237,7 @@ export default function CreateCompany(props: any) {
 
     return(
         <div > 
-            <Button style={props.hide ? {display: "None"} : {}} startIcon={<BusinessIcon />} className={classes.companyBtn} onClick={handleClickOpen}   aria-labelledby="form-dialog-title" >Create Company </Button>
+            <Button startIcon={<BusinessIcon />} className={classes.companyBtn} onClick={handleClickOpen}   aria-labelledby="form-dialog-title" >Create Company </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="sm" scroll="body" >
                 <DialogTitle id="form-dialog-title" style={{background:"#f2f6fa"}}>Create Company</DialogTitle>
                 
