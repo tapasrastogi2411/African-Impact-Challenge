@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 
+const axios = require('axios');
+
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     paper: {
@@ -78,7 +80,7 @@ const CssTextField = withStyles({
 // backendErr = username already taken or invalid password
 const defaultErr = {userErr: "", passErr: "", backendErr: "false"};
 
-export const SignInAjax = async (
+export const SignInAjax =  async (
     data: any,
     onSuccess: any,
     setError: any,
@@ -109,19 +111,24 @@ export const SignInAjax = async (
                 object[key] = value;
             });
 
+                
             const response = await fetch('http://localhost:8080/api/profile/login/', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
+                mode: 'cors',
                 body: JSON.stringify(object),
             });
+            
             const responseData = await response.json();
-            if (response.status > 300 || response.status < 200) {
-                throw responseData;
-            }
-            // console.log(response);
-            onSuccess(responseData);
+           if (response.status > 300 || response.status < 200) {
+               throw responseData;
+           }
+           console.log(response);
+           onSuccess(responseData);
+           
         }
         
         
@@ -135,12 +142,38 @@ export const SignInAjax = async (
 
 export default function SignIn(props: any) {
     const history = useHistory();
-    const onSuccess = (responseData: any) => {
+    // get user data from server and pass it to the handler
+    const onSuccess = (responseData: any) => {  
         history.push('/profile');
         console.log(responseData);
-        // get user data from server and pass it to the handler
+
+        // get company membership 
+        checkUserInCompany(responseData);
         props.updateUserDataHandler(responseData); 
+
+        
     }
+    const checkUserInCompany = (responseData: any) => {
+        fetch('http://localhost:8080/api/profile/inCompany/', {
+          method: "GET",
+          credentials: 'include',
+          mode: 'cors',
+        })
+        .then(response => { // if company exists then show view company button/hide create company button
+            if (response.status == 200) {
+                props.setCompanyCreateBtnHandler(false); // hide
+            } else {
+                props.setCompanyCreateBtnHandler(true); // show
+            }
+
+        })
+        .catch(err => { 
+            console.log("error");
+            props.setCompanyCreateBtnHandler(false); // hide
+        })
+    }
+
+
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
     const [error, setError] = React.useState(defaultErr); 
