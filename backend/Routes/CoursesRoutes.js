@@ -8,7 +8,7 @@ var upload = require('../Middleware/upload');
 //fields([{name:'readings'},{name: 'videos'}, {name:'assignments'}])
 
 router.post('/upload', auth, upload.any(), function (req, res) { 
-    // req.session.username = "Aaron JACOB"; uncomment this for testing
+    //req.session.username = "Aaron JACOB"; //uncomment this for testing
 
     var currentdate = new Date(); 
     var datetime = currentdate.getFullYear() + "-" 
@@ -32,7 +32,7 @@ router.post('/upload', auth, upload.any(), function (req, res) {
     var postfileSchema = "(file_path, category, upload_date, upload_user, description)";
     var preparedValues = "($1,$2,$3,$4,$5)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.files[0].path.split(path.resolve(__dirname, '../../')).pop(), category, datetime, req.session.username, req.body.description]   
+    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, req.body.description]   
 
     db
         .query(query, values)
