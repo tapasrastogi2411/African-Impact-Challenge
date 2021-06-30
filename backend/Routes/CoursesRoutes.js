@@ -18,7 +18,7 @@ router.post('/upload', auth, upload.any(), function (req, res) {
             + currentdate.getSeconds();
 
     var fieldName = req.files[0].fieldname;
-    console.log(req.files[0].fieldname);
+
     var category;
     if (fieldName === 'readings') {
         category = 1;
