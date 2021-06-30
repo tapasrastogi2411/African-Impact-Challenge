@@ -122,7 +122,7 @@ function Profilepage(props: any) {
       </Grid>}
 
         <Grid>
-          <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>
             <Alert severity="success" onClose={handleCloseSnackbar}>
               Company successfully created!
             </Alert>
