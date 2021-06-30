@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: 170,
     left: 300,
-    width: 1400
+    width: 1400,
+    height: "auto",
   },
   content: {
     flexGrow: 1,
@@ -35,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     width: "100%",
     height: 3,
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 20,
+    marginBottom: 20,
   },
   profilePic: {
     width: 200,
@@ -92,21 +93,27 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
     '&:hover': { background: "#e69113" },
     borderRadius: 20,
-    marginLeft: 1000,
+    marginLeft: 1250,
   },
 
   relatedPic: {
     width: 100,
-    height: "auto"
+    height: "auto",
+    alignSelf:"center",
+    marginLeft:"auto",
+    marginRight:"auto",
+    marginTop: 10,
+    marginBottom: 10,
   },
   relatedPicFounder: {
     width: 100,
     height: "auto",
     marginTop: 2
-  },
-  relatedUser: {
-    marginRight: 40
   }
+
+  /* relatedUser: {
+    marginRight: 40
+  } */
 }));
 
 
@@ -138,10 +145,6 @@ function CompanyPage(props: any) {
         </Grid>
 
 
-      
-        
-
-
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <img src={building} className={classes.profilePic} />
@@ -152,7 +155,7 @@ function CompanyPage(props: any) {
           container
           spacing={3}
           xs={10}
-          direction="column"
+          direction="row"
           className={classes.info}>
 
           <Grid item xs={4}>
@@ -169,21 +172,27 @@ function CompanyPage(props: any) {
           </Grid>
         </Grid>
         <Divider className={classes.divider} />
-        <Grid container spacing={3}>
+
+
+        <Grid container spacing={5}>
           <Grid item xs={12}>
             <Typography variant="h5">Members</Typography>
           </Grid>
-          <Grid item className={classes.relatedUser}>
-          <Typography align="center">Founder</Typography>
-            <Avatar src={founder} className={classes.relatedPicFounder} />
-            <Typography align="center">{companyData.creator}</Typography>
+
+
+          <Grid item >
+              <Typography align="center">Founder</Typography>
+              <Avatar src={founder} className={classes.relatedPic} />
+              <Typography align="center">{companyData.creator}</Typography>
           </Grid>
-          <Grid item className={classes.relatedUser}>
-          <Typography align="center">Member</Typography>
+          
+
+          <Grid item >
+             <Typography align="center">Member</Typography>
             <Avatar src={member} className={classes.relatedPic} />
-            <Typography align="center">Aaron1999</Typography>
+            <Typography align="center">Aaron1999999999 </Typography>
           </Grid>
-          <Grid item className={classes.relatedUser}>
+          <Grid item >
           <Typography align="center">Member</Typography>
             <Avatar src={member} className={classes.relatedPic} />
             <Typography align="center">Jason2002</Typography>
@@ -191,11 +200,11 @@ function CompanyPage(props: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h5">Resources</Typography>
-          </Grid>
-        </Grid>
+      
+          
+          <Typography variant="h5">Resources</Typography>
+          
+        
       </Grid>
     </div>
   );
