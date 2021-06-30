@@ -32,10 +32,9 @@ const fileFilter = function (req, file, cb) {
         fileTypes = /docx|doc|txt|pdf/;  
     } 
 
-    var mimetype = fileTypes.test(file.mimetype)
-    var extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-
-    if (!(mimetype && extname)) {
+    var isValidFile = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    
+    if (!isValidFile) {
         return cb(new Error ('Only ' + fileTypes + ' are allowed'));
     }
 
