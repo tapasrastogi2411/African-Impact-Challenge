@@ -40,10 +40,14 @@ router.post('/upload', auth, upload.any(), function (req, res) {
 
     db
         .query(query, values)
-        .then(res => {
+        .then(result => {
             console.log("File successfully uploaded.")
+            return res.status(200);
         })
-        .catch(e => console.error(e.stack))
+        .catch(e => {
+            console.error(e.stack);
+            return res.status(500);
+        })
 
 });
 
