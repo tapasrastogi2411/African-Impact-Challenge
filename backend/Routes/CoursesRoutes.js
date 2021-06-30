@@ -18,6 +18,10 @@ router.post('/upload', auth, upload.any(), function (req, res) {
             + currentdate.getMinutes() + ":" 
             + currentdate.getSeconds();
 
+    if(req.files.length === 0) {
+        return res.status(400).end();
+    };
+
     var fieldName = req.files[0].fieldname;
 
     var category;
