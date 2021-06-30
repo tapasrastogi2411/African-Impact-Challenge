@@ -96,7 +96,6 @@ function AssignmentPage() {
   const handleSubmit = async (e: any) => {
     const formdata = new FormData();
     formdata.append("assignments", file);
-    formdata.append("type", "assignments");
     formdata.append("description", description);
 
     const response = await fetch(
@@ -184,7 +183,7 @@ function AssignmentPage() {
                     name="assignments"
                     id="assignments"
                     label="assignments"
-                    inputProps={{ accept: "application/pdf" }}
+                    inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
                     onChange={handleUploadedFile}
                   ></TextField>
                   <AssignmentIcon />
