@@ -17,10 +17,21 @@ router.post('/upload', auth, upload.any(), function (req, res) {
             + currentdate.getMinutes() + ":" 
             + currentdate.getSeconds();
 
+    var fieldName = req.files[0].fieldname;
+    console.log(req.files[0].fieldname);
+    var category;
+    if (fieldName === 'readings') {
+        category = 1;
+    } else if (fieldName === 'videos') {
+        category = 2;
+    } else if (fieldName === 'assignments') {
+        category = 3;
+    } 
+
     var postfileSchema = "(file_path, category, upload_date, upload_user, description)";
     var preparedValues = "($1,$2,$3,$4,$5)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.files[0].path, 1, datetime, req.session.username, 'sda']   
+    var values = [req.files[0].path, category, datetime, req.session.username, req.body.description]   
 
     db
         .query(query, values)
@@ -29,7 +40,6 @@ router.post('/upload', auth, upload.any(), function (req, res) {
         })
         .catch(e => console.error(e.stack))
 
-    // res.json({hi: 1231});
 });
 
 module.exports = router;
