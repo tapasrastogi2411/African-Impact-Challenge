@@ -1,3 +1,6 @@
+DROP DATABASE aic IF EXISTS aic CASCADE;
+CREATE DATABASE aic;
+
 -- Profile Schema
 DROP SCHEMA IF EXISTS profile_schema CASCADE;
 CREATE SCHEMA profile_schema;
@@ -69,3 +72,28 @@ INSERT INTO aic_role VALUES
 (1, 'Teacher'), 
 (2, 'Entrepreneur'), 
 (3, 'Partner');
+
+-- Post Schema
+DROP SCHEMA IF EXISTS post_schema CASCADE;
+CREATE SCHEMA post_schema;
+SET SEARCH_PATH to post_schema;
+
+CREATE TABLE PostCategory(
+  category_id INT PRIMARY KEY, 
+  category_name TEXT NOT NULL
+);
+
+CREATE TABLE PostFile (
+  file_path TEXT PRIMARY KEY,
+  category INT,
+  upload_date timestamp NOT NULL, 
+  upload_user TEXT not NULL, 
+  description TEXT, 
+
+  FOREIGN KEY(category) REFERENCES PostCategory
+    on delete restrict
+);
+
+INSERT INTO PostCategory VALUES 
+(1, 'Reading'), 
+(2, 'Video')
