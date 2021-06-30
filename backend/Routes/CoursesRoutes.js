@@ -10,6 +10,10 @@ var upload = require('../Middleware/upload');
 router.post('/upload', auth, upload.any(), function (req, res) { 
     //req.session.username = "Aaron JACOB"; //uncomment this for testing
 
+    if(req.files.length === 0) {
+        return res.status(400).end();
+    };
+
     var currentdate = new Date(); 
     var datetime = currentdate.getFullYear() + "-" 
             + (currentdate.getMonth()+1) + "-"
@@ -17,10 +21,6 @@ router.post('/upload', auth, upload.any(), function (req, res) {
             + currentdate.getHours() + ":"  
             + currentdate.getMinutes() + ":" 
             + currentdate.getSeconds();
-
-    if(req.files.length === 0) {
-        return res.status(400).end();
-    };
 
     var fieldName = req.files[0].fieldname;
 
@@ -40,11 +40,14 @@ router.post('/upload', auth, upload.any(), function (req, res) {
 
     db
         .query(query, values)
-        .then(res => {
+        .then(result => {
             console.log("File successfully uploaded.")
+            return res.status(200);
         })
-        .catch(e => console.error(e.stack))
-
+        .catch(e => {
+            console.error(e.stack);
+            return res.status(500);
+        })
 });
 
 module.exports = router;
