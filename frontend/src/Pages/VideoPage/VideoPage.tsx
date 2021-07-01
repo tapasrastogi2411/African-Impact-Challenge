@@ -110,7 +110,7 @@ function VideoPage(prop: any) {
   };
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
-    formData.append("reading", file);
+    formData.append("videos", file);
     formData.append("description", description);
 
     const response = await fetch("http://localhost:8080/api/course/upload", {
@@ -132,9 +132,9 @@ function VideoPage(prop: any) {
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getResources",
+      "http://localhost:8080/api/course/getVideos",
       {
-        method: "POST",
+        method: "GET",
         mode: "cors",
       }
     );
@@ -225,11 +225,10 @@ function VideoPage(prop: any) {
             assignmentItems.map((item) => (
               <ListItem key={item} button>
                 <ListItemIcon>
-                  <LocalLibraryIcon />
                 </ListItemIcon>
                 <video width="320" height="240" controls>
                   <source src={"http://localhost:8080" + item} type="video/mp4">
-                    {" "}
+                
                   </source>
                 </video>
               </ListItem>

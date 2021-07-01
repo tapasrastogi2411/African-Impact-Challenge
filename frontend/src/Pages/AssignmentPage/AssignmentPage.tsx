@@ -121,6 +121,8 @@ function AssignmentPage(prop: any) {
       body: formData,
       mode: "cors",
     });
+
+    console.log(response.status);
     if (response.status > 300 || response.status < 200) {
       handleAlert("Failed to upload");
     }
@@ -135,9 +137,9 @@ function AssignmentPage(prop: any) {
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getResources",
+      "http://localhost:8080/api/course/getAssignments",
       {
-        method: "POST",
+        method: "GET",
         mode: "cors",
       }
     );

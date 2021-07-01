@@ -110,14 +110,17 @@ function ReadingPage(prop: any) {
   };
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
-    formData.append("reading", file);
+    formData.append("readings", file);
     formData.append("description", description);
-
+    
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
       body: formData,
       mode: "cors",
     });
+
+    console.log(response.status);
+
     if (response.status > 300 || response.status < 200) {
       handleAlert("Failed to upload");
     }
@@ -132,9 +135,9 @@ function ReadingPage(prop: any) {
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getResources",
+      "http://localhost:8080/api/course/getReadings",
       {
-        method: "POST",
+        method: "GET",
         mode: "cors",
       }
     );
