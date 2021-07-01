@@ -64,8 +64,6 @@ export default function Pages(props: any) {
     }
     const updateCompanyData = (newCompanyData: any) => {
         setCompanyData(newCompanyData);
-        console.log("IN UPDATE COMPANY DATA");
-        console.log(newCompanyData);
     }
 
     const setCompanyCreateBtn = (show: boolean) => {

@@ -36,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     width: "100%",
     height: 3,
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 10,
+    marginBottom: 10,
   },
   profilePic: {
     width: 200,
@@ -190,7 +190,7 @@ function CompanyPage(props: any) {
           <Grid item >
              <Typography align="center">Member</Typography>
             <Avatar src={member} className={classes.relatedPic} />
-            <Typography align="center">Aaron1999999999 </Typography>
+            <Typography align="center">Aaron1999 </Typography>
           </Grid>
           <Grid item >
           <Typography align="center">Member</Typography>
