@@ -5,6 +5,8 @@ import SignIn from "./UserProfile/LogIn";
 import SignUp from './UserProfile/SignUp';
 import ProfilePage from './ProfilePage/Profilepage';
 import Update from './ProfilePage/UpdateProfile';
+import CompanyPage from './CompanyPage/CompanyPage';
+
 import {
     makeStyles,
     createStyles,
@@ -38,7 +40,7 @@ const defaultUserData = {
     phone_number: "",
     country: "",
     address: "",
-    showCompanyBtn: true,
+    showCompanyBtn: true, // unused
 }
 
 
@@ -49,6 +51,7 @@ export default function Pages(props: any) {
 
     const [reg, setReg] = React.useState("false");
     const [userData, setUserData] = React.useState(defaultUserData);
+    const [companyData, setCompanyData] = React.useState("");
     const [showCompanyCreateBtn, setShowCompanyCreateBtn] = React.useState(false);
 
     const updateReg = (val:string) => {
@@ -57,7 +60,10 @@ export default function Pages(props: any) {
 
     const updateUserData = (newUserData: any) => {
         setUserData(newUserData);
-        console.log(newUserData);
+        // console.log(newUserData);
+    }
+    const updateCompanyData = (newCompanyData: any) => {
+        setCompanyData(newCompanyData);
     }
 
     const setCompanyCreateBtn = (show: boolean) => {
@@ -71,8 +77,9 @@ export default function Pages(props: any) {
                 <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
                 <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData} setCompanyCreateBtnHandler={setCompanyCreateBtn} />}  />
                 <Route exact path="/signup" render={() => <SignUp regHandler={updateReg} />} />
-                <Route exact path="/profile" render={() => <ProfilePage setCompanyCreateBtnHandler={setCompanyCreateBtn} showCreateCompanyBtn={showCompanyCreateBtn} userDataProp={userData} />}   />
+                <Route exact path="/profile" render={() => <ProfilePage updateCompanyData={updateCompanyData} setCompanyCreateBtnHandler={setCompanyCreateBtn} showCreateCompanyBtn={showCompanyCreateBtn} userDataProp={userData} />}   />
                 <Route exact path="/update" component={Update}/>
+                <Route exact path="/company" render={() => <CompanyPage companyData={companyData} />}  />
 
             </Switch>
 

@@ -95,11 +95,17 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+
+
 function Profilepage(props: any) {
   
   const classes = useStyles();
   var userData = props.userDataProp;
+  console.log("IN PROFILE PAGE");
+
+  
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [companyData, setCompanyData] = React.useState("");
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -111,15 +117,55 @@ function Profilepage(props: any) {
     setOpenSnackbar(true);
   }
 
+  const getCompanyData = () => {
+    fetch('http://localhost:8080/api/profile/getCompany/', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            credentials: 'include',
+            mode: 'cors',
+        })
+        .then(response => { // company creation successful
+            return response.json();
+        })
+        .then(responseJson => {
+          console.log(responseJson);
+          setCompanyData(responseJson)
+          props.updateCompanyData(responseJson);
+        })
+        .catch(err => { // company name is already taken
+            console.log("error"); 
+        })
+  }
+
+  const companyButton = () => {
+    if (userData.user_role == "Entrepreneur"){
+      if (props.showCreateCompanyBtn) {
+        return (
+          <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid>
+        )
+      } else {
+          return(
+            <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button></Grid>
+          )
+        }
+    }
+    
+    }
+  
+
   return (
     <div >
       <Navbar></Navbar>
-      
+      {console.log(userData.user_role)}
       <Grid container className={classes.root}>
+        
+      {/*   {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 
+        : <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button>
+      </Grid>} */}
 
-        {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 
-        : <Grid item xs={12} > <Button startIcon={<BusinessIcon />} className={classes.companyBtn}  >View Company </Button>
-      </Grid>}
+      {companyButton()}
 
         <Grid>
           <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>

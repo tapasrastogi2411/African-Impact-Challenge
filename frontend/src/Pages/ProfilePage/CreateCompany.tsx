@@ -286,12 +286,12 @@ export default function CreateCompany(props: any) {
                                        
                                         >
                                         
-                                        <MenuItem value="energy">Energy</MenuItem>
-                                        <MenuItem value="manufacturing">Manufacturing</MenuItem>
-                                        <MenuItem value="technology">Technology</MenuItem>
-                                        <MenuItem value="aerospace">Aerospace</MenuItem>
-                                        <MenuItem value="construction">Construction</MenuItem>
-                                        <MenuItem value="other">Other</MenuItem>
+                                        <MenuItem value="Energy">Energy</MenuItem>
+                                        <MenuItem value="Manufacturing">Manufacturing</MenuItem>
+                                        <MenuItem value="Technology">Technology</MenuItem>
+                                        <MenuItem value="Aerospace">Aerospace</MenuItem>
+                                        <MenuItem value="Construction">Construction</MenuItem>
+                                        <MenuItem value="Other">Other</MenuItem>
                                     </Select>
                                     {error.industry != "" && <FormHelperText > Industry is required </FormHelperText>} 
                                 </FormControl>
