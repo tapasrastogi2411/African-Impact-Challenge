@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import MainPage from "./MainPage/MainPage";
 import SignIn from "./UserProfile/LogIn";
+
 import SignUp from "./UserProfile/SignUp";
 import ProfilePage from "./ProfilePage/Profilepage";
 import Update from "./ProfilePage/UpdateProfile";
