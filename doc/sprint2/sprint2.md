@@ -38,7 +38,9 @@ Sub-Tasks
 * [TT-69] Store videos, readings and assignments in file-system on the server  – Aaron Tan
 * [TT-71] Create route for obtaining videos, readings and assignments from the server – Tapas Rastogi
 * [TT-70] Modify the db schema to include the posted resources – Ho Ki Yuen
-* [TT-64] Create two pages to render the videos and readings respectively - Haolong Zhang
+* [TT-64] Design dashboard page which tells users what they can do on the site and how to go about navigating through the site. - Haolong Zhang
+* [TT-74] Create video page - Clement Tran
+* [TT-76] Create readings page - Clement Tran
 
 ### [TT-9] As a teacher, I want to post assignments for students to complete by a specified due date so they can practice what they learned in the videos in a practical setting.  (46 pts)
 Sub-Tasks
