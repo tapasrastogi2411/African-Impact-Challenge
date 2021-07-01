@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, useState, useEffect} from "react";
 import SignIn from "../UserProfile/LogIn";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -89,7 +89,7 @@ const RedTextTypography = withStyles({
   },
 })(Typography);
 
-function AssignmentPage() {
+function AssignmentPage(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
@@ -112,7 +112,6 @@ function AssignmentPage() {
     setAlertMessage(e);
   };
   const handleSubmit = async (e: any) => {
-    handleAlert("Successfully Uploaded");
     const formData = new FormData();
     formData.append("assignments", file);
     formData.append("description", description);
@@ -122,9 +121,7 @@ function AssignmentPage() {
       body: formData,
       mode: "cors",
     });
-    const responseData = await response.json();
     if (response.status > 300 || response.status < 200) {
-      throw responseData;
       handleAlert("Failed to upload");
     }
     handleAlert("Successfully Uploaded");
@@ -133,17 +130,14 @@ function AssignmentPage() {
   };
 
   const parseItem = (e: string) => {
-    return e.split("/")[e.split("/").length - 1].split(".")[0];
+    return e.substring(e.indexOf('_')+1,e.length)
   };
-  const handleGet = async () => {
-    const formData = new FormData();
-    formData.append("category", "3");
 
+  const handleGet = async () => {
     const response = await fetch(
       "http://localhost:8080/api/course/getResources",
       {
-        method: "GET",
-        body: formData,
+        method: "POST",
         mode: "cors",
       }
     );
@@ -151,13 +145,18 @@ function AssignmentPage() {
     if (response.status > 300 || response.status < 200) {
       throw responseData;
     }
-    setAssignmentItems(responseData.get("files"));
+    
+    setAssignmentItems(responseData.file_paths);
   };
+
+  useEffect(() => {
+    handleGet();
+  }, []);
 
   return (
     <div>
-      <Navbar></Navbar>
       {handleGet}
+      <Navbar></Navbar>
       <Grid container className={classes.root}>
         <Grid item xs={12} container spacing={2}>
           <Typography variant="h4" className={classes.pageTitle}>
@@ -231,14 +230,13 @@ function AssignmentPage() {
             assignmentItems.map((item) => (
               <ListItem
                 key={item}
-                href={"http://localhost:8080" + { item }}
                 button
-                download
               >
+                
                 <ListItemIcon>
                   <AssignmentIcon />
                 </ListItemIcon>
-                <ListItemText>{parseItem(item)}</ListItemText>
+                <a href={"http://localhost:8080" + item }  target='_blank' download>{parseItem(item)}</a> 
               </ListItem>
             ))
           ) : (
@@ -253,3 +251,4 @@ function AssignmentPage() {
 }
 
 export default AssignmentPage;
+
