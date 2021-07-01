@@ -190,7 +190,7 @@ function CompanyPage(props: any) {
           <Grid item >
              <Typography align="center">Member</Typography>
             <Avatar src={member} className={classes.relatedPic} />
-            <Typography align="center">Aaron1999 </Typography>
+            <Typography align="center">Aaron1999</Typography>
           </Grid>
           <Grid item >
           <Typography align="center">Member</Typography>
