@@ -21,6 +21,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import { withStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -74,26 +75,44 @@ const useStyles = makeStyles((theme) => ({
   uploadButton: {
     marginLeft: 800,
   },
+  assignmentHeader: {
+    fontSize: 22,
+  },
+  noAssignmentHeader: {
+    fontSize: 22,
+  },
 }));
+
+const RedTextTypography = withStyles({
+  root: {
+    color: "#e43132",
+  },
+})(Typography);
 
 function AssignmentPage() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setAlertMessage("");
   };
 
   const handleUploadedFile = (e: any) => {
     setFile(e.target.files[0]);
   };
-
+  const handleAlert = (e: string) => {
+    setAlertMessage(e);
+  };
   const handleSubmit = async (e: any) => {
+    handleAlert("Successfully Uploaded");
     const formData = new FormData();
     formData.append("assignments", file);
     formData.append("description", description);
@@ -106,25 +125,39 @@ function AssignmentPage() {
     const responseData = await response.json();
     if (response.status > 300 || response.status < 200) {
       throw responseData;
+      handleAlert("Failed to upload");
     }
+    handleAlert("Successfully Uploaded");
     handleClose();
+    handleGet();
   };
 
-  const assignmentItems = [
-    {
-      text: "first assignment title",
-      path: "frontend/public/logo192.png",
-    },
-    {
-      text: "2nd assignment title",
-      path: "frontend/public/Uploads/Assignments/CSCC43Tutorial1.pdf",
-    },
-  ];
+  const parseItem = (e: string) => {
+    return e.split("/")[e.split("/").length - 1].split(".")[0];
+  };
+  const handleGet = async () => {
+    const formData = new FormData();
+    formData.append("category", "3");
+
+    const response = await fetch(
+      "http://localhost:8080/api/course/getResources",
+      {
+        method: "GET",
+        body: formData,
+        mode: "cors",
+      }
+    );
+    const responseData = await response.json();
+    if (response.status > 300 || response.status < 200) {
+      throw responseData;
+    }
+    setAssignmentItems(responseData.get("files"));
+  };
 
   return (
     <div>
       <Navbar></Navbar>
-
+      {handleGet}
       <Grid container className={classes.root}>
         <Grid item xs={12} container spacing={2}>
           <Typography variant="h4" className={classes.pageTitle}>
@@ -151,17 +184,6 @@ function AssignmentPage() {
                   <TextField
                     autoFocus
                     margin="dense"
-                    id="assignmentTitle"
-                    name="assignmentTitle"
-                    label="Assignment Title"
-                    type="text"
-                    fullWidth
-                  />
-                </DialogContent>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    margin="dense"
                     id="description"
                     name="description"
                     label="description"
@@ -182,6 +204,11 @@ function AssignmentPage() {
                   ></TextField>
                   <AssignmentIcon />
                 </DialogContent>
+                <DialogContent>
+                  {alertMessage.length > 0 ? (
+                    <RedTextTypography>{alertMessage}</RedTextTypography>
+                  ) : null}
+                </DialogContent>
                 <DialogActions>
                   <Button onClick={handleSubmit} color="primary">
                     Submit
@@ -197,15 +224,28 @@ function AssignmentPage() {
 
         <Divider className={classes.divider} />
         <List component="nav" aria-labelledby="assignmentList">
-          <Typography>Assignment</Typography>
-          {assignmentItems.map((item) => (
-            <ListItem key={item.text} button>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary={item.text}></ListItemText>
-            </ListItem>
-          ))}
+          <Typography className={classes.assignmentHeader}>
+            Assignment
+          </Typography>
+          {assignmentItems.length > 0 ? (
+            assignmentItems.map((item) => (
+              <ListItem
+                key={item}
+                href={"http://localhost:8080" + { item }}
+                button
+                download
+              >
+                <ListItemIcon>
+                  <AssignmentIcon />
+                </ListItemIcon>
+                <ListItemText>{parseItem(item)}</ListItemText>
+              </ListItem>
+            ))
+          ) : (
+            <Typography align="center" className={classes.noAssignmentHeader}>
+              There are currently no assignments!
+            </Typography>
+          )}
         </List>
       </Grid>
     </div>
