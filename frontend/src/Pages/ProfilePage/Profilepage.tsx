@@ -11,6 +11,10 @@ import { Avatar, Divider, Toolbar } from "@material-ui/core";
 import profilepic from "./profilepic.jpeg";
 import ChatIcon from '@material-ui/icons/Chat';
 import EditIcon from '@material-ui/icons/Edit';
+import BusinessIcon from '@material-ui/icons/Business';
+import CreateCompany from './CreateCompany';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +67,20 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 10,
     marginTop: 10,
   },
+  companyBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: "200px",
+    '&:hover': { background: "#e69113" },
+    marginLeft: 1200,
+    borderRadius: 20,
+    marginBottom: 10,
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
   relatedPic: {
     width: 100,
     height: "auto"
@@ -72,15 +90,92 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
- 
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+
+
 function Profilepage(props: any) {
+  
   const classes = useStyles();
-  const userData = props.userDataProp;
-  console.log(userData);
+  var userData = props.userDataProp;
+  console.log("IN PROFILE PAGE");
+
+  
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [companyData, setCompanyData] = React.useState("");
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  }
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  }
+
+  const getCompanyData = () => {
+    fetch('http://localhost:8080/api/profile/getCompany/', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            credentials: 'include',
+            mode: 'cors',
+        })
+        .then(response => { // company creation successful
+            return response.json();
+        })
+        .then(responseJson => {
+          console.log(responseJson);
+          setCompanyData(responseJson)
+          props.updateCompanyData(responseJson);
+        })
+        .catch(err => { // company name is already taken
+            console.log("error"); 
+        })
+  }
+
+  const companyButton = () => {
+    if (userData.user_role == "Entrepreneur"){
+      if (props.showCreateCompanyBtn) {
+        return (
+          <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid>
+        )
+      } else {
+          return(
+            <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button></Grid>
+          )
+        }
+    }
+    
+    }
+  
+
   return (
     <div >
       <Navbar></Navbar>
+      {console.log(userData.user_role)}
       <Grid container className={classes.root}>
+        
+      {/*   {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 
+        : <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button>
+      </Grid>} */}
+
+      {companyButton()}
+
+        <Grid>
+          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>
+            <Alert severity="success" onClose={handleCloseSnackbar}>
+              Company successfully created!
+            </Alert>
+          </Snackbar>
+        </Grid>
+        
+
         <Grid item xs={12}>
           <Typography variant="h4">{userData.username}</Typography>
         </Grid>
@@ -88,11 +183,10 @@ function Profilepage(props: any) {
 
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
-        <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography> 
+          <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography> 
           <img src={profilepic} className={classes.profilePic} />
           <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
           <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
-
         </Grid>
         <Grid
           item
