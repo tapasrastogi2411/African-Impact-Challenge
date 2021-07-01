@@ -29,19 +29,19 @@ Sub-Tasks
 * [TT-73] Modify the database to store companies and the entrepreneurs who work for the company - Brandon Jaipersaud
 
 ### [TT-17] As a user, I want to view the profile of another user/entity so that I can gain more information about and interact with the user. (39 pts)
-Sub-tasks
+Sub-Tasks
 * [TT-62] Create a “people” page which holds information about all the users and entities in the application (entrepreneurs, teachers, partners and companies created by the entrepreneurs)  – Haolong Zhang
 
 
 ### [TT-7] As a teacher, I want to post videos and readings for students to watch and complete in a self-paced manner so that they will be aided in the assignments and obtain valuable knowledge as entrepreneurs. (46 pts)
-Sub-tasks
+Sub-Tasks
 * [TT-69] Store videos, readings and assignments in file-system on the server  – Aaron Tan
 * [TT-71] Create route for obtaining videos, readings and assignments from the server – Tapas Rastogi
 * [TT-70] Modify the db schema to include the posted resources – Ho Ki Yuen
 * [TT-64] Create two pages to render the videos and readings respectively - Haolong Zhang
 
 ### [TT-9] As a teacher, I want to post assignments for students to complete by a specified due date so they can practice what they learned in the videos in a practical setting.  (46 pts)
-Sub-tasks
+Sub-Tasks
 * [TT-72] Create route for uploading videos, readings and assignments onto the server – Patrick Kemzang
 * [TT-65] Create a page to render the assignments on the frontend - Clement Tran
 
