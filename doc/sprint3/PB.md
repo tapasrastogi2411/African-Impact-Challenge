@@ -33,13 +33,7 @@ As a user, I want to view the profile of another user/entity so that I can gain 
   - Can view the profile of entrepreneurs, teachers, partners, and companies created by the entrepreneurs.
 
 
-As an entrepreneur, I want to create a company so that the state of my company is stored on the website which includes things like entrepreneurs that are part of the company and resources associated with the company.
-  - Appropriate form fields are included for company creation (name, address, industry, size, about)
-  - Form validation
-  - Data is rendered on the company page based on what the user entered on company creation
-  - Different roles for people in the company are tracked (company creator vs. member)
-  - Company profile has dividers to divide the information, such as members, mission statement, files, etc.
-  - Only entrepreneurs have this functionality
+
   
   
 
@@ -88,6 +82,13 @@ As a teacher, I want to post videos and readings for students to watch and compl
     
 -   Videos have Youtube integration.
     
+
+As a user, I want to be greeted by a welcome page after I login so that my experience on the site is more enjoyable.
+ -  User gets taken to the dashboard page after login
+ -  
+ -  Give an overview of user state on the application (i.e. number of videos watched, # of assignments completed, upcoming deadlines, etc.)
+ -  
+ -  Give user recommended actions to take
 
 
 As a teacher, I want to post assignments for students to complete by a specified due date so they can practice what they learned in the videos in a practical setting.
