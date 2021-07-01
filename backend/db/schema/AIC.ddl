@@ -1,6 +1,3 @@
-DROP DATABASE aic IF EXISTS aic CASCADE;
-CREATE DATABASE aic;
-
 -- Profile Schema
 DROP SCHEMA IF EXISTS profile_schema CASCADE;
 CREATE SCHEMA profile_schema;
@@ -37,8 +34,7 @@ CREATE TABLE message (
   FOREIGN KEY(receiver) REFERENCES aic_user
     on delete cascade
 );
--- avoid enumerated types
--- consider whether domain is final or not
+
 CREATE TABLE company(
   company_name TEXT PRIMARY KEY, -- each company must have a unique name
   address TEXT,
@@ -96,4 +92,5 @@ CREATE TABLE PostFile (
 
 INSERT INTO PostCategory VALUES 
 (1, 'Reading'), 
-(2, 'Video')
+(2, 'Video'), 
+(3, 'Assignment')
