@@ -5,7 +5,54 @@ const db = require('../db');
 const path = require('path');
 var upload = require('../Middleware/upload');
 
-//fields([{name:'readings'},{name: 'videos'}, {name:'assignments'}])
+
+// Route for gettings the `Readings`
+router.get('/getReadings', auth, async (req, res) => {
+    try{
+
+        let query = `SELECT file_path FROM post_schema.postfile WHERE category=1 ORDER BY upload_date DESC`;
+        const result = await db.query(query);
+        const filePaths = result.rows.map(row => row.file_path);
+        return res.status(200).json({file_paths: filePaths});
+    }
+
+    catch(err){
+        console.log(err)
+        res.status(500).end('Server Error ...');
+    }
+});
+
+// Route for getting the `Videos`
+router.get('/getVideos', auth, async (req, res) => {
+    try{
+
+        let query = `SELECT file_path FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
+        const result = await db.query(query);
+        const filePaths = result.rows.map(row => row.file_path);
+        return res.status(200).json({file_paths: filePaths});
+    }
+
+    catch(err){
+        console.log(err)
+        res.status(500).end('Server Error ...');
+    }
+});
+
+// Route for getting the `Assignments`
+router.get('/getAssignments', auth, async (req, res) => {
+    try{
+
+        let query = `SELECT file_path FROM post_schema.postfile WHERE category=3 ORDER BY upload_date DESC`;
+        const result = await db.query(query);
+        const filePaths = result.rows.map(row => row.file_path);
+        return res.status(200).json({file_paths: filePaths});
+    }
+
+    catch(err){
+        console.log(err)
+        res.status(500).end('Server Error ...');
+    }
+});
 
 router.post('/upload', auth, upload.any(), function (req, res) { 
     // req.session.username = "Aaron JACOB"; //uncomment this for testing
