@@ -7,6 +7,30 @@ var upload = require('../Middleware/upload');
 
 //fields([{name:'readings'},{name: 'videos'}, {name:'assignments'}])
 
+// I am writing the routes for vidoes, reading and assignments starting here
+
+router.get('/getResources', auth, async (req, res) => {
+
+    try{
+        const category = req.body.category
+        // console.log(category)
+        let query = `SELECT file_path FROM post_schema.postfile WHERE category=${category} ORDER BY upload_date`
+        const result = await db.query(query)
+        console.log(result.rows)
+        const filePaths = []
+        for(row in result.rows){
+            // console.log(row)
+            filePaths.push(result.rows[row].file_path)
+        }
+        return res.status(200).json({files: filePaths})
+    }
+    catch(err){
+        
+        console.log(err)
+        res.status(500).end('Server Error ...')
+    }
+})
+
 router.post('/upload', auth, upload.any(), function (req, res) { 
     // req.session.username = "Aaron JACOB"; //uncomment this for testing
 
