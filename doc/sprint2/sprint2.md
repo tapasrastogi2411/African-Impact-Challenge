@@ -47,6 +47,11 @@ Sub-Tasks
 * [TT-72] Create route for uploading videos, readings and assignments onto the server – Patrick Kemzang
 * [TT-65] Create a page to render the assignments on the frontend - Clement Tran
 
+### [TT-77] As a user, I want to be greeted by a welcome page after I login so that my experience on the site is more enjoyable.
+Sub-Tasks
+* [TT-78] Design dashboard page which tells users what they can do on the site and how to go about navigating through the site. - Haolong Zhang
+
+
 ### Other Tasks and Bug Fixes
 
 * [TT-59 and TT-60] Fix the form validation for registration and login forms. Apply backend validation so users cannot register if the username is taken and cannot login if their username/password is invalid. (8+8=16 pts) - Brandon Jaipersaud 
