@@ -94,21 +94,15 @@ function AssignmentPage() {
   };
 
   const handleSubmit = async (e: any) => {
-    const formdata = new FormData();
-    formdata.append("assignments", file);
-    formdata.append("description", description);
+    const formData = new FormData();
+    formData.append("assignments", file);
+    formData.append("description", description);
 
-    const response = await fetch(
-      "https://localhost:8080/api/assignment/updateAssignment",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        body: formdata,
-        mode: "cors",
-      }
-    );
+    const response = await fetch("http://localhost:8080/api/course/upload", {
+      method: "POST",
+      body: formData,
+      mode: "cors",
+    });
     const responseData = await response.json();
     if (response.status > 300 || response.status < 200) {
       throw responseData;
@@ -170,7 +164,7 @@ function AssignmentPage() {
                     margin="dense"
                     id="description"
                     name="description"
-                    label="Description"
+                    label="description"
                     type="text"
                     fullWidth
                     onChange={(e) => setDescription(e.target.value)}
