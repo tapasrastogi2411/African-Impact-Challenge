@@ -1,4 +1,4 @@
-SET SEARCH_PATH to profile_schema,public;
+SET SEARCH_PATH to profile_schema, post_schema, public;
 
 INSERT INTO aic_user VALUES 
 ('Teacher_1', 'teacher', 1, 'Ms', 'Diana', 'Butler', 'diana@aci.com', null, 'Canada', null), 
@@ -18,4 +18,5 @@ INSERT INTO company VALUES
 INSERT INTO employee VALUES 
 ('Entrepreneur_1', 1, 'Founder');
 
-
+INSERT INTO PostFile VALUES 
+('/video/v1.mp3', 2, '2021-06-08 9:30:00', 'Teacher_1', 'New Video');
