@@ -6,6 +6,7 @@ import SignUp from './UserProfile/SignUp';
 import ProfilePage from './ProfilePage/Profilepage';
 import Update from './ProfilePage/UpdateProfile';
 import CompanyPage from './CompanyPage/CompanyPage';
+import PeoplePage from './PeoplePage/PeoplePage';
 
 import {
     makeStyles,
@@ -18,7 +19,7 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
     createStyles({
 
         root: {
-            background: "#f2f6fa",
+            background: "#faf6f2",
             display: "flex",
             paddingTop: 80,
             height: "800px",
@@ -80,6 +81,7 @@ export default function Pages(props: any) {
                 <Route exact path="/profile" render={() => <ProfilePage updateCompanyData={updateCompanyData} setCompanyCreateBtnHandler={setCompanyCreateBtn} showCreateCompanyBtn={showCompanyCreateBtn} userDataProp={userData} />}   />
                 <Route exact path="/update" component={Update}/>
                 <Route exact path="/company" render={() => <CompanyPage companyData={companyData} />}  />
+                <Route exact path="/people" component={PeoplePage}/>
 
             </Switch>
 
