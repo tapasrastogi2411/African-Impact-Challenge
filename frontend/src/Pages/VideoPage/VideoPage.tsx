@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState, useEffect} from "react";
+import React, { Component, Fragment, useState, useEffect } from "react";
 import SignIn from "../UserProfile/LogIn";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -7,14 +7,11 @@ import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Avatar, Divider, Toolbar } from "@material-ui/core";
+import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -75,10 +72,10 @@ const useStyles = makeStyles((theme) => ({
   uploadButton: {
     marginLeft: 800,
   },
-  assignmentHeader: {
+  VideoHeader: {
     fontSize: 22,
   },
-  noAssignmentHeader: {
+  noVideoHeader: {
     fontSize: 22,
   },
 }));
@@ -89,7 +86,7 @@ const RedTextTypography = withStyles({
   },
 })(Typography);
 
-function AssignmentPage(prop: any) {
+function VideoPage(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
@@ -113,7 +110,7 @@ function AssignmentPage(prop: any) {
   };
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
-    formData.append("assignments", file);
+    formData.append("videos", file);
     formData.append("description", description);
 
     const response = await fetch("http://localhost:8080/api/course/upload", {
@@ -121,8 +118,6 @@ function AssignmentPage(prop: any) {
       body: formData,
       mode: "cors",
     });
-
-    console.log(response.status);
     if (response.status > 300 || response.status < 200) {
       handleAlert("Failed to upload");
     }
@@ -132,12 +127,12 @@ function AssignmentPage(prop: any) {
   };
 
   const parseItem = (e: string) => {
-    return e.substring(e.indexOf('_')+1,e.length)
+    return e.substring(e.indexOf("_") + 1, e.length);
   };
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getAssignments",
+      "http://localhost:8080/api/course/getVideos",
       {
         method: "GET",
         mode: "cors",
@@ -147,7 +142,7 @@ function AssignmentPage(prop: any) {
     if (response.status > 300 || response.status < 200) {
       throw responseData;
     }
-    
+
     setAssignmentItems(responseData.file_paths);
   };
 
@@ -162,7 +157,7 @@ function AssignmentPage(prop: any) {
       <Grid container className={classes.root}>
         <Grid item xs={12} container spacing={2}>
           <Typography variant="h4" className={classes.pageTitle}>
-            Assignments
+            Videos
           </Typography>
           <Grid>
             <div>
@@ -171,7 +166,7 @@ function AssignmentPage(prop: any) {
                 onClick={handleClickOpen}
                 className={classes.uploadButton}
               >
-                Upload Assignment
+                Upload Videos
               </Button>
               <Dialog
                 open={open}
@@ -197,10 +192,10 @@ function AssignmentPage(prop: any) {
                 <DialogContent>
                   <TextField
                     type={"file"}
-                    name="assignments"
-                    id="assignments"
-                    label="assignments"
-                    inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
+                    name="videos"
+                    id="videos"
+                    label="videos"
+                    inputProps={{ accept: ".mp4" }}
                     onChange={handleUploadedFile}
                   ></TextField>
                   <AssignmentIcon />
@@ -224,26 +219,23 @@ function AssignmentPage(prop: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-        <List component="nav" aria-labelledby="assignmentList">
-          <Typography className={classes.assignmentHeader}>
-            Assignment
-          </Typography>
+        <List component="nav" aria-labelledby="readingList">
+          <Typography className={classes.VideoHeader}>Videos</Typography>
           {assignmentItems.length > 0 ? (
             assignmentItems.map((item) => (
-              <ListItem
-                key={item}
-                button
-              >
-                
+              <ListItem key={item} button>
                 <ListItemIcon>
-                  <AssignmentIcon />
                 </ListItemIcon>
-                <a href={"http://localhost:8080" + item }  target='_blank' download>{parseItem(item)}</a> 
+                <video width="320" height="240" controls>
+                  <source src={"http://localhost:8080" + item} type="video/mp4">
+                
+                  </source>
+                </video>
               </ListItem>
             ))
           ) : (
-            <Typography align="center" className={classes.noAssignmentHeader}>
-              There are currently no assignments!
+            <Typography align="center" className={classes.noVideoHeader}>
+              There are currently no Videos!
             </Typography>
           )}
         </List>
@@ -252,5 +244,4 @@ function AssignmentPage(prop: any) {
   );
 }
 
-export default AssignmentPage;
-
+export default VideoPage;
