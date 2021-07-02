@@ -116,6 +116,7 @@ function VideoPage(prop: any) {
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
       body: formData,
+      credentials: "include",
       mode: "cors",
     });
     if (response.status > 300 || response.status < 200) {
@@ -135,6 +136,7 @@ function VideoPage(prop: any) {
       "http://localhost:8080/api/course/getVideos",
       {
         method: "GET",
+        credentials: "include",
         mode: "cors",
       }
     );

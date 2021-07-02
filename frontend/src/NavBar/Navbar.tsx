@@ -85,11 +85,7 @@ export default function PersistentDrawerLeft() {
         </IconButton> */}
 
         <List className={classes.list}>
-          <ListItem
-            button
-            className={classes.btn}
-            component={Link}
-            to="/profile">
+          <ListItem button className={classes.btn} component={RouterLink} to="/profile">
             <Typography className={classes.txt}>Profile</Typography>
           </ListItem>
           <ListItem
@@ -107,6 +103,22 @@ export default function PersistentDrawerLeft() {
           </ListItem>
           <ListItem button className={classes.btn}>
             <Typography className={classes.txt}>Calendar</Typography>
+          </ListItem>
+          <ListItem
+            button
+            className={classes.btn}
+            component={RouterLink}
+            to="/videos"
+          >
+            <Typography className={classes.txt}>Videos</Typography>
+          </ListItem>
+          <ListItem
+            button
+            className={classes.btn}
+            component={RouterLink}
+            to="/readings"
+          >
+            <Typography className={classes.txt}>Readings</Typography>
           </ListItem>
           <ListItem
             button

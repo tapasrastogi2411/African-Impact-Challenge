@@ -42,10 +42,21 @@ router.get('/getVideos', auth, async (req, res) => {
 router.get('/getAssignments', auth, async (req, res) => {
     try{
 
-        let query = `SELECT file_path FROM post_schema.postfile WHERE category=3 ORDER BY upload_date DESC`;
+        let query = `SELECT * FROM post_schema.postfile WHERE category=3 ORDER BY upload_date DESC`;
         const result = await db.query(query);
-        const filePaths = result.rows.map(row => row.file_path);
-        return res.status(200).json({file_paths: filePaths});
+        // const filePaths = result.rows.map(row => row.file_path);
+        var fileArray = result.rows;
+        for (obj of fileArray) {
+            if (obj['description'] == "") {
+                obj['description'] = "Description not provided";
+            }
+            if (obj['upload_user'] == "") {
+                obj['upload_user'] = "Unknown";
+            }
+        }
+       
+        console.log(fileArray);
+        return res.status(200).json(fileArray);
     }
 
     catch(err){
@@ -70,6 +81,7 @@ router.post('/upload', auth, upload.any(), function (req, res) {
             + currentdate.getSeconds();
 
     var fieldName = req.files[0].fieldname;
+    var title = "";
 
     var category;
     if (fieldName === 'readings') {
@@ -78,12 +90,13 @@ router.post('/upload', auth, upload.any(), function (req, res) {
         category = 2;
     } else if (fieldName === 'assignments') {
         category = 3;
+        title = req.body.title
     } 
 
-    var postfileSchema = "(file_path, category, upload_date, upload_user, description)";
-    var preparedValues = "($1,$2,$3,$4,$5)";
+    var postfileSchema = "(file_path, category, upload_date, upload_user, description, title)";
+    var preparedValues = "($1,$2,$3,$4,$5, $6)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, req.body.description]   
+    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, req.body.description, title]   
 
     db
         .query(query, values)

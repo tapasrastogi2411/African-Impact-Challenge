@@ -22,6 +22,16 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -34,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   divider: {
-    width: "150%",
+    width: "85%",
     height: 3,
-    marginTop: 5,
+    marginTop: 15,
     marginBottom: 10,
   },
   profilePic: {
@@ -71,16 +81,45 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     marginLeft: 10,
+    marginRight: 790,
+    marginTop: 40,
+    display: "inline",
   },
   uploadButton: {
-    marginLeft: 800,
+    //marginLeft: 800,
+    marginBottom: "10px",
+    width: 200,
   },
   assignmentHeader: {
+    
     fontSize: 22,
   },
   noAssignmentHeader: {
     fontSize: 22,
   },
+  assignmentCard: {
+    width: 1200,
+  },
+  cardBody: {
+    marginBottom: 25,
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400
+  }, 
+  cardDesc: {
+    fontSize: "13px",
+    fontWeight: 400,
+    marginBottom: 35
+  },
+  upload: {
+    flexBasis: "23.33%",
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400,
+    marginTop: 8,
+    
+
+  }
 }));
 
 const RedTextTypography = withStyles({
@@ -93,8 +132,9 @@ function AssignmentPage(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
+  const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
@@ -114,12 +154,15 @@ function AssignmentPage(prop: any) {
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
     formData.append("assignments", file);
+    formData.append("title", title);
     formData.append("description", description);
 
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
       body: formData,
+      credentials: 'include',
       mode: "cors",
+
     });
 
     console.log(response.status);
@@ -131,8 +174,9 @@ function AssignmentPage(prop: any) {
     handleGet();
   };
 
-  const parseItem = (e: string) => {
-    return e.substring(e.indexOf('_')+1,e.length)
+  const parseItem = (e: any) => {
+    var filePath = e.file_path;
+    return filePath.substring(filePath.indexOf('_')+1,filePath.length)
   };
 
   const handleGet = async () => {
@@ -140,6 +184,7 @@ function AssignmentPage(prop: any) {
       "http://localhost:8080/api/course/getAssignments",
       {
         method: "GET",
+        credentials: 'include',
         mode: "cors",
       }
     );
@@ -148,8 +193,61 @@ function AssignmentPage(prop: any) {
       throw responseData;
     }
     
-    setAssignmentItems(responseData.file_paths);
+    setAssignmentItems(responseData);
   };
+
+  
+
+    const renderAssignments = (item: any) => {  // item is an object containing assignment data
+    // call event handler in main and set state to the current assignment
+    return(
+      <Accordion className={classes.assignmentCard}>
+        <AccordionSummary 
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
+          <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
+          <Typography className={classes.upload} style={{marginLeft: 600}} >Posted: {item.upload_date.substring(0,10)}</Typography>
+        </AccordionSummary>
+        
+        <AccordionDetails style={{flexDirection: "column"}} >
+          <div style={{flexBasis: "33.33%"}}>
+
+            <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
+              Created by {item.upload_user}
+            </Typography>
+          </div>
+
+          <div style={{flexBasis: "33.33%"}}>
+            <Typography variant="body2" className={classes.cardDesc}>
+            {item.description}
+            </Typography>
+          </div>
+          <Divider style={{marginBottom: "20px"}}/>
+          <Typography variant="body2" style={{marginBottom: 10}}>
+              Download File
+            </Typography>
+          
+          <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+          <Typography variant="body2" >
+            {parseItem(item)}
+            </Typography>
+            
+            </a>
+        </AccordionDetails>
+      </Accordion>
+      
+    
+    ); 
+
+
+
+
+  }
+
+  
 
   useEffect(() => {
     handleGet();
@@ -161,11 +259,14 @@ function AssignmentPage(prop: any) {
       <Navbar></Navbar>
       <Grid container className={classes.root}>
         <Grid item xs={12} container spacing={2}>
-          <Typography variant="h4" className={classes.pageTitle}>
-            Assignments
-          </Typography>
+          
           <Grid>
-            <div>
+
+            <Typography variant="h4" className={classes.pageTitle}>
+              Assignments
+            </Typography>
+           
+            
               <Button
                 variant="outlined"
                 onClick={handleClickOpen}
@@ -173,6 +274,8 @@ function AssignmentPage(prop: any) {
               >
                 Upload Assignment
               </Button>
+              
+              
               <Dialog
                 open={open}
                 onClose={handleClose}
@@ -184,6 +287,16 @@ function AssignmentPage(prop: any) {
                   </DialogContentText>
                   <TextField
                     autoFocus
+                    margin="dense"
+                    id="title"
+                    name="title"
+                    label="title"
+                    type="text"
+                    fullWidth
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <TextField
+      
                     margin="dense"
                     id="description"
                     name="description"
@@ -219,29 +332,15 @@ function AssignmentPage(prop: any) {
                   </Button>
                 </DialogActions>
               </Dialog>
-            </div>
+            
           </Grid>
         </Grid>
 
         <Divider className={classes.divider} />
         <List component="nav" aria-labelledby="assignmentList">
-          <Typography className={classes.assignmentHeader}>
-            Assignment
-          </Typography>
-          {assignmentItems.length > 0 ? (
-            assignmentItems.map((item) => (
-              <ListItem
-                key={item}
-                button
-              >
-                
-                <ListItemIcon>
-                  <AssignmentIcon />
-                </ListItemIcon>
-                <a href={"http://localhost:8080" + item }  target='_blank' download>{parseItem(item)}</a> 
-              </ListItem>
-            ))
-          ) : (
+          {assignmentItems.length > 0 ?  assignmentItems.map((item) => (
+      renderAssignments(item)
+    )) : ( 
             <Typography align="center" className={classes.noAssignmentHeader}>
               There are currently no assignments!
             </Typography>
@@ -249,6 +348,8 @@ function AssignmentPage(prop: any) {
         </List>
       </Grid>
     </div>
+
+    
   );
 }
 
