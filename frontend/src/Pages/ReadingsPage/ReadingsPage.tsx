@@ -116,6 +116,7 @@ function ReadingPage(prop: any) {
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
       body: formData,
+      credentials: "include",
       mode: "cors",
     });
 
@@ -138,6 +139,7 @@ function ReadingPage(prop: any) {
       "http://localhost:8080/api/course/getReadings",
       {
         method: "GET",
+        credentials: "include",
         mode: "cors",
       }
     );
