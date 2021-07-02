@@ -101,7 +101,7 @@ function Profilepage(props: any) {
   
   const classes = useStyles();
   var userData = props.userDataProp;
-  console.log("IN PROFILE PAGE");
+  
 
   
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -130,7 +130,7 @@ function Profilepage(props: any) {
             return response.json();
         })
         .then(responseJson => {
-          console.log(responseJson);
+          
           setCompanyData(responseJson)
           props.updateCompanyData(responseJson);
         })
@@ -158,7 +158,7 @@ function Profilepage(props: any) {
   return (
     <div >
       <Navbar></Navbar>
-      {console.log(userData.user_role)}
+     
       <Grid container className={classes.root}>
         
       {/*   {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 

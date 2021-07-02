@@ -360,7 +360,6 @@ function AssignmentPage(prop: any) {
 
         <Divider className={classes.divider} />
         <List component="nav" aria-labelledby="assignmentList">
-          {console.log(assignmentItems)}
           {assignmentItems.length > 0 ?  assignmentItems.map((item) => (
       renderAssignments(item)
     )) : ( 

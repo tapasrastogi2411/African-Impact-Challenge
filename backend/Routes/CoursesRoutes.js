@@ -48,7 +48,10 @@ router.get('/getAssignments', auth, async (req, res) => {
         var fileArray = result.rows;
         for (obj of fileArray) {
             if (obj['description'] == "") {
-                obj['description'] = "Description not provided"
+                obj['description'] = "Description not provided";
+            }
+            if (obj['upload_user'] == "") {
+                obj['upload_user'] = "Unknown";
             }
         }
        
@@ -78,6 +81,7 @@ router.post('/upload', auth, upload.any(), function (req, res) {
             + currentdate.getSeconds();
 
     var fieldName = req.files[0].fieldname;
+    var title = "";
 
     var category;
     if (fieldName === 'readings') {
@@ -86,12 +90,13 @@ router.post('/upload', auth, upload.any(), function (req, res) {
         category = 2;
     } else if (fieldName === 'assignments') {
         category = 3;
+        title = req.body.title
     } 
 
     var postfileSchema = "(file_path, category, upload_date, upload_user, description, title)";
     var preparedValues = "($1,$2,$3,$4,$5, $6)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, req.body.description, req.body.title]   
+    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, req.body.description, title]   
 
     db
         .query(query, values)
