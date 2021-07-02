@@ -125,6 +125,7 @@ function AssignmentPage(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
+  const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
@@ -146,12 +147,15 @@ function AssignmentPage(prop: any) {
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
     formData.append("assignments", file);
+    formData.append("title", title);
     formData.append("description", description);
 
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
       body: formData,
+      credentials: 'include',
       mode: "cors",
+
     });
 
     console.log(response.status);
@@ -173,6 +177,7 @@ function AssignmentPage(prop: any) {
       "http://localhost:8080/api/course/getAssignments",
       {
         method: "GET",
+        credentials: 'include',
         mode: "cors",
       }
     );
@@ -206,10 +211,8 @@ function AssignmentPage(prop: any) {
     
     ); */
 
-// Include upload date?
+
     const renderAssignments = (item: any) => {  // item is an object containing assignment data
-    //console.log("IN");
-    //console.log(item);
     // call event handler in main and set state to the current assignment
     return(
       <Accordion className={classes.assignmentCard}>
@@ -219,7 +222,7 @@ function AssignmentPage(prop: any) {
           id="panel1a-header"
         >
           <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
-          <Typography variant="h6" style={{flexBasis: "73.33%"}} >Assignment Title</Typography>
+          <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
           <Typography className={classes.upload} style={{flexBasis: "33.33%"}} >Posted: {item.upload_date.substring(0,10)}</Typography>
         </AccordionSummary>
         
@@ -306,6 +309,16 @@ function AssignmentPage(prop: any) {
                   </DialogContentText>
                   <TextField
                     autoFocus
+                    margin="dense"
+                    id="title"
+                    name="title"
+                    label="title"
+                    type="text"
+                    fullWidth
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <TextField
+      
                     margin="dense"
                     id="description"
                     name="description"

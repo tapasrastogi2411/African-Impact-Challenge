@@ -63,7 +63,7 @@ router.get('/getAssignments', auth, async (req, res) => {
 });
 
 router.post('/upload', auth, upload.any(), function (req, res) { 
-    req.session.username = "Aaron JACOB"; //uncomment this for testing
+    // req.session.username = "Aaron JACOB"; //uncomment this for testing
 
     if(req.files.length === 0) {
         return res.status(400).end();
@@ -88,10 +88,10 @@ router.post('/upload', auth, upload.any(), function (req, res) {
         category = 3;
     } 
 
-    var postfileSchema = "(file_path, category, upload_date, upload_user, description)";
-    var preparedValues = "($1,$2,$3,$4,$5)";
+    var postfileSchema = "(file_path, category, upload_date, upload_user, description, title)";
+    var preparedValues = "($1,$2,$3,$4,$5, $6)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, req.body.description]   
+    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, req.body.description, req.body.title]   
 
     db
         .query(query, values)
