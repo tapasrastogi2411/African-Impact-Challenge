@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SignIn from "../UserProfile/LogIn";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -49,7 +49,43 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard(props: any) {
 
   const classes = useStyles();
+  const [videoItems, setVideos] = React.useState([]);
+  const [readingsItems, setReadings] = React.useState([]);
 
+  const getVideos = async () => {
+    const response = await fetch(
+      "http://localhost:8080/api/course/getVideos",
+      {
+        method: "GET",
+        mode: "cors",
+      }
+    );
+    const responseData = await response.json();
+    if (response.status > 300 || response.status < 200) {
+      throw responseData;
+    }
+
+    setVideos(responseData.file_paths);
+  };
+  const getReadings = async () => {
+    const response = await fetch(
+      "http://localhost:8080/api/course/getReadings",
+      {
+        method: "GET",
+        mode: "cors",
+      }
+    );
+    const responseData = await response.json();
+    if (response.status > 300 || response.status < 200) {
+      throw responseData;
+    }
+
+    setReadings(responseData.file_paths);
+  };
+  useEffect(() => {
+    getVideos();
+    getReadings();
+  }, []);
 
 
 
@@ -72,12 +108,23 @@ export default function Dashboard(props: any) {
           xs={12}
           className={classes.section}
           spacing={2}
-   
+
         >
           <Grid item xs={12} >
             <Typography variant="h5">Videos</Typography>
           </Grid>
-          <Grid item xs={3}>
+          {videoItems.length > 0 ? (
+            videoItems.map(() => (
+              <Grid item xs={3}>
+                <Card src={player}/>
+              </Grid>
+            ))
+          ) : (
+              <Typography align="center" >
+                There are currently no videos!
+              </Typography>
+            )}
+          {/* <Grid item xs={3}>
             <Card src={player} />
           </Grid>
           <Grid item xs={3}>
@@ -88,12 +135,14 @@ export default function Dashboard(props: any) {
           </Grid>
           <Grid item xs={3}>
             <Card src={player} />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <Button
               variant="contained"
               className={classes.btn}
               endIcon={<MoreHorizIcon />}
+              component={Link}
+              to="/videos"
             >
               More
             </Button>
@@ -105,7 +154,18 @@ export default function Dashboard(props: any) {
           <Grid item xs={12} >
             <Typography variant="h5">Readings</Typography>
           </Grid>
-          <Grid item xs={3}>
+          {readingsItems.length > 0 ? (
+            readingsItems.map(() => (
+              <Grid item xs={3}>
+                <Card src={book} />
+              </Grid>
+            ))
+          ) : (
+              <Typography align="center" >
+                There are currently no readings!
+              </Typography>
+            )}
+          {/* <Grid item xs={3}>
             <Card src={book} />
           </Grid>
           <Grid item xs={3}>
@@ -116,12 +176,14 @@ export default function Dashboard(props: any) {
           </Grid>
           <Grid item xs={3}>
             <Card src={book} />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <Button
               variant="contained"
               className={classes.btn}
               endIcon={<MoreHorizIcon />}
+              component={Link}
+              to="/readings"
             >
               More
             </Button>

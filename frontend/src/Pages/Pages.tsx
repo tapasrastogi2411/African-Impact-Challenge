@@ -8,17 +8,17 @@ import Update from './ProfilePage/UpdateProfile';
 import CompanyPage from './CompanyPage/CompanyPage';
 import PeoplePage from './PeoplePage/PeoplePage';
 import Dashboard from './Dashboard/Dashboard';
+import AssignmentPage from './AssignmentPage/AssignmentPage';
 import {
     makeStyles,
     createStyles,
     Theme,
 } from "@material-ui/core";
+import { People } from "@material-ui/icons";
+import VideoPage from "./VideoPage/VideoPage";
+import ReadingsPage from "./ReadingsPage/ReadingsPage";
 
-import SignUp from "./UserProfile/SignUp";
-import ProfilePage from "./ProfilePage/Profilepage";
-import Update from "./ProfilePage/UpdateProfile";
-import AssignmentPage from "./AssignmentPage/AssignmentPage";
-import { makeStyles, createStyles, Theme } from "@material-ui/core";
+
 
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
     createStyles({
@@ -106,6 +106,11 @@ export default function Pages(props: any) {
         />
         <Route exact path="/update" component={Update} />
         <Route exact path="/assignments" component={AssignmentPage} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/people" component={PeoplePage} />
+        <Route exact path="/videos" component={VideoPage} />
+        <Route exact path="/readings" component={ReadingsPage} />
+
       </Switch>
     </div>
   );
