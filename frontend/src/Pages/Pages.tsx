@@ -7,7 +7,7 @@ import ProfilePage from './ProfilePage/Profilepage';
 import Update from './ProfilePage/UpdateProfile';
 import CompanyPage from './CompanyPage/CompanyPage';
 import PeoplePage from './PeoplePage/PeoplePage';
-
+import Dashboard from './Dashboard/Dashboard';
 import {
     makeStyles,
     createStyles,
@@ -36,7 +36,7 @@ const defaultUserData = {
     user_role: "",
     honorifics: "",
     first_name: "",
-    last_name : "",
+    last_name: "",
     email: "",
     phone_number: "",
     country: "",
@@ -55,7 +55,7 @@ export default function Pages(props: any) {
     const [companyData, setCompanyData] = React.useState("");
     const [showCompanyCreateBtn, setShowCompanyCreateBtn] = React.useState(false);
 
-    const updateReg = (val:string) => {
+    const updateReg = (val: string) => {
         setReg(val);
     };
 
@@ -75,13 +75,14 @@ export default function Pages(props: any) {
     return (
         <div className={classes.root}>
             <Switch>
-                <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
-                <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData} setCompanyCreateBtnHandler={setCompanyCreateBtn} />}  />
+                <Route exact path="/" render={() => <MainPage regHandler={updateReg} />} />
+                <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData} setCompanyCreateBtnHandler={setCompanyCreateBtn} />} />
                 <Route exact path="/signup" render={() => <SignUp regHandler={updateReg} />} />
-                <Route exact path="/profile" render={() => <ProfilePage updateCompanyData={updateCompanyData} setCompanyCreateBtnHandler={setCompanyCreateBtn} showCreateCompanyBtn={showCompanyCreateBtn} userDataProp={userData} />}   />
-                <Route exact path="/update" component={Update}/>
-                <Route exact path="/company" render={() => <CompanyPage companyData={companyData} />}  />
-                <Route exact path="/people" component={PeoplePage}/>
+                <Route exact path="/profile" render={() => <ProfilePage updateCompanyData={updateCompanyData} setCompanyCreateBtnHandler={setCompanyCreateBtn} showCreateCompanyBtn={showCompanyCreateBtn} userDataProp={userData} />} />
+                <Route exact path="/update" component={Update} />
+                <Route exact path="/company" render={() => <CompanyPage companyData={companyData} />} />
+                <Route exact path="/people" component={PeoplePage} />
+                <Route exact path="/dashboard" component={Dashboard} />
 
             </Switch>
 
