@@ -114,22 +114,25 @@ export default function Dashboard(props: any) {
             <Typography variant="h5">Videos</Typography>
           </Grid>
           {videoItems.length > 0 ? (
-            videoItems.slice(0, 4).map((item) => (
-              <Grid item xs={3}>
-                <video width="300" height="160" controls>
-                  <source src={"http://localhost:8080" + item} type="video/mp4" />
-                </video>
-              </Grid>
-            )) &&
-            <Button
-              variant="contained"
-              className={classes.btn}
-              endIcon={<MoreHorizIcon />}
-              component={Link}
-              to="/videos"
-            >
-              More
+            <>
+              {videoItems.slice(0, 4).map((item) => (
+                <Grid item xs={3}>
+                  <video width="300" height="160" controls>
+                    <source src={"http://localhost:8080" + item} type="video/mp4" />
+                  </video>
+                </Grid>
+              ))}
+              <Button
+                variant="contained"
+                className={classes.btn}
+                endIcon={<MoreHorizIcon />}
+                component={Link}
+                to="/videos"
+              >
+                More
           </Button>
+            </>
+
           ) : (
               <Typography align="center" >
                 There are currently no videos!
@@ -165,22 +168,26 @@ export default function Dashboard(props: any) {
           <Grid item xs={12} >
             <Typography variant="h5">Readings</Typography>
           </Grid>
+
           {readingsItems.length > 0 ? (
-            readingsItems.slice(0, 4).map((item) => (
-              <Grid item xs={3}>
-                <Card src={book} />
+            <>
+              {readingsItems.slice(0, 4).map((item) => (
+                <Grid item xs={3}>
+                  <Card src={book} />
+                </Grid>
+              ))}
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  className={classes.btn}
+                  endIcon={<MoreHorizIcon />}
+                  component={Link}
+                  to="/readings"
+                >
+                  More
+                </Button>
               </Grid>
-            )) && <Grid item xs={12}>
-              <Button
-                variant="contained"
-                className={classes.btn}
-                endIcon={<MoreHorizIcon />}
-                component={Link}
-                to="/readings"
-              >
-                More
-            </Button>
-            </Grid>
+            </>
           ) : (
               <Typography align="center" >
                 There are currently no readings!
