@@ -114,11 +114,22 @@ export default function Dashboard(props: any) {
             <Typography variant="h5">Videos</Typography>
           </Grid>
           {videoItems.length > 0 ? (
-            videoItems.map(() => (
+            videoItems.slice(0, 4).map((item) => (
               <Grid item xs={3}>
-                <Card src={player}/>
+                <video width="300" height="160" controls>
+                  <source src={"http://localhost:8080" + item} type="video/mp4" />
+                </video>
               </Grid>
-            ))
+            )) &&
+            <Button
+              variant="contained"
+              className={classes.btn}
+              endIcon={<MoreHorizIcon />}
+              component={Link}
+              to="/videos"
+            >
+              More
+          </Button>
           ) : (
               <Typography align="center" >
                 There are currently no videos!
@@ -135,7 +146,7 @@ export default function Dashboard(props: any) {
           </Grid>
           <Grid item xs={3}>
             <Card src={player} />
-          </Grid> */}
+          </Grid>
           <Grid item xs={12}>
             <Button
               variant="contained"
@@ -146,7 +157,7 @@ export default function Dashboard(props: any) {
             >
               More
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
 
 
@@ -155,11 +166,21 @@ export default function Dashboard(props: any) {
             <Typography variant="h5">Readings</Typography>
           </Grid>
           {readingsItems.length > 0 ? (
-            readingsItems.map(() => (
+            readingsItems.slice(0, 4).map((item) => (
               <Grid item xs={3}>
                 <Card src={book} />
               </Grid>
-            ))
+            )) && <Grid item xs={12}>
+              <Button
+                variant="contained"
+                className={classes.btn}
+                endIcon={<MoreHorizIcon />}
+                component={Link}
+                to="/readings"
+              >
+                More
+            </Button>
+            </Grid>
           ) : (
               <Typography align="center" >
                 There are currently no readings!
@@ -176,7 +197,7 @@ export default function Dashboard(props: any) {
           </Grid>
           <Grid item xs={3}>
             <Card src={book} />
-          </Grid> */}
+          </Grid>
           <Grid item xs={12}>
             <Button
               variant="contained"
@@ -187,7 +208,7 @@ export default function Dashboard(props: any) {
             >
               More
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
 
 
