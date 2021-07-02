@@ -225,7 +225,6 @@ function ReadingPage(prop: any) {
 
         <Divider className={classes.divider} />
         <List component="nav" aria-labelledby="readingList">
-          <Typography className={classes.readingHeader}>Readings</Typography>
           {assignmentItems.length > 0 ? (
             assignmentItems.map((item) => (
               <ListItem key={item} button>

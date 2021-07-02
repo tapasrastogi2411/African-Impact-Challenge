@@ -222,16 +222,13 @@ function VideoPage(prop: any) {
 
         <Divider className={classes.divider} />
         <List component="nav" aria-labelledby="readingList">
-          <Typography className={classes.VideoHeader}>Videos</Typography>
           {assignmentItems.length > 0 ? (
             assignmentItems.map((item) => (
               <ListItem key={item} button>
                 <ListItemIcon>
                 </ListItemIcon>
                 <video width="320" height="240" controls>
-                  <source src={"http://localhost:8080" + item} type="video/mp4">
-                
-                  </source>
+                  <source src={"http://localhost:8080" + item} type="video/mp4"/>
                 </video>
               </ListItem>
             ))
