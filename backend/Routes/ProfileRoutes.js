@@ -199,6 +199,48 @@ router.post('/createCompany/', auth, function (req, res, next) {
 
 });
 
+router.get('/getUser/', auth, function (req, res) {
+    console.log("IN GET USER");
+    var userQuery = "SELECT * FROM profile_schema.aic_user WHERE username=$1";
+    db.query(userQuery, [req.session.username])
+    .then(pgRes => {
+        if (pgRes.rowCount == 0) {
+            throw new Error("Cannot find user");
+        }
+        var userData = pgRes.rows[0]; // prevent password from getting sent (although it's hashed+salted)
+        if (userData["user_role"] == 1) {
+            userData["user_role"] = "Teacher";
+        } else if (userData["user_role"] == 2) {
+            userData["user_role"] = "Entrepreneur";
+        } else {
+            userData["user_role"] = "Partner";
+        }
+
+        for (const property in userData) {
+            if (userData[property] == 'null') {
+                userData[property] = "Not Provided";
+            }
+        }
+        delete userData["password"];
+        console.log(userData);
+        return res.status(200).json(userData);
+    })
+    .catch(err => {
+        console.log(err.message);
+        switch(err.message) {
+            case "Cannot find user":
+                res.status(404).json({ error: "Cannot find user"});
+                break;
+
+            default:
+                res.status(500).json({ error: err.message});
+                break;
+        }
+    })
+
+
+});
+
 /* Status response codes:
 400 = BadRequest - No user with the given user name
 401 = Unauthorized - Incorrect password has been provided for the given username
@@ -230,25 +272,7 @@ router.post('/login/', auth, async function (req, res) {
                     req.session.loggedIn = true
                     req.session.username = username
                     console.log(req.session.id);
-                    var userData = result.rows[0]; // prevent password from getting sent (although it's hashed+salted)
-                    // console.log(req.session);
-                    console.log(userData);
-                    if (userData["user_role"] == 1) {
-                        userData["user_role"] = "Teacher";
-                    } else if (userData["user_role"] == 2) {
-                        userData["user_role"] = "Entrepreneur";
-                    } else {
-                        userData["user_role"] = "Partner";
-                    }
-
-                    for (const property in userData) {
-                        if (userData[property] == 'null') {
-                            userData[property] = "Not Provided";
-                        }
-                    }
-                    delete userData["password"];
-                    console.log(userData);
-                    return res.status(200).json(userData);
+                    return res.status(200).json("");
                 }
             }
             

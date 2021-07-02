@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import MainPage from "./MainPage/MainPage";
 import SignIn from "./UserProfile/LogIn";

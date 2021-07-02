@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import SignIn from "../UserProfile/LogIn";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -116,13 +116,44 @@ const useStyles = makeStyles((theme) => ({
   } */
 }));
 
-
+const defaultCompanyData = {
+  company_name: "",
+  address: "",
+  industry: "",
+  bio: "",
+  creator: ""
+};
 
 
 function CompanyPage(props: any) {
   
   const classes = useStyles();
-  const companyData = props.companyData;
+  const [companyData, setCompanyData] = React.useState(defaultCompanyData);
+
+  const getCompanyData = () => {
+    fetch('http://localhost:8080/api/profile/getCompany/', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            credentials: 'include',
+            mode: 'cors',
+        })
+        .then(response => { // company data successfully retrieved
+            return response.json();
+        })
+        .then(responseJson => {
+          setCompanyData(responseJson);
+        })
+        .catch(err => { // company data cannot be retrieved 
+            console.log("error"); 
+        })
+  }
+
+  React.useEffect(() => {
+    getCompanyData();
+  }, []);
+
 
   
 

@@ -96,16 +96,28 @@ function Alert(props: AlertProps) {
 }
 
 
+const defaultUserData = {
+  username: "",
+  user_role: "",
+  honorifics: "",
+  first_name: "",
+  last_name : "",
+  email: "",
+  phone_number: "",
+  country: "",
+  address: "",
+  showCompanyBtn: true, // unused
+}
 
 function Profilepage(props: any) {
 
   const classes = useStyles();
-  var userData = props.userDataProp;
   
-
-
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [companyData, setCompanyData] = React.useState("");
+  const [userData, setUserData] = React.useState(defaultUserData);
+  const [showCreateCompanyBtn, setShowCreateCompanyBtn] = React.useState(false);
+  var reRenderFlag = false;
+ 
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -117,43 +129,63 @@ function Profilepage(props: any) {
     setOpenSnackbar(true);
   }
 
-  const getCompanyData = () => {
-    fetch('http://localhost:8080/api/profile/getCompany/', {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                },
-            credentials: 'include',
-            mode: 'cors',
-        })
-        .then(response => { // company creation successful
-            return response.json();
-        })
-        .then(responseJson => {
-          
-          setCompanyData(responseJson)
-          props.updateCompanyData(responseJson);
-        })
-        .catch(err => { // company name is already taken
-            console.log("error"); 
-        })
-  }
+  const getUserData = async () => {
+    const response = await fetch('http://localhost:8080/api/profile/getUser/', {
+          method: "GET",
+          credentials: 'include',
+          mode: 'cors',
+      });
+      
+      const responseData = await response.json();
+      if (response.status > 300 || response.status < 200) {
+          throw responseData;
+      }
+      console.log("USER DATA");
+      console.log(response);
+      setUserData(responseData);
+  };
 
+  const checkUserInCompany = () => {
+    fetch('http://localhost:8080/api/profile/inCompany/', {
+      method: "GET",
+      credentials: 'include',
+      mode: 'cors',
+    })
+    .then(response => { // if company exists then show view company button/hide create company button
+        if (response.status == 200) {
+            setShowCreateCompanyBtn(false); // hide
+        } else {
+          setShowCreateCompanyBtn(true);; // show
+        }
+
+    })
+    .catch(err => { 
+        console.log("error");
+        setShowCreateCompanyBtn(false); // hide
+    })
+}
+
+  
   const companyButton = () => {
+    reRenderFlag = !reRenderFlag;
     if (userData.user_role == "Entrepreneur") {
-      if (props.showCreateCompanyBtn) {
+      if (showCreateCompanyBtn) {
         return (
           <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid>
         )
       } else {
         return (
-          <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button></Grid>
+          <Grid item xs={12} > <Button  startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company</Button></Grid>
         )
       }
     }
 
   }
 
+  React.useEffect(() => {
+    getUserData();
+    checkUserInCompany();
+  }, [props.setCompanyCreateBtnHandler]);
 
   return (
     <div >
