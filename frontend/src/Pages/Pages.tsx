@@ -6,7 +6,6 @@ import SignUp from './UserProfile/SignUp';
 import ProfilePage from './ProfilePage/Profilepage';
 import Update from './ProfilePage/UpdateProfile';
 import CompanyPage from './CompanyPage/CompanyPage';
-import ViewAssignmentPage from './AssignmentPage/ViewAssignmentPage';
 
 import {
     makeStyles,
@@ -84,7 +83,7 @@ export default function Pages(props: any) {
                 <Route exact path="/update" component={Update}/>
                 <Route exact path="/company" render={() => <CompanyPage companyData={companyData} />}  />
                 <Route exact path="/assignments" component={AssignmentPage} />
-                <Route exact path="/viewAssignment" render={() => <ViewAssignmentPage currAssignment={currAssignment} />} />
+                
 
             </Switch>
 

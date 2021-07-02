@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   divider: {
-    width: "150%",
+    width: "85%",
     height: 3,
-    marginTop: 5,
+    marginTop: 15,
     marginBottom: 10,
   },
   profilePic: {
@@ -81,18 +81,24 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     marginLeft: 10,
+    marginRight: 790,
+    marginTop: 40,
+    display: "inline",
   },
   uploadButton: {
-    marginLeft: 800,
+    //marginLeft: 800,
+    marginBottom: "10px",
+    width: 200,
   },
   assignmentHeader: {
+    
     fontSize: 22,
   },
   noAssignmentHeader: {
     fontSize: 22,
   },
   assignmentCard: {
-    width: 800,
+    width: 1200,
   },
   cardBody: {
     marginBottom: 25,
@@ -111,6 +117,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12px",
     fontWeight: 400,
     marginTop: 8,
+    
 
   }
 }));
@@ -223,7 +230,7 @@ function AssignmentPage(prop: any) {
         >
           <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
           <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
-          <Typography className={classes.upload} style={{flexBasis: "33.33%"}} >Posted: {item.upload_date.substring(0,10)}</Typography>
+          <Typography className={classes.upload} style={{marginLeft: 600}} >Posted: {item.upload_date.substring(0,10)}</Typography>
         </AccordionSummary>
         
         <AccordionDetails style={{flexDirection: "column"}} >
@@ -286,11 +293,14 @@ function AssignmentPage(prop: any) {
       <Navbar></Navbar>
       <Grid container className={classes.root}>
         <Grid item xs={12} container spacing={2}>
-          <Typography variant="h4" className={classes.pageTitle}>
-            Assignments
-          </Typography>
+          
           <Grid>
-            <div>
+
+            <Typography variant="h4" className={classes.pageTitle}>
+              Assignments
+            </Typography>
+           
+            
               <Button
                 variant="outlined"
                 onClick={handleClickOpen}
@@ -298,6 +308,8 @@ function AssignmentPage(prop: any) {
               >
                 Upload Assignment
               </Button>
+              
+              
               <Dialog
                 open={open}
                 onClose={handleClose}
@@ -354,7 +366,7 @@ function AssignmentPage(prop: any) {
                   </Button>
                 </DialogActions>
               </Dialog>
-            </div>
+            
           </Grid>
         </Grid>
 
