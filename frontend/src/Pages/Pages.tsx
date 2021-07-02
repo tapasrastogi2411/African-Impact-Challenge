@@ -13,20 +13,20 @@ import {
     Theme,
 } from "@material-ui/core";
 
+import AssignmentPage from "./AssignmentPage/AssignmentPage";
+
 
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
-    createStyles({
-
-        root: {
-            background: "#f2f6fa",
-            display: "flex",
-            paddingTop: 80,
-            height: "800px",
-            alignItems: "center",
-        },
-    })
+  createStyles({
+    root: {
+      background: "#f2f6fa",
+      display: "flex",
+      paddingTop: 80,
+      height: "800px",
+      alignItems: "center",
+    },
+  })
 );
-
 
 // updated when user logs in
 // maybe don't need this
@@ -80,11 +80,11 @@ export default function Pages(props: any) {
                 <Route exact path="/profile" render={() => <ProfilePage updateCompanyData={updateCompanyData} setCompanyCreateBtnHandler={setCompanyCreateBtn} showCreateCompanyBtn={showCompanyCreateBtn} userDataProp={userData} />}   />
                 <Route exact path="/update" component={Update}/>
                 <Route exact path="/company" render={() => <CompanyPage companyData={companyData} />}  />
+                <Route exact path="/assignments" component={AssignmentPage} />
 
             </Switch>
 
         </div>
     );
+
 }
-
-
