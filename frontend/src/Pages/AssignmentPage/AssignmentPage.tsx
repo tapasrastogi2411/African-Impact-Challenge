@@ -22,6 +22,16 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -81,6 +91,28 @@ const useStyles = makeStyles((theme) => ({
   noAssignmentHeader: {
     fontSize: 22,
   },
+  assignmentCard: {
+    width: 800,
+  },
+  cardBody: {
+    marginBottom: 25,
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400
+  }, 
+  cardDesc: {
+    fontSize: "13px",
+    fontWeight: 400,
+    marginBottom: 35
+  },
+  upload: {
+    flexBasis: "33.33%",
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400,
+    marginTop: 8,
+
+  }
 }));
 
 const RedTextTypography = withStyles({
@@ -150,6 +182,84 @@ function AssignmentPage(prop: any) {
     
     setAssignmentItems(responseData.file_paths);
   };
+
+  /* const renderAssignments = (item: any) => {
+    // console.log(item);
+    // call event handler in main and set state to the current assignment
+    return(
+      
+        <Card  variant="outlined" className={classes.assignmentCard}>
+          <CardContent>
+          <AssignmentOutlinedIcon />
+          <Typography variant="h6" >
+              <Link to="/viewAssignment" color="inherit">
+                Assignment Title
+              </Link>
+              
+            </Typography>
+            <Typography variant="body2" >
+              Created by Clement Tran
+            </Typography>
+          </CardContent>
+        </Card>
+    
+    ); */
+
+// Include upload date?
+    const renderAssignments = (item: any) => {
+    // console.log(item);
+    // call event handler in main and set state to the current assignment
+    return(
+      <Accordion className={classes.assignmentCard}>
+        <AccordionSummary 
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
+          <Typography variant="h6" style={{flexBasis: "53.33%"}} >Assignment Title</Typography>
+          <Typography className={classes.upload} style={{flexBasis: "33.33%"}} >Upload Date</Typography>
+        </AccordionSummary>
+        
+        <AccordionDetails style={{flexDirection: "column"}} >
+          <div style={{flexBasis: "33.33%"}}>
+
+            <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
+              Created by Clement Tran
+            </Typography>
+          </div>
+
+          <div style={{flexBasis: "33.33%"}}>
+            <Typography variant="body2" className={classes.cardDesc}>
+              Instructions go here
+            </Typography>
+          </div>
+          <Divider style={{marginBottom: "20px"}}/>
+        </AccordionDetails>
+      </Accordion>
+      
+    
+    ); 
+
+
+
+
+  }
+
+  /* (
+    assignmentItems.map((item) => (
+      <ListItem
+        key={item}
+        button
+      >
+        
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <a href={"http://localhost:8080" + item }  target='_blank' download>{parseItem(item)}</a> 
+      </ListItem>
+    ))
+  )  */
 
   useEffect(() => {
     handleGet();
@@ -225,23 +335,10 @@ function AssignmentPage(prop: any) {
 
         <Divider className={classes.divider} />
         <List component="nav" aria-labelledby="assignmentList">
-          <Typography className={classes.assignmentHeader}>
-            Assignment
-          </Typography>
-          {assignmentItems.length > 0 ? (
-            assignmentItems.map((item) => (
-              <ListItem
-                key={item}
-                button
-              >
-                
-                <ListItemIcon>
-                  <AssignmentIcon />
-                </ListItemIcon>
-                <a href={"http://localhost:8080" + item }  target='_blank' download>{parseItem(item)}</a> 
-              </ListItem>
-            ))
-          ) : (
+          
+          {assignmentItems.length > 0 ?  assignmentItems.map((item) => (
+      renderAssignments(item)
+    )) : ( 
             <Typography align="center" className={classes.noAssignmentHeader}>
               There are currently no assignments!
             </Typography>
@@ -249,6 +346,8 @@ function AssignmentPage(prop: any) {
         </List>
       </Grid>
     </div>
+
+    
   );
 }
 
