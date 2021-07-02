@@ -57,6 +57,7 @@ export default function Dashboard(props: any) {
       "http://localhost:8080/api/course/getVideos",
       {
         method: "GET",
+        credentials: "include",
         mode: "cors",
       }
     );
@@ -72,6 +73,7 @@ export default function Dashboard(props: any) {
       "http://localhost:8080/api/course/getReadings",
       {
         method: "GET",
+        credentials: "include",
         mode: "cors",
       }
     );
