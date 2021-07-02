@@ -196,28 +196,7 @@ function AssignmentPage(prop: any) {
     setAssignmentItems(responseData);
   };
 
-  /* const renderAssignments = (item: any) => {
-    // console.log(item);
-    // call event handler in main and set state to the current assignment
-    return(
-      
-        <Card  variant="outlined" className={classes.assignmentCard}>
-          <CardContent>
-          <AssignmentOutlinedIcon />
-          <Typography variant="h6" >
-              <Link to="/viewAssignment" color="inherit">
-                Assignment Title
-              </Link>
-              
-            </Typography>
-            <Typography variant="body2" >
-              Created by Clement Tran
-            </Typography>
-          </CardContent>
-        </Card>
-    
-    ); */
-
+  
 
     const renderAssignments = (item: any) => {  // item is an object containing assignment data
     // call event handler in main and set state to the current assignment
@@ -268,20 +247,7 @@ function AssignmentPage(prop: any) {
 
   }
 
-  /* (
-    assignmentItems.map((item) => (
-      <ListItem
-        key={item}
-        button
-      >
-        
-        <ListItemIcon>
-          <AssignmentIcon />
-        </ListItemIcon>
-        <a href={"http://localhost:8080" + item }  target='_blank' download>{parseItem(item)}</a> 
-      </ListItem>
-    ))
-  )  */
+  
 
   useEffect(() => {
     handleGet();

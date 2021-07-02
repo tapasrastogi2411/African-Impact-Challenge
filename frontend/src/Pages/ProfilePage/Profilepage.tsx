@@ -98,12 +98,12 @@ function Alert(props: AlertProps) {
 
 
 function Profilepage(props: any) {
-  
+
   const classes = useStyles();
   var userData = props.userDataProp;
   
 
-  
+
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [companyData, setCompanyData] = React.useState("");
 
@@ -140,32 +140,32 @@ function Profilepage(props: any) {
   }
 
   const companyButton = () => {
-    if (userData.user_role == "Entrepreneur"){
+    if (userData.user_role == "Entrepreneur") {
       if (props.showCreateCompanyBtn) {
         return (
           <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid>
         )
       } else {
-          return(
-            <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button></Grid>
-          )
-        }
+        return (
+          <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button></Grid>
+        )
+      }
     }
-    
-    }
-  
+
+  }
+
 
   return (
     <div >
       <Navbar></Navbar>
      
       <Grid container className={classes.root}>
-        
-      {/*   {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 
+
+        {/*   {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 
         : <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button>
       </Grid>} */}
 
-      {companyButton()}
+        {companyButton()}
 
         <Grid>
           <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>
@@ -174,7 +174,7 @@ function Profilepage(props: any) {
             </Alert>
           </Snackbar>
         </Grid>
-        
+
 
         <Grid item xs={12}>
           <Typography variant="h4">{userData.username}</Typography>
@@ -183,7 +183,7 @@ function Profilepage(props: any) {
 
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
-          <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography> 
+          <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography>
           <img src={profilepic} className={classes.profilePic} />
           <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
           <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>

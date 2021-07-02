@@ -6,7 +6,8 @@ import SignUp from './UserProfile/SignUp';
 import ProfilePage from './ProfilePage/Profilepage';
 import Update from './ProfilePage/UpdateProfile';
 import CompanyPage from './CompanyPage/CompanyPage';
-
+import PeoplePage from './PeoplePage/PeoplePage';
+import Dashboard from './Dashboard/Dashboard';
 import {
     makeStyles,
     createStyles,
@@ -17,15 +18,16 @@ import AssignmentPage from "./AssignmentPage/AssignmentPage";
 
 
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      background: "#f2f6fa",
-      display: "flex",
-      paddingTop: 80,
-      height: "800px",
-      alignItems: "center",
-    },
-  })
+    createStyles({
+
+        root: {
+            background: "#faf6f2",
+            display: "flex",
+            paddingTop: 80,
+            height: "800px",
+            alignItems: "center",
+        },
+    })
 );
 
 // updated when user logs in
