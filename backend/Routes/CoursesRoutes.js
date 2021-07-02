@@ -42,10 +42,18 @@ router.get('/getVideos', auth, async (req, res) => {
 router.get('/getAssignments', auth, async (req, res) => {
     try{
 
-        let query = `SELECT file_path FROM post_schema.postfile WHERE category=3 ORDER BY upload_date DESC`;
+        let query = `SELECT * FROM post_schema.postfile WHERE category=3 ORDER BY upload_date DESC`;
         const result = await db.query(query);
-        const filePaths = result.rows.map(row => row.file_path);
-        return res.status(200).json({file_paths: filePaths});
+        // const filePaths = result.rows.map(row => row.file_path);
+        var fileArray = result.rows;
+        for (obj of fileArray) {
+            if (obj['description'] == "") {
+                obj['description'] = "Description not provided"
+            }
+        }
+       
+        console.log(fileArray);
+        return res.status(200).json(fileArray);
     }
 
     catch(err){

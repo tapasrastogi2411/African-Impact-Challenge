@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 35
   },
   upload: {
-    flexBasis: "33.33%",
+    flexBasis: "23.33%",
     color: "#5f6368",
     fontSize: "12px",
     fontWeight: 400,
@@ -126,7 +126,7 @@ function AssignmentPage(prop: any) {
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
@@ -163,8 +163,9 @@ function AssignmentPage(prop: any) {
     handleGet();
   };
 
-  const parseItem = (e: string) => {
-    return e.substring(e.indexOf('_')+1,e.length)
+  const parseItem = (e: any) => {
+    var filePath = e.file_path;
+    return filePath.substring(filePath.indexOf('_')+1,filePath.length)
   };
 
   const handleGet = async () => {
@@ -180,7 +181,7 @@ function AssignmentPage(prop: any) {
       throw responseData;
     }
     
-    setAssignmentItems(responseData.file_paths);
+    setAssignmentItems(responseData);
   };
 
   /* const renderAssignments = (item: any) => {
@@ -206,8 +207,9 @@ function AssignmentPage(prop: any) {
     ); */
 
 // Include upload date?
-    const renderAssignments = (item: any) => {
-    // console.log(item);
+    const renderAssignments = (item: any) => {  // item is an object containing assignment data
+    //console.log("IN");
+    //console.log(item);
     // call event handler in main and set state to the current assignment
     return(
       <Accordion className={classes.assignmentCard}>
@@ -217,24 +219,34 @@ function AssignmentPage(prop: any) {
           id="panel1a-header"
         >
           <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
-          <Typography variant="h6" style={{flexBasis: "53.33%"}} >Assignment Title</Typography>
-          <Typography className={classes.upload} style={{flexBasis: "33.33%"}} >Upload Date</Typography>
+          <Typography variant="h6" style={{flexBasis: "73.33%"}} >Assignment Title</Typography>
+          <Typography className={classes.upload} style={{flexBasis: "33.33%"}} >Posted: {item.upload_date.substring(0,10)}</Typography>
         </AccordionSummary>
         
         <AccordionDetails style={{flexDirection: "column"}} >
           <div style={{flexBasis: "33.33%"}}>
 
             <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
-              Created by Clement Tran
+              Created by {item.upload_user}
             </Typography>
           </div>
 
           <div style={{flexBasis: "33.33%"}}>
             <Typography variant="body2" className={classes.cardDesc}>
-              Instructions go here
+            {item.description}
             </Typography>
           </div>
           <Divider style={{marginBottom: "20px"}}/>
+          <Typography variant="body2" style={{marginBottom: 10}}>
+              Download File
+            </Typography>
+          
+          <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+          <Typography variant="body2" >
+            {parseItem(item)}
+            </Typography>
+            
+            </a>
         </AccordionDetails>
       </Accordion>
       
@@ -335,7 +347,7 @@ function AssignmentPage(prop: any) {
 
         <Divider className={classes.divider} />
         <List component="nav" aria-labelledby="assignmentList">
-          
+          {console.log(assignmentItems)}
           {assignmentItems.length > 0 ?  assignmentItems.map((item) => (
       renderAssignments(item)
     )) : ( 
