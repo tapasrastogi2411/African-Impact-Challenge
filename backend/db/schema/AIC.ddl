@@ -96,4 +96,5 @@ CREATE TABLE PostFile (
 
 INSERT INTO PostCategory VALUES 
 (1, 'Reading'), 
-(2, 'Video')
+(2, 'Video'), 
+(3, 'Assignment')
