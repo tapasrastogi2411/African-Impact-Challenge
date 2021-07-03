@@ -47,20 +47,20 @@ To run the front-end do:
 
 	$ cd frontend
 	$ npm install
-	$ npm run
+	$ npm start
 
 To run the back-end do:
 
 	$ cd backend
+	$ npm install
 	$ node app.js
 	
 
 To initialize the Postgresql database do:
 
-	$ First, create a database in Postgresql with name=aic, username=postgres, password=postgres
+	$ First, create a database in Postgresql with databaseName=aic, username=postgres, password=postgres
 	$ cd backend/db/schema/
-	$ psql -d aic -f profile-schema.sql
-	$ psql -d aic -f sample_data.sql
+	$ psql -d aic -f AIC.ddl
 
 
 	
