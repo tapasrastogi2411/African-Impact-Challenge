@@ -59,7 +59,7 @@ function Appbar(props: any) {
 
     // session should be destroyed and user taken back to the login page
     function logoutUser() {
-        fetch('https://localhost:8080/api/profile/logout', {
+        fetch('http://localhost:8080/api/profile/logout', {
             method: 'GET', 
         })
         .then(() => {
