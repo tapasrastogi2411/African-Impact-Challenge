@@ -5,13 +5,6 @@
 ## Profile-Based User-Stories
 
   
-
-As a user, I want to logout of the website so that I maintain privacy when I am done using the site.
-
--   User cannot re-login after being logged-out without entering the correct credentials (i.e. clicking back button, accidental form resubmission)
-    
-
- 
 As a user, I want to delete my profile if I am no longer a part of the site so that I am no longer associated with the site.
 
 -   Entrepreneurs, partners and teachers can delete their profile.
@@ -28,14 +21,7 @@ As a user, I want to update my profile so that my profile information is accurat
 -   Founding entrepreneurs can update profile/company information for the company they founded.
     
 
-As a user, I want to view the profile of another user/entity so that I can gain more information about and interact with the user.
 
-  - Can view the profile of entrepreneurs, teachers, partners, and companies created by the entrepreneurs.
-
-
-
-  
-  
 
 ## Company-Based User-Stories
 
@@ -69,21 +55,11 @@ As a founder/co-founder, I want to upload resources/files pertaining to my compa
 
 
 
-
-
 ## E-learning User-Stories
 
 
-As a teacher, I want to post videos and readings for students to watch and complete in a self-paced manner which will aid them in the assignments and give them valuable knowledge as entrepreneurs.
-
--   Teachers can upload individual modules containing links, videos, and/or articles.
-    
--   Uploaded files must be in PDF format.
-    
--   Videos have Youtube integration.
-    
-
 As a user, I want to be greeted by a welcome page after I login so that my experience on the site is more enjoyable.
+
  -  User gets taken to the dashboard page after login
  
  -  Give an overview of user state on the application (i.e. number of videos watched, # of assignments completed, upcoming deadlines, etc.)
@@ -91,17 +67,7 @@ As a user, I want to be greeted by a welcome page after I login so that my exper
  -  Give user recommended actions to take
 
 
-As a teacher, I want to post assignments for students to complete by a specified due date so they can practice what they learned in the videos in a practical setting.
 
--   Files should be uploaded in PDF format.
-    
--   If the due date passes and the student has not uploaded an assignment, they get a zero.
-    
--   Teacher must specify the total number of marks the assignment is worth before posting it.
-    
--   Teacher must add an assignment title and description before posting it.
-    
-  
 
 As a teacher, I want to hold office hours for students to attend so they have a chance to ask questions in real-time about material taught in the videos or to ask assignment questions.
 
