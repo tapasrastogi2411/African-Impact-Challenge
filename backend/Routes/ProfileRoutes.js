@@ -93,38 +93,190 @@ router.post('/register/', function (req, res, next) {
 });
 
 
+router.get('/inCompany/', auth, function (req, res, next) {
+
+    var inCompany = "SELECT * FROM profile_schema.works_for WHERE username=$1";
+    db.query(inCompany, [req.session.username])
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) {
+            return res.status(200).json('');
+        }
+        return res.status(404).json('');
+    })
+    .catch(err => {
+        console.log(err.message);
+        return res.status(500).json('');
+    });
+    
+});
+
+router.get('/getCompany/', auth, function (req, res, next) {
+
+    var inCompany = "SELECT * FROM profile_schema.works_for WHERE username=$1";
+    db.query(inCompany, [req.session.username])
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) { // get company data
+            var companyName = pgRes.rows[0].company_name;
+            var companyDataQuery = "SELECT * FROM profile_schema.company WHERE company_name=$1";
+            return db.query(companyDataQuery, [companyName]);
+        }
+        return res.status(404).json('');
+    })
+    .then(pgRes => { // extract company data and send to client
+        var companyDataJson = pgRes.rows[0];
+        // companyDataJson["industry"] = value;
+        for (var key in companyDataJson) {
+            
+            var value = companyDataJson[key];
+            if (value == "null") {
+                companyDataJson[key] = "Not Provided";
+            } 
+                
+        }
+        return res.status(200).json(companyDataJson);
+    })
+    .catch(err => {
+        console.log(err.message);
+        return res.status(500).json('');
+    });
+});
+
+router.post('/createCompany/', auth, function (req, res, next) {
+    
+    var orderedFields = ["companyName", "companyAddress", "industry", "size", "about"];
+    var orderedValues = []; // values to be inserted into db
+    for (var key of orderedFields) {
+        var value = req.body[key];
+        if (value == "") {
+            orderedValues.push("null");
+        } else {
+            orderedValues.push(value);
+        }
+    }
+    
+    if (!req.session.username) {
+        return res.status(500).json("Username is null");
+    } 
+    
+    orderedValues.push(req.session.username);
+    
+
+    
+    var companyExists = "SELECT * FROM profile_schema.company WHERE company_name=$1";
+    // first check if the company already exists in the db
+    db.query(companyExists, [req.body['companyName']])
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) {
+            throw new Error("Company name already exists");
+        }
+        // add the company to the db
+        var insertCompany = "INSERT INTO profile_schema.company VALUES ($1,$2,$3,$4,$5,$6)";
+        return db.query(insertCompany, orderedValues);
+    })
+    .then(pgRes => {
+        // add username,company to works_for
+        var worksFor = "INSERT INTO profile_schema.works_for VALUES($1,$2)";
+        return db.query(worksFor, [req.session.username, req.body['companyName']]);
+    })
+    .then(pgRes => {
+        res.status(201).json("Company added");
+
+    })
+    .catch(err => {
+        console.log(err.message);
+        switch(err.message) {
+            case "Company name already exists":
+                res.status(409).json("Company name already exists");
+                break;
+
+            default:
+                res.status(500).json({ error: err.message});
+                break;
+        }
+
+    })
+
+});
+
+router.get('/getUser/', auth, function (req, res) {
+    var userQuery = "SELECT * FROM profile_schema.aic_user WHERE username=$1";
+    db.query(userQuery, [req.session.username])
+    .then(pgRes => {
+        if (pgRes.rowCount == 0) {
+            throw new Error("Cannot find user");
+        }
+        var userData = pgRes.rows[0]; // prevent password from getting sent (although it's hashed+salted)
+        if (userData["user_role"] == 1) {
+            userData["user_role"] = "Teacher";
+        } else if (userData["user_role"] == 2) {
+            userData["user_role"] = "Entrepreneur";
+        } else {
+            userData["user_role"] = "Partner";
+        }
+
+        for (const property in userData) {
+            if (userData[property] == 'null') {
+                userData[property] = "Not Provided";
+            }
+        }
+        delete userData["password"];
+       
+        return res.status(200).json(userData);
+    })
+    .catch(err => {
+        console.log(err.message);
+        switch(err.message) {
+            case "Cannot find user":
+                res.status(404).json({ error: "Cannot find user"});
+                break;
+
+            default:
+                res.status(500).json({ error: err.message});
+                break;
+        }
+    })
+
+
+});
+
 /* Status response codes:
 400 = BadRequest - No user with the given user name
 401 = Unauthorized - Incorrect password has been provided for the given username
 200 = OK - Correct credentials have been provided */
-router.post('/login/', auth, async function (req, res) {
+router.post('/login/', async function (req, res) {
     // // check if user is already logged in
     // if(req.session.loggedIn){
     //     res.status(200)
     // }
     // else{
-        // get the password and username from the request object
-        const { username, password } = req.body;
-        // Checking the database to authenticate the user
-        let query = `SELECT * FROM profile_schema.aic_user WHERE username='${username}'`
-        const result = await db.query(query)
-        // if the query returned no rows (i.e no user with the given username) return a 400
-        if (result.rows.length === 0){
-            return res.status(400).end('Invalid username')
-        } else {
-            // check if the passwords match (the passwords in the database have been hashed)
-            const isMatch = await bcrypt.compare(password, result.rows[0].password)
-            // return a 401 if passwords dont match
-            if(!isMatch){
-                return res.status(401).end('Invalid password')
+
+        try {
+            // get the password and username from the request object
+            const { username, password } = req.body;
+            // Checking the database to authenticate the user
+            let query = `SELECT * FROM profile_schema.aic_user WHERE username='${username}'`
+            const result = await db.query(query)
+            // if the query returned no rows (i.e no user with the given username) return a 400
+            if (result.rows.length === 0){
+                return res.status(400).end('Invalid username')
             } else {
-                // create a session and return a 200 response
-                req.session.loggedIn = true
-                req.session.username = username
-                console.log(req.session);
-                return res.status(200).json("");
+                // check if the passwords match (the passwords in the database have been hashed)
+                const isMatch = await bcrypt.compare(password, result.rows[0].password)
+                // return a 401 if passwords dont match
+                if(!isMatch){
+                    return res.status(401).end('Invalid password')
+                } else {
+                    // create a session and return a 200 response
+                    req.session.loggedIn = true
+                    req.session.username = username
+                    return res.status(200).json("");
+                }
             }
+            
+        } catch (error) {
+            console.log(error);
         }
+        
     // }
 })
 
@@ -164,7 +316,7 @@ router.delete('/delete/', auth, function (req, res) {
 router.get('/logout', auth, function (req, res) { 
     req.session.destroy(function(err) {
         if(err) return res.status(500).end(err);
-        return res.end();
+        return res.status(200).end();
     });
 
 });

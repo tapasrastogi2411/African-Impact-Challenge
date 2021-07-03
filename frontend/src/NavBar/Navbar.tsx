@@ -28,25 +28,23 @@ import Profilepage from "../Pages/ProfilePage/Profilepage";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 88,
-    background: "black"
+    background: "black",
   },
   list: {
     width: 200,
     background: "#FFFFFF",
-    paddingTop: 120
+    paddingTop: 120,
   },
   drawerContainer: {
-    overflow: "auto"
+    overflow: "auto",
   },
   btn: {
     height: 50,
     paddingLeft: 40,
   },
   txt: {
-    fontSize: 18
-
-  }
-
+    fontSize: 18,
+  },
 }));
 
 export default function PersistentDrawerLeft() {
@@ -70,7 +68,7 @@ export default function PersistentDrawerLeft() {
     setHover(false);
   };
   return (
-    <Container >
+    <Container>
       {/* <IconButton
         onClick={navOpen}
         onMouseEnter={() => hoverOver}
@@ -87,10 +85,14 @@ export default function PersistentDrawerLeft() {
         </IconButton> */}
 
         <List className={classes.list}>
-          <ListItem button className={classes.btn}>
+          <ListItem button className={classes.btn} component={RouterLink} to="/profile">
             <Typography className={classes.txt}>Profile</Typography>
           </ListItem>
-          <ListItem button className={classes.btn}>
+          <ListItem
+            button
+            className={classes.btn}
+            component={Link}
+            to="/dashboard">
             <Typography className={classes.txt}>Dashboard</Typography>
           </ListItem>
           <ListItem button className={classes.btn}>
@@ -102,13 +104,38 @@ export default function PersistentDrawerLeft() {
           <ListItem button className={classes.btn}>
             <Typography className={classes.txt}>Calendar</Typography>
           </ListItem>
-          <ListItem button className={classes.btn}>
+          <ListItem
+            button
+            className={classes.btn}
+            component={RouterLink}
+            to="/videos"
+          >
+            <Typography className={classes.txt}>Videos</Typography>
+          </ListItem>
+          <ListItem
+            button
+            className={classes.btn}
+            component={RouterLink}
+            to="/readings"
+          >
+            <Typography className={classes.txt}>Readings</Typography>
+          </ListItem>
+          <ListItem
+            button
+            className={classes.btn}
+            component={RouterLink}
+            to="/assignments"
+          >
             <Typography className={classes.txt}>Assignments</Typography>
           </ListItem>
           <ListItem button className={classes.btn}>
             <Typography className={classes.txt}>Grades</Typography>
           </ListItem>
-          <ListItem button className={classes.btn}>
+          <ListItem
+            button
+            className={classes.btn}
+            component={Link}
+            to="/people">
             <Typography className={classes.txt}>People</Typography>
           </ListItem>
           <ListItem button className={classes.btn}>

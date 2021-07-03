@@ -7,7 +7,6 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -29,8 +28,6 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
         color: "#ffffff",
         width: 300,
         '&:hover': { background: "#e69113" },
-
-
     },
     input: {
         background: "white",
@@ -78,104 +75,265 @@ const defaultError = {
     address: "",
 };
 
-const SignUpAjax = async (data: any, onSuccess: any
-) => {
-    try {
-        var formdata = new FormData();
-        formdata.append("username", data.username);
-        formdata.append("password", data.password);
-        formdata.append("phone_number", data.phone_number);
-        formdata.append("first_name", data.first_name);
-        formdata.append("last_name", data.last_name);
-        // console.log(data.role);
-        if (data.role == "Entrepreneur") {
-            formdata.append("user_role", "2");
-        } else if (data.role == "Instructor") {
-            formdata.append("user_role", "1");
-        } else {
-            formdata.append("user_role", "3");
-        }
-        
-        formdata.append("email", data.email);
-        formdata.append("honorifics", data.honorifics);
-        formdata.append("address", data.address);
-        formdata.append("country", "");
-        
-        // convert formData to JSON since that is what the server looks for
-        var object:any = {};
-        formdata.forEach(function(value: any, key: any){
-            object[key] = value;
-        });
+// honorifics and role tracked separately
+const defaultFieldData = {
+    username: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    address: "",
+    country: ""
+}
 
-        const response = await fetch('https://localhost:8080/api/profile/register/', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-              },
-            body: JSON.stringify(object),
-        });
-        const responseData = await response.json();
-        if (response.status > 300 || response.status < 200) {
-            throw responseData;
-        }
-        onSuccess();
 
-    } catch (e) {
-        console.dir(e);
-    }
-};
 
+
+// when user first enters the signup page, all data should be cleared/reset
+// this is done when the component is re-rendered after visiting the page
 export default function SignUp(props: any) {
+    
     const history = useHistory();
-
     const classes = useStyles();
-    // const [role, setRole] = React.useState('');
+    const [role, setRole] = React.useState('');
+    const [honorifics, setHonorifics] = React.useState('');
     const { register, handleSubmit, control } = useForm();
     const [error, setError] = React.useState(defaultError);
-    const onSuccess = () => {
-        history.push('/login')
-    }
-    // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    //     setRole(event.target.value as string);
-    // };
-    const onSubmit = ({ username, email, first_name, last_name, password, role, phone_number, honorifics, address }: any) => {
-        const newError = { ...defaultError };
-        if (username.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
-            newError.username =
-                "User name may contain only letters, numbers, and @/./+/-/_ characters";
-        } else if (username.length < 6 || username.length > 28) {
-            newError.username = "User name must be between 6 and 28 characters long";
-        }
-        if (email && !email.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
-            newError.email = "Please enter a valid email";
-        }
-        if (first_name && first_name.match(/[^a-zA-Z\s]/i)) {
-            newError.first_name =
-                "Name may contain only letters";
-        }
+    const [fieldData, setFieldData] = React.useState(defaultFieldData);
 
-        if (last_name && last_name.match(/[^a-zA-Z\s]/i)) {
-            newError.last_name =
-                "Name may contain only letters";
+    props.regHandler("false");
+
+    const onSuccess = () => { // successful response from the server -> user added to the db
+        history.push('/login'); 
+        props.regHandler("true");
+
+        // call pages handler and tell it login success
+    }
+
+    const SignUpAjax = async (data: any, onSuccess: any
+        ) => {
+            try{
+                var formdata = new FormData();
+                formdata.append("username", data.username);
+                formdata.append("password", data.password);
+                formdata.append("phone_number", data.phone_number);
+                formdata.append("first_name", data.first_name);
+                formdata.append("last_name", data.last_name);
+                if (data.roleData == "Entrepreneur") {
+                    formdata.append("user_role", "2");
+                } else if (data.roleData == "Instructor") {
+                    formdata.append("user_role", "1");
+                } else {
+                    formdata.append("user_role", "3");
+                }
+                
+                formdata.append("email", data.email);
+                formdata.append("honorifics", data.honorificsData);
+                formdata.append("address", data.address);
+                formdata.append("country", data.country);
+                
+                // convert formData to JSON since that is what the server looks for
+                var object:any = {};
+                formdata.forEach(function(value: any, key: any){
+                    object[key] = value;
+                });
+        
+                const response = await fetch('http://localhost:8080/api/profile/register/', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                      },
+                    body: JSON.stringify(object),
+                });
+                const responseData = await response.json();
+                const newError = { ...error };
+                console.log(response);
+
+                if (response.status == 201) {
+                    onSuccess();
+                } else {
+
+                    if (response.status == 409) { // username already exists
+                        newError.username = "Username already exists";
+                        setError(newError);
+
+                    } else if (response.status == 500) {
+                        console.log("Server error");
+                    } else {
+                        console.log("Unknown status code recieved from server");
+                    }
+                    
+                }
+            } catch(e) {
+                console.log("Unhandled promise");
+            }
+                
+        };
+    
+    
+    var validateAndSetField = (e: {target: {name: String, value: String, id: String, innerText: String }}) => {
+        
+        const newError = { ...error };
+        var name;
+        var value: any;
+        // no validation needed for country
+        // just need to extract country name to send to the server
+        if (e.target.id.includes("country")) {
+            name = "country";
+            var country = e.target.innerText.split("(")[0];
+            value = country.split("\n")[1];
+        } else {
+            name = e.target.name;
+            value = e.target.value;
         }
-        if (!password || password.length < 8) {
-            newError.password = password
-                ? "Password must be at least 8 characters long"
-                : "Password is required";
-        }
+       
+        
+        switch(name) {
+            case 'first_name':
+                setFieldData(prevState => {
+                     return {...prevState, first_name: value }
+                });
+
+                if (value.match(/[^a-zA-Z\s]/i)) {
+                    newError.first_name =
+                        "First name may contain only letters";
+                } else {
+                    newError.first_name =
+                        "";
+
+                }
+                break;
+            case 'last_name':
+                setFieldData(prevState => {
+                    return {...prevState, last_name: value }
+               });
+                if (value.match(/[^a-zA-Z\s]/i)) {
+                    newError.last_name =
+                        "Last name may contain only letters";
+                } else {
+                    newError.last_name =
+                        "";
+                }
+                break;
+            case 'username':
+                setFieldData(prevState => {
+                    return {...prevState, username: value }
+               });
+                if (value.match(/[^a-z0-9@\/\.\+\-\_]/i)) {
+                    newError.username = "User name may contain only letters, numbers, and @/./+/-/_ characters";
+                } else {
+                    newError.username = "";
+                }
+                break;
+
+            case 'password':
+                setFieldData(prevState => {
+                    return {...prevState, password: value }
+               });
+                if (value && value.length < 8) {
+                    newError.password = "Password must be at least 8 characters long";
+                } else {
+                    newError.password = "";
+                }
+                break;
+
+            case 'email':
+                setFieldData(prevState => {
+                    return {...prevState, email: value }
+               });
+
+                if (!value.match(/.{3,}@.+\.[a-z\d]{2,}/i)) {
+                    newError.email = "Please enter a valid email";
+                } else {
+                    newError.email = "";
+                }
+                break;
+            
+            case 'country':
+                setFieldData(prevState => {
+                    return {...prevState, country: value }
+               });
+               break;
+            
+            case 'address':
+                setFieldData(prevState => {
+                    return {...prevState, address: value }
+               });
+               break;
+
+            case 'phone_number':
+            setFieldData(prevState => {
+                return {...prevState, phone_number: value }
+            });
+            break;
+
+
+            default:
+                break;
+    
+        };
+       
+        
+        setError(newError);
         const haveError = Object.values(newError).find(
             (el: String) => el.length > 0
         );
+         
+    }
+
+    
+    const handleSelect = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+        var selectedRole = e.currentTarget.innerText;
+        setRole(selectedRole);
+       if (selectedRole != "") {
+           error.role = "";
+       }
+    }
+
+    const handleHonorifics = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+        var selectedHonorific = e.currentTarget.innerText;
+        setHonorifics(selectedHonorific);
+    }
+
+    // only do submission based validation: unique username
+    const onSubmit = ({ username, email, first_name, last_name, password, phone_number, address }: any) => {
+        const newError = { ...error };  // the errors from dynamic validation are kept from before
+        // only submit if the required fields are non-empty and there are no other validation errors
+        
+
+        if (fieldData.first_name == "") {
+            newError.first_name = "First name is required"
+        }
+        if (fieldData.last_name == "") {
+            newError.last_name = "Last name is required"
+        }
+        if (fieldData.username == "") {
+            newError.username = "Username is required"
+        }
+        if (fieldData.password == "") {
+            newError.password = "Password is required"
+        }
+        if (role == "") {
+            newError.role = "Role is required"
+        } 
+        
+        const haveError = Object.values(newError).find(
+            (el: String) => el.length > 0
+        );
+
         setError(newError);
+       
         if (!haveError) {
-            console.log({ username, email, first_name, last_name, password, role, phone_number, honorifics, address });
+            var combinedFields = {...fieldData, honorificsData: honorifics, roleData: role}
+            
             SignUpAjax(
-                { username, email, first_name, last_name, password, role, phone_number, honorifics, address }, onSuccess
+                combinedFields, onSuccess
             );
-
-
         }
     };
+
+   
 
     return (
         <Container component="main" maxWidth="md">
@@ -204,11 +362,12 @@ export default function SignUp(props: any) {
                     alignItems="center"
                     justify="center"
                     spacing={3}>
-
+                        
                     <Grid item>
                         <CssTextField
-                            error={!!error.first_name}
+                            error={error.first_name == "" ? false: true}
                             helperText={error.first_name}
+                            
                             variant="outlined"
                             required
                             name="first_name"
@@ -216,14 +375,15 @@ export default function SignUp(props: any) {
                             type="text"
                             id="first_name"
                             className={classes.input}
-                            inputRef={register({ required: true })}
+                            //inputRef={register({ required: true })}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
 
                     <Grid item>
                         <CssTextField
-                            error={!!error.last_name}
+                            error={error.last_name == "" ? false: true}
                             helperText={error.last_name}
                             variant="outlined"
                             required
@@ -233,7 +393,7 @@ export default function SignUp(props: any) {
                             id="last_name"
                             className={classes.input}
                             inputRef={register({ required: true })}
-
+                            onChange={validateAndSetField}
                         />
                     </Grid>
 
@@ -246,8 +406,8 @@ export default function SignUp(props: any) {
                             <Controller
                                 as={
                                     <CssTextField select variant="outlined" label="Honorifics">
-                                        <MenuItem value="Mr">Mr</MenuItem>
-                                        <MenuItem value="Ms">Ms</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleHonorifics(e)} value="Mr">Mr</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleHonorifics(e)} value="Ms">Ms</MenuItem>
                                     </CssTextField>
                                 }
                                 name="honorifics"
@@ -261,25 +421,32 @@ export default function SignUp(props: any) {
                         <FormControl
                             variant="outlined"
                             className={classes.input}
-                            required>
+                            
+                            >
                             <Controller
                                 as={
-                                    <CssTextField select required variant="outlined" label="Role">
-                                        <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
-                                        <MenuItem value="Instructor">Instructor</MenuItem>
-                                        <MenuItem value="Partner">Partner</MenuItem>
+                                    <CssTextField select required variant="outlined" label="Role" error={error.role == "" ? false: true} helperText={error.role} 
+
+                                    >
+                                        <MenuItem  onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleSelect(e)} value="Entrepreneur">Entrepreneur</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleSelect(e)} value="Instructor">Instructor</MenuItem>
+                                        <MenuItem onClick={(e:React.MouseEvent<HTMLLIElement, MouseEvent>) => handleSelect(e)} value="Partner">Partner</MenuItem>
                                     </CssTextField>
+                                    
                                 }
                                 name="role"
                                 control={control}
                                 defaultValue=""
+                                
+                                
+                                
                             />
                         </FormControl>
 
                     </Grid>
                     <Grid item>
                         <CssTextField
-                            error={!!error.username}
+                            error={error.username == "" ? false: true}
                             helperText={error.username}
                             variant="outlined"
                             required
@@ -289,11 +456,14 @@ export default function SignUp(props: any) {
                             autoComplete="username"
                             className={classes.input}
                             inputRef={register({ required: true })}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
                     <Grid item>
                         <CssTextField
+                            error={error.password == "" ? false: true}
+                            helperText={error.password}
                             variant="outlined"
                             required
                             name="password"
@@ -303,6 +473,7 @@ export default function SignUp(props: any) {
                             autoComplete="current-password"
                             className={classes.input}
                             inputRef={register({ required: true })}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
@@ -315,10 +486,13 @@ export default function SignUp(props: any) {
                             id="phone_number"
                             className={classes.input}
                             inputRef={register}
+                            onChange={validateAndSetField}
                         />
                     </Grid>
                     <Grid item>
                         <CssTextField
+                            error={error.email == "" ? false: true}
+                            helperText={error.email}
                             variant="outlined"
                             id="email"
                             label="Email"
@@ -326,12 +500,18 @@ export default function SignUp(props: any) {
                             autoComplete="email"
                             className={classes.input}
                             inputRef={register}
+                            onChange={validateAndSetField}
 
                         />
                     </Grid>
 
                     <Grid item>
-                            <CountrySelect />
+                        
+                        <CountrySelect
+                            onChange={validateAndSetField}
+                        />
+                    
+                        
                     </Grid>
 
                     <Grid item>
@@ -343,6 +523,7 @@ export default function SignUp(props: any) {
                             autoComplete="address"
                             className={classes.input}
                             inputRef={register}
+                            onChange={validateAndSetField}
                         />
                     </Grid>
 
@@ -352,6 +533,7 @@ export default function SignUp(props: any) {
                             variant="contained"
                             size="large"
                             className={classes.submit}
+                            onClick={onSubmit}
                         >
                             Sign Up
                         </Button>

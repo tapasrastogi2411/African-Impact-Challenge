@@ -26,12 +26,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CountrySelect() {
+export default function CountrySelect(props: any) {
   const classes = useStyles();
+
 
   return (
     <Autocomplete
-      id="country-select-demo"
+      onChange={props.onChange}
+      id="country"
       style={{ width: 300, background: 'white' }}
       options={countries as CountryType[]}
       classes={{
