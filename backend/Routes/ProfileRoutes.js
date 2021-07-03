@@ -157,10 +157,9 @@ router.post('/createCompany/', auth, function (req, res, next) {
     if (!req.session.username) {
         return res.status(500).json("Username is null");
     } 
-    console.log(req.session.username);
+    
     orderedValues.push(req.session.username);
-    console.log(orderedFields);
-    console.log(orderedValues);
+    
 
     
     var companyExists = "SELECT * FROM profile_schema.company WHERE company_name=$1";
@@ -200,7 +199,6 @@ router.post('/createCompany/', auth, function (req, res, next) {
 });
 
 router.get('/getUser/', auth, function (req, res) {
-    console.log("IN GET USER");
     var userQuery = "SELECT * FROM profile_schema.aic_user WHERE username=$1";
     db.query(userQuery, [req.session.username])
     .then(pgRes => {
@@ -222,7 +220,7 @@ router.get('/getUser/', auth, function (req, res) {
             }
         }
         delete userData["password"];
-        console.log(userData);
+       
         return res.status(200).json(userData);
     })
     .catch(err => {
@@ -245,7 +243,7 @@ router.get('/getUser/', auth, function (req, res) {
 400 = BadRequest - No user with the given user name
 401 = Unauthorized - Incorrect password has been provided for the given username
 200 = OK - Correct credentials have been provided */
-router.post('/login/', auth, async function (req, res) {
+router.post('/login/', async function (req, res) {
     // // check if user is already logged in
     // if(req.session.loggedIn){
     //     res.status(200)
@@ -271,7 +269,6 @@ router.post('/login/', auth, async function (req, res) {
                     // create a session and return a 200 response
                     req.session.loggedIn = true
                     req.session.username = username
-                    console.log(req.session.id);
                     return res.status(200).json("");
                 }
             }
@@ -319,7 +316,7 @@ router.delete('/delete/', auth, function (req, res) {
 router.get('/logout', auth, function (req, res) { 
     req.session.destroy(function(err) {
         if(err) return res.status(500).end(err);
-        return res.end();
+        return res.status(200).end();
     });
 
 });
