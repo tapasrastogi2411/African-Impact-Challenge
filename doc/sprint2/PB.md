@@ -85,9 +85,9 @@ As a teacher, I want to post videos and readings for students to watch and compl
 
 As a user, I want to be greeted by a welcome page after I login so that my experience on the site is more enjoyable.
  -  User gets taken to the dashboard page after login
- -  
+ 
  -  Give an overview of user state on the application (i.e. number of videos watched, # of assignments completed, upcoming deadlines, etc.)
- -  
+ 
  -  Give user recommended actions to take
 
 
