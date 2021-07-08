@@ -106,7 +106,6 @@ const defaultUserData = {
   phone_number: "",
   country: "",
   address: "",
-  showCompanyBtn: true, // unused
 }
 
 function Profilepage(props: any) {
@@ -116,7 +115,7 @@ function Profilepage(props: any) {
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [userData, setUserData] = React.useState(defaultUserData);
   const [showCreateCompanyBtn, setShowCreateCompanyBtn] = React.useState(false);
-  var reRenderFlag = false;
+
  
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
@@ -140,8 +139,6 @@ function Profilepage(props: any) {
       if (response.status > 300 || response.status < 200) {
           throw responseData;
       }
-      console.log("USER DATA");
-      console.log(response);
       setUserData(responseData);
   };
 
@@ -167,11 +164,10 @@ function Profilepage(props: any) {
 
   
   const companyButton = () => {
-    reRenderFlag = !reRenderFlag;
     if (userData.user_role == "Entrepreneur") {
       if (showCreateCompanyBtn) {
         return (
-          <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid>
+          <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar}  />  </Grid>
         )
       } else {
         return (
@@ -185,17 +181,15 @@ function Profilepage(props: any) {
   React.useEffect(() => {
     getUserData();
     checkUserInCompany();
-  }, [props.setCompanyCreateBtnHandler]);
+  }, [companyButton, openSnackbar]);
+
+  props.regHandler("false");
 
   return (
     <div >
       <Navbar></Navbar>
      
       <Grid container className={classes.root}>
-
-        {/*   {props.showCreateCompanyBtn == true ? <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid> 
-        : <Grid item xs={12} > <Button onClick={getCompanyData} startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company </Button>
-      </Grid>} */}
 
         {companyButton()}
 

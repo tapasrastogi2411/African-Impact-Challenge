@@ -232,7 +232,6 @@ function CompanyPage(props: any) {
 
         <Divider className={classes.divider} />
       
-          
           <Typography variant="h5">Resources</Typography>
           
         
