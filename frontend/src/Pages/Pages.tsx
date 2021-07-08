@@ -76,13 +76,12 @@ export default function Pages(props: any) {
                 <Route exact path="/profile" render={() => <ProfilePage regHandler={updateReg} userDataProp={userData} />}   />
                 <Route exact path="/update" component={Update}/>
                 <Route exact path="/company" render={() => <CompanyPage  />}  />
-                <Route exact path="/assignments" component={AssignmentPage} />
+                <Route exact path="/assignments" component={AssignmentPage} /> 
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/people" component={PeoplePage} />
                 <Route exact path="/videos" component={VideoPage} />
                 <Route exact path="/readings" component={ReadingsPage} />
             </Switch>
-
         </div>
     );
 
