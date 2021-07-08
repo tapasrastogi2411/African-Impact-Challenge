@@ -188,9 +188,7 @@ export default function CreateCompany(props: any) {
         const newData = { ...defaultFieldData };
         var name = e.target.name;
         var value = e.target.value;
-        //console.log(e);
-        //console.log(name);
-        //console.log(value);
+        
 
         switch(name) {
             case 'companyName':
