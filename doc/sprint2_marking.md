@@ -98,8 +98,7 @@
     - 1 mark  = part of the stories not started and explanation why not is not provided
     - 0 marks = no story started
     
-    Your Mark: 1 
-    Feedback: one story not started and no explanation was provided
+    Your Mark: 2 
 
   - Do the pull request on GitHub match the tasks listed on Jira Active Sprint Board? (max 2 marks)
     - 2 marks = no tasks are missing
@@ -161,7 +160,7 @@
 
     Your Mark: 2
 
-Tracking on Jira Total Mark: 23 / 24
+Tracking on Jira Total Mark: 24 / 24
 
 ---
 ## Sprint Completion (Max 20 marks) 
@@ -236,4 +235,4 @@ Tracking on Jira Total Mark: 23 / 24
 
 ## Total Mark
 
-74.2 / 89
+75.2 / 89
