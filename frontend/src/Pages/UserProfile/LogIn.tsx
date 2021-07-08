@@ -146,33 +146,10 @@ export default function SignIn(props: any) {
     const onSuccess = (responseData: any) => {  
         history.push('/profile');
         console.log(responseData);
-
-        // get company membership 
-        checkUserInCompany(responseData);
         props.updateUserDataHandler(responseData); 
-
         
     }
-    const checkUserInCompany = (responseData: any) => {
-        fetch('http://localhost:8080/api/profile/inCompany/', {
-          method: "GET",
-          credentials: 'include',
-          mode: 'cors',
-        })
-        .then(response => { // if company exists then show view company button/hide create company button
-            if (response.status == 200) {
-                props.setCompanyCreateBtnHandler(false); // hide
-            } else {
-                props.setCompanyCreateBtnHandler(true); // show
-            }
-
-        })
-        .catch(err => { 
-            console.log("error");
-            props.setCompanyCreateBtnHandler(false); // hide
-        })
-    }
-
+ 
 
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
@@ -203,7 +180,6 @@ export default function SignIn(props: any) {
             return "";
         }
     }
-
 
 
     return (

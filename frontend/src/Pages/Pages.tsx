@@ -55,7 +55,7 @@ export default function Pages(props: any) {
     const classes = useStyles();
     const currentLocation = useLocation();
 
-    const [reg, setReg] = React.useState("false");
+    const [reg, setReg] = React.useState("false"); // used to track whether the user is logged-in so the LoginPage can display "User is succesfully registered" alert
     const [userData, setUserData] = React.useState(defaultUserData);
 
     const updateReg = (val:string) => {
@@ -73,7 +73,7 @@ export default function Pages(props: any) {
                 <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
                 <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData}  />}  />
                 <Route exact path="/signup" render={() => <SignUp regHandler={updateReg} />} />
-                <Route exact path="/profile" render={() => <ProfilePage  userDataProp={userData} />}   />
+                <Route exact path="/profile" render={() => <ProfilePage regHandler={updateReg} userDataProp={userData} />}   />
                 <Route exact path="/update" component={Update}/>
                 <Route exact path="/company" render={() => <CompanyPage  />}  />
                 <Route exact path="/assignments" component={AssignmentPage} />

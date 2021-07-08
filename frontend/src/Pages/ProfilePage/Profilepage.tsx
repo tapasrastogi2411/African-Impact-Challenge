@@ -167,7 +167,7 @@ function Profilepage(props: any) {
     if (userData.user_role == "Entrepreneur") {
       if (showCreateCompanyBtn) {
         return (
-          <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} setCompanyCreateBtnHandler={props.setCompanyCreateBtnHandler} />  </Grid>
+          <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar}  />  </Grid>
         )
       } else {
         return (
@@ -181,7 +181,9 @@ function Profilepage(props: any) {
   React.useEffect(() => {
     getUserData();
     checkUserInCompany();
-  }, [props.setCompanyCreateBtnHandler]);
+  }, [companyButton, openSnackbar]);
+
+  props.regHandler("false");
 
   return (
     <div >
