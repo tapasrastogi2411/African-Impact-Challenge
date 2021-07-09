@@ -90,10 +90,44 @@ CREATE TABLE PostFile (
   upload_user TEXT not NULL, 
   title TEXT,
   description TEXT, 
+  total_marks INT, -- Only applies to assignments (i.e. category=x). Should be optional. Ex. essay submission may not have total marks.
 
   FOREIGN KEY(category) REFERENCES PostCategory
     on delete restrict
 );
+
+
+--  Assignment submissions
+
+CREATE TABLE SubmitAssignment (
+
+  submission_file_path TEXT PRIMARY KEY, -- each user assignment submission is unique
+  submission_user TEXT,
+  assignment_file_path TEXT,
+  submission_date timestamp, 
+  
+  FOREIGN KEY(submission_user) REFERENCES aic_user(username)
+    on delete restrict,
+  FOREIGN KEY(submission_file_path) REFERENCES PostFile(file_path)
+    on delete restrict,
+  FOREIGN KEY(assignment_file_path) REFERENCES PostFile(file_path)
+    on delete restrict
+
+);
+
+CREATE TABLE GradeAssignment (
+  submission_file_path TEXT PRIMARY KEY, 
+  grade INT,
+  feedback TEXT,
+  
+  FOREIGN KEY(submission_file_path) REFERENCES SubmitAssignment
+    on delete restrict
+);
+
+
+
+
+
 
 INSERT INTO PostCategory VALUES 
 (1, 'Reading'), 
