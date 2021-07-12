@@ -255,7 +255,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
             </Grid>
 
             <Grid item> 
-                <Button className={classes.submitBtn} >Submit</Button>
+                <Button className={classes.submitBtn} onClick={handleClickOpen} >Submit</Button>
             </Grid>
         </Grid>
         </AccordionDetails>
@@ -285,16 +285,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
               Assignments
             </Typography>
            
-            
-              <Button
-                variant="outlined"
-                onClick={handleClickOpen}
-                className={classes.uploadButton}
-              >
-                Upload Assignment
-              </Button>
-              
-              
+  
               <Dialog
                 open={open}
                 onClose={handleClose}
