@@ -9,6 +9,7 @@ import CompanyPage from './CompanyPage/CompanyPage';
 import PeoplePage from './PeoplePage/PeoplePage';
 import Dashboard from './Dashboard/Dashboard';
 import AssignmentPage from './AssignmentPage/AssignmentPage';
+import AssignmentPageEntrepreneurView from './AssignmentPage/AssignmentPageEntrepreneurView';
 import {
     makeStyles,
     createStyles,
@@ -76,7 +77,7 @@ export default function Pages(props: any) {
                 <Route exact path="/profile" render={() => <ProfilePage regHandler={updateReg} userDataProp={userData} />}   />
                 <Route exact path="/update" component={Update}/>
                 <Route exact path="/company" render={() => <CompanyPage  />}  />
-                <Route exact path="/assignments" component={AssignmentPage} /> 
+                <Route exact path="/assignments" component={AssignmentPageEntrepreneurView} /> 
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/people" component={PeoplePage} />
                 <Route exact path="/videos" component={VideoPage} />
