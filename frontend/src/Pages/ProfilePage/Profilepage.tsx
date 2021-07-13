@@ -41,12 +41,15 @@ const useStyles = makeStyles((theme) => ({
   profilePic: {
     width: 200,
     marginTop: 5,
-    borderRadius: 5
+    borderRadius: 5,
   },
   info: {
     marginTop: 3,
     marginLeft: 15,
-    maxWidth: 1100
+    maxWidth: 975,
+    [theme.breakpoints.down('lg')]: {
+      marginLeft: 30,
+    },
   },
   category: {
     fontSize: 22,

@@ -11,12 +11,17 @@ import {
     Link
 } from "react-router-dom";
 import pic from './sample.jpg'
-import VideoPage from '../VideoPage/VideoPage';
-import GuestVideoPage from '../GuestVideoPage/GuestVideoPage';
+
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-           
+            display: "flex",
+            // flexWrap: "wrap",
+            alignItems: "center",
+            marginTop: 250,
+            [theme.breakpoints.down('lg')]: {
+                marginTop: 200,
+            },
         },
         signUpBtn: {
             height: 50,
@@ -37,7 +42,9 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
         content: {
             width: 600,
             marginLeft: 300,
-
+            [theme.breakpoints.down('lg')]: {
+                marginLeft: 100,
+            },
         },
         highlightTxt: {
             fontWeight: 800,
@@ -53,11 +60,15 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
         },
         pic: {
             boxShadow: "0px 8px 2rem -6px #000000",
-            position: "absolute",
+            //position: "absolute",
             right: "200px",
             width: "700px",
             top: "300px",
-
+            
+            [theme.breakpoints.down('lg')]: {
+                width: "600px",
+            },
+   
         }
     })
 );
@@ -67,31 +78,37 @@ function MainPage(props: any) {
 
     return (
         <div className={classes.root}>
-            <Grid className={classes.content} container>
-                <Grid item xs={12}>
-                    <Typography className={classes.highlightTxt}>
-                        Helping Africa’s brightest minds go from idea to MVP to market
-                        </Typography >
+            <div>
+                <Grid className={classes.content} container>
+                    <Grid item xs={12}>
+                        <Typography className={classes.highlightTxt}>
+                            Helping Africa’s brightest minds go from idea to MVP to market
+                            </Typography >
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography className={classes.description}>
+                            Enabling the continent’s aspiring entrepreuners to build market-creating innovations, which tackle the country’s biggest challenges with technology                        </Typography >
+                    </Grid>
+                    <Grid item >
+                        <Button className={classes.signUpBtn}
+                            component={Link}
+                            to="/signup">
+                            Sign Up
+                            </Button>
+                    </Grid>
+                    <Grid item >
+                        <Button className={classes.logInBtn}
+                            component={Link}
+                            to="/login">Log In
+                            </Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.description}>
-                        Enabling the continent’s aspiring entrepreuners to build market-creating innovations, which tackle the country’s biggest challenges with technology                        </Typography >
-                </Grid>
-                <Grid item >
-                    <Button className={classes.signUpBtn}
-                        component={Link}
-                        to="/signup">
-                        Sign Up
-                        </Button>
-                </Grid>
-                <Grid item >
-                    <Button className={classes.logInBtn}
-                        component={Link}
-                        to="/login">Log In
-                        </Button>
-                </Grid>
-            </Grid>
-            <img src={pic} className={classes.pic}></img>
+            </div>
+            
+            <div>
+                <img src={pic} className={classes.pic}></img>
+            </div>
+            
         </div >
     );
 }

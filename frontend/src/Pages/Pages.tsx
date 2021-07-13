@@ -21,18 +21,18 @@ import GuestVideoPage from "./GuestVideoPage/GuestVideoPage";
 
 
 
-const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
-    createStyles({
+// const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
+//     createStyles({
 
-        root: {
-            background: "#faf6f2",
-            display: "flex",
-            paddingTop: 80,
-            height: "800px",
-            alignItems: "center",
-        },
-    })
-);
+//         root: {
+//             background: "#faf6f2",
+//             display: "flex",
+//             paddingTop: 80,
+//             height: "800px",
+//             alignItems: "center",
+//         },
+//     })
+// );
 
 // updated when user logs in
 // maybe don't need this
@@ -52,7 +52,7 @@ const defaultUserData = {
 
 
 export default function Pages(props: any) {
-    const classes = useStyles();
+    //const classes = useStyles();
     const currentLocation = useLocation();
 
     const [reg, setReg] = React.useState("false"); // used to track whether the user is logged-in so the LoginPage can display "User is succesfully registered" alert

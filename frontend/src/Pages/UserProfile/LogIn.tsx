@@ -15,6 +15,12 @@ const axios = require('axios');
 
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
+    root: {
+        marginTop: 250,
+        [theme.breakpoints.down('lg')]: {
+            marginTop: 200,
+        },
+    },
     paper: {
         marginTop: 0,
         display: "flex",
@@ -183,7 +189,7 @@ export default function SignIn(props: any) {
 
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" className={classes.root}>
             <Typography variant="h5" className={classes.text}>
                 WELCOME BACK!
             </Typography>

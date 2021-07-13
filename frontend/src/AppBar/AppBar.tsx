@@ -71,24 +71,24 @@ function Appbar(props: any) {
         <AppBar position="fixed" className={classes.mainAppBar}>
             <Toolbar className={classes.root}>
                 <Link to='/'>
-                    <img src={Logo} className={classes.logo} />
+                <img src={Logo} className={classes.logo} />
                 </Link>
                 <Typography
                     className={classes.title}
                     variant="h6"
                     noWrap
-                >
+                    >
                     THE AFRICAN IMPACT CHALLENGE
-        </Typography>
+                </Typography>
                 <IconButton
                     onClick={logoutUser}
                     className={classes.btn}
-                >
+                    >
                     <InputIcon />
                     <Typography variant="button" noWrap className={classes.btnTxt}
-                    >
+                        >
                         Sign Out
-            </Typography>
+                    </Typography>
                 </IconButton>
             </Toolbar>
         </AppBar>

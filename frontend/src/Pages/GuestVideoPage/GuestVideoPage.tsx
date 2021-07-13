@@ -22,14 +22,9 @@ import { withStyles } from "@material-ui/core/styles";
 import VideoCard from "./VideoCard";
 const useStyles = makeStyles((theme) => ({
   root: { //uncomment pages.tsk root
-    position: "absolute",
-    // backgroundColor: "red",
-    // top: 130,
-    // left: 300,
-    // width: 1400,
     marginTop: 100,
     marginLeft: 200,   
-    marginRight: "10%" 
+    marginRight: "10%",
   },
   divider: {
     width: "100%",
