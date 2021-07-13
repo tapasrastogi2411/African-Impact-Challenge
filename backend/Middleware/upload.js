@@ -5,6 +5,7 @@ const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         var destinationPath = path.resolve(__dirname, '..') + '/uploads/';
         var fieldName = file.fieldname;
+        
 
         if (fieldName === 'videos') { //videos should be label of input attribute
             destinationPath += 'videos/'
@@ -23,6 +24,8 @@ const storage = multer.diskStorage({
 const fileFilter = function (req, file, cb) {
     var fieldName = file.fieldname;
     var fileTypes;
+    console.log("in upload");
+    console.log(file);
 
     if (fieldName === 'videos') { //videos should be label of input attribute
         fileTypes = /mp4/;    

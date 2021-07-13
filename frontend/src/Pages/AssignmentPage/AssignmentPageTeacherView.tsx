@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     width: "85%",
     height: 3,
     marginTop: 15,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   profilePic: {
     width: 200,
@@ -147,7 +147,7 @@ function AssignmentPage(prop: any) {
     formData.append("title", title);
     formData.append("description", description);
 
-    const response = await fetch("http://localhost:8080/api/course/upload", {
+    const response = await fetch("http://localhost:8080/api/course/upload/assignment/teacher/", {
       method: "POST",
       body: formData,
       credentials: 'include',
