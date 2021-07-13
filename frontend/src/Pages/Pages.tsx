@@ -17,7 +17,7 @@ import {
 import { People } from "@material-ui/icons";
 import VideoPage from "./VideoPage/VideoPage";
 import ReadingsPage from "./ReadingsPage/ReadingsPage";
-
+import GuestVideoPage from "./GuestVideoPage/GuestVideoPage";
 
 
 
@@ -26,10 +26,10 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
 
         root: {
             background: "#faf6f2",
-            display: "flex",
-            paddingTop: 80,
+            // display: "flex",
+            // paddingTop: 80,
             height: "800px",
-            alignItems: "center",
+            // alignItems: "center",
         },
     })
 );
@@ -81,6 +81,8 @@ export default function Pages(props: any) {
                 <Route exact path="/people" component={PeoplePage} />
                 <Route exact path="/videos" component={VideoPage} />
                 <Route exact path="/readings" component={ReadingsPage} />
+                <Route exact path="/test" component={GuestVideoPage} />     
+                {/* added this ^ */}
             </Switch>
         </div>
     );

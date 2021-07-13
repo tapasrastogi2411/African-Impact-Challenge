@@ -154,7 +154,6 @@ function VideoPage(prop: any) {
 
   return (
     <div>
-      {handleGet}
       <Navbar></Navbar>
       <Grid container className={classes.root}>
         <Grid item xs={12} container spacing={2}>

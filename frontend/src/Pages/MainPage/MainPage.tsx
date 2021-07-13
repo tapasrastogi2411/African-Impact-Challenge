@@ -11,10 +11,12 @@ import {
     Link
 } from "react-router-dom";
 import pic from './sample.jpg'
+import VideoPage from '../VideoPage/VideoPage';
+import GuestVideoPage from '../GuestVideoPage/GuestVideoPage';
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-
+           
         },
         signUpBtn: {
             height: 50,
@@ -91,7 +93,6 @@ function MainPage(props: any) {
             </Grid>
             <img src={pic} className={classes.pic}></img>
         </div >
-
     );
 }
 export default MainPage;
