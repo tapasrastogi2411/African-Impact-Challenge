@@ -383,7 +383,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
               There are currently no assignments!
             </Typography>
           )}
-        
+
       </Grid>
     </div>
 
