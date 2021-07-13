@@ -38,31 +38,42 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 15,
     marginBottom: 20,
   },
-  profilePic: {
-    width: 200,
-    marginTop: 20,
-    borderRadius: 5,
-  },
-  info: {
-    marginTop: 3,
-    marginLeft: 15,
-    maxWidth: 1100,
-  },
-  category: {
-    fontSize: 22,
-    fontWeight: 700,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
+  
   submitBtn: {
     backgroundColor: "#fcb040",
     color: "#ffffff",
-    width: 100,
+    width: 120,
     "&:hover": { background: "#e69113" },
     borderRadius: 20,
-    marginRight: 50
-    
+    marginRight: 269,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+  },
+  reSubmitBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 120,
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
+    marginRight: 50,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12
+  },
+  viewSubmissionBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 170,
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
+    marginRight: 50,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12
   },
   uploadBtn: {
     backgroundColor: "#fcb040",
@@ -80,13 +91,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 40,
     display: "inline",
   },
-  uploadButton: {
-    //marginLeft: 800,
-    marginBottom: "10px",
-    width: 200,
-  },
   assignmentHeader: {
-    
     fontSize: 22,
   },
   noAssignmentHeader: {
@@ -112,7 +117,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12px",
     fontWeight: 400,
     marginTop: 8,
-    
 
   }
 }));
@@ -165,8 +169,6 @@ function AssignmentPageEntrepreneurView(prop: any) {
     formData.append("assignments", file as any);
     formData.append("postedAssignment", JSON.stringify(assignment as any));
     
-    
-    
 
     const response = await fetch("http://localhost:8080/api/course/upload/assignment/entrepreneur/", {
       method: "POST",
@@ -204,6 +206,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
       if (response.status > 300 || response.status < 200) {
         throw responseData;
       }
+      console.log(responseData);
       setAssignmentItems(responseData);
 
     } catch (err) {
@@ -215,9 +218,41 @@ function AssignmentPageEntrepreneurView(prop: any) {
     console.log(e);
   };
 
+  const renderButtons = (index:any) => {
+    let submissionUser:any = (assignmentItems[index] as any).submission_user;
+
+    if (!submissionUser) {
+      return (
+              <Grid item>
+                <Button className={classes.submitBtn} onClick={handleClickOpen} >Submit</Button>
+              </Grid>
+              );
+    } else {
+      return (
+              <React.Fragment>
+                <Grid item>
+                  <Grid container direction="row" spacing={0}>
+                    <Grid item>
+                      <Button className={classes.reSubmitBtn} onClick={handleClickOpen} >Resubmit</Button> 
+                    </Grid>
+                    <Grid item>
+                      <Button className={classes.viewSubmissionBtn} onClick={handleClickOpen} >View Submission</Button> 
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </React.Fragment>
+        
+        );
+    }
+
+  };
+
   
     const renderAssignments = (item: any, index: any) => {  // item is an object containing assignment data
-    // call event handler in main and set state to the current assignment
+    // call event handler in main and set state to the current assignment.
+    // determine whether current assignment has been submitted by the currently logged-in user and render accordingly
+    // assignmentItems[index]
+    
     return(
       <Accordion className={classes.assignmentCard} onClick={() => {setAssignment(assignmentItems[index])}}>
         <AccordionSummary 
@@ -264,14 +299,13 @@ function AssignmentPageEntrepreneurView(prop: any) {
                 </Grid>
             </Grid>
 
-            <Grid item> 
-                <Button className={classes.submitBtn} onClick={handleClickOpen} >Submit</Button>
-            </Grid>
+            
+              {renderButtons(index)}
+            
         </Grid>
         </AccordionDetails>
       </Accordion>
       
-    
     ); 
 
   }
