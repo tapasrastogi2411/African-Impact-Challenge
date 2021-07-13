@@ -26,10 +26,10 @@ const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
 
         root: {
             background: "#faf6f2",
-            // display: "flex",
-            // paddingTop: 80,
+            display: "flex",
+            paddingTop: 80,
             height: "800px",
-            // alignItems: "center",
+            alignItems: "center",
         },
     })
 );
@@ -68,7 +68,7 @@ export default function Pages(props: any) {
    
    
     return (
-        <div className={classes.root}>
+        //<div className={classes.root}>
             <Switch>
                 <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
                 <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData}  />}  />
@@ -84,7 +84,7 @@ export default function Pages(props: any) {
                 <Route exact path="/test" component={GuestVideoPage} />     
                 {/* added this ^ */}
             </Switch>
-        </div>
+        //</div>
     );
 
 }

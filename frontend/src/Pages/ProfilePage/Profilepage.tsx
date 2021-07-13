@@ -18,10 +18,15 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    position: "absolute",
-    top: 170,
-    left: 300,
-    width: 1400
+    display: "flex",
+    // position: "absolute",
+    // top: 170,
+    // left: 300,
+    // width: 1400
+  },
+  profile: {
+    marginTop: 100,
+    marginLeft:200,
   },
   content: {
     flexGrow: 1,
@@ -186,89 +191,92 @@ function Profilepage(props: any) {
   props.regHandler("false");
 
   return (
-    <div >
-      <Navbar></Navbar>
-     
-      <Grid container className={classes.root}>
-
-        {companyButton()}
-
-        <Grid>
-          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>
-            <Alert severity="success" onClose={handleCloseSnackbar}>
-              Company successfully created!
-            </Alert>
-          </Snackbar>
+    <div className={classes.root}>
+      <div>
+        <Navbar></Navbar>
+      </div>
+      
+      <div className={classes.profile}>
+        <Grid container >
+            {companyButton()}
+            <Grid>
+              <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>
+                  <Alert severity="success" onClose={handleCloseSnackbar}>
+                    Company successfully created!
+                  </Alert>
+              </Snackbar>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h4">{userData.username}</Typography>
+            </Grid>
+            <Divider className={classes.divider} />
+            <Grid xs={2} item alignItems="center">
+              <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography>
+              <img src={profilepic} className={classes.profilePic} />
+              <Button startIcon={
+              <ChatIcon />
+              } className={classes.btn}>Message</Button>
+              <Button component={Link} to="/update" startIcon={
+              <EditIcon />
+              } className={classes.btn}>Update Info</Button>
+            </Grid>
+            <Grid
+              item
+              container
+              spacing={3}
+              xs={10}
+              direction="row"
+              className={classes.info}>
+              <Grid item xs={4}>
+                  <Typography className={classes.category}>Honorifics</Typography>
+                  <Typography >{userData.honorifics}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                  <Typography className={classes.category}>First Name</Typography>
+                  <Typography >{userData.first_name}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                  <Typography className={classes.category}>Last Name</Typography>
+                  <Typography >{userData.last_name}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                  <Typography className={classes.category}>Phone Number</Typography>
+                  <Typography >{userData.phone_number}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                  <Typography className={classes.category}>Email</Typography>
+                  <Typography >{userData.email} </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                  <Typography className={classes.category}>Address</Typography>
+                  <Typography >{userData.address}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                  <Typography className={classes.category}>Country</Typography>
+                  <Typography >{userData.country}</Typography>
+              </Grid>
+            </Grid>
+            <Divider className={classes.divider} />
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                  <Typography variant="h5">Related Users</Typography>
+              </Grid>
+              <Grid item className={classes.relatedUser}>
+                  <Avatar src={profilepic} className={classes.relatedPic} />
+                  <Typography align="center">User1</Typography>
+              </Grid>
+              <Grid item className={classes.relatedUser}>
+                  <Avatar src={profilepic} className={classes.relatedPic} />
+                  <Typography align="center">User2</Typography>
+              </Grid>
+              <Grid item className={classes.relatedUser}>
+                  <Avatar src={profilepic} className={classes.relatedPic} />
+                  <Typography align="center">User3</Typography>
+              </Grid>
+            </Grid>
         </Grid>
-
-
-        <Grid item xs={12}>
-          <Typography variant="h4">{userData.username}</Typography>
-        </Grid>
-
-
-        <Divider className={classes.divider} />
-        <Grid xs={2} item alignItems="center">
-          <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography>
-          <img src={profilepic} className={classes.profilePic} />
-          <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
-          <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
-        </Grid>
-        <Grid
-          item
-          container
-          spacing={3}
-          xs={10}
-          direction="row"
-          className={classes.info}>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Honorifics</Typography>
-            <Typography >{userData.honorifics}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>First Name</Typography>
-            <Typography >{userData.first_name}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Last Name</Typography>
-            <Typography >{userData.last_name}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Phone Number</Typography>
-            <Typography >{userData.phone_number}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Email</Typography>
-            <Typography >{userData.email} </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Address</Typography>
-            <Typography >{userData.address}</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography className={classes.category}>Country</Typography>
-            <Typography >{userData.country}</Typography>
-          </Grid>
-        </Grid>
-        <Divider className={classes.divider} />
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h5">Related Users</Typography>
-          </Grid>
-          <Grid item className={classes.relatedUser}>
-            <Avatar src={profilepic} className={classes.relatedPic} />
-            <Typography align="center">User1</Typography>
-          </Grid>
-          <Grid item className={classes.relatedUser}>
-            <Avatar src={profilepic} className={classes.relatedPic} />
-            <Typography align="center">User2</Typography>
-          </Grid>
-          <Grid item className={classes.relatedUser}>
-            <Avatar src={profilepic} className={classes.relatedPic} />
-            <Typography align="center">User3</Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+      </div>
+      
     </div>
   );
 }
