@@ -60,7 +60,7 @@ router.get('/getVideos', auth, async (req, res) => {
  */
 router.get('/getAssignments', auth, async (req, res) => {
     try{
-        req.session.username = "Aaron JACOB"; //uncomment this for testing
+        req.session.username = "Aaron"; //uncomment this for testing
         let query = "SELECT * " +
                     "FROM (post_schema.postfile pf join post_schema.postassignment pa on (pf.file_path=pa.file_path)) left outer join (select * " +
                                                                                                                 "from post_schema.submitassignment sa " +
@@ -68,10 +68,10 @@ router.get('/getAssignments', auth, async (req, res) => {
                     "ORDER BY upload_date";
 
         const result = await db.query(query, [req.session.username]);
-        console.log(result.rows);
+        //console.log(result.rows);
         // const filePaths = result.rows.map(row => row.file_path);
         var fileArray = result.rows;
-        console.log(fileArray);
+        //console.log(fileArray);
         for (obj of fileArray) {
             if (obj['description'] == "") {
                 obj['description'] = "Description not provided";
@@ -92,9 +92,9 @@ router.get('/getAssignments', auth, async (req, res) => {
 });
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    req.session.username = "Aaron JACOB"; //uncomment this for testing
-    console.log("In upload route");
-    console.log(req.files);
+    req.session.username = "Aaron"; //uncomment this for testing
+    //console.log("In upload route");
+    //console.log(req.files);
 
     if(req.files.length === 0) {
         return res.status(400).end();
@@ -129,7 +129,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
     db
         .query(query, values)
         .then(result => {
-            console.log("File successfully uploaded.");
+            //console.log("File successfully uploaded.");
             if (fieldName === 'assignments') {
                 next();
             }
@@ -150,7 +150,7 @@ router.post('/upload/assignment/teacher', function (req, res) {
 
     db.query(query, [filePath, totalMarks])
     .then(result => {
-        console.log("Assignment stored in PostAssignment");
+        //console.log("Assignment stored in PostAssignment");
         res.status(200).end();
     })
     .catch(e => {
@@ -161,14 +161,45 @@ router.post('/upload/assignment/teacher', function (req, res) {
 
 
 // include assignment url and submission url in the json body
+/**
+ * For simplicity, entrepreneur can make one submission per assignment
+ * Most recent submission is stored
+ * Allow for resubmission
+ * 
+ * INSERT INTO submitassignment values ($1, $2, $3)
+ * 
+ */
 router.post('/upload/assignment/entrepreneur',  function (req, res) { 
     console.log("In entrepreneur route");
-    var assignmentPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
-    var file_path = req.body.submission.file_path;
-    // insert entry into db: SubmitAssignment
-    console.log("Leaving entrepreneur route");
-    res.status(200).json("");
+    let submissionPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    let postedAssignment = JSON.parse(req.body.postedAssignment);
+    let assignmentPath = postedAssignment.file_path;
+    let currentdate = new Date(); 
+    let datetime = currentdate.getFullYear() + "-" 
+            + (currentdate.getMonth()+1) + "-"
+            + currentdate.getDate() + " "
+            + currentdate.getHours() + ":"  
+            + currentdate.getMinutes() + ":" 
+            + currentdate.getSeconds();
 
+    console.log(submissionPath);
+    console.log(assignmentPath);
+    console.log(req.session.username);
+    console.log("In entrepreneur route");
+
+    let schema = "(submission_file_path, submission_user, assignment_file_path, submission_date)";
+    let query = "INSERT INTO post_schema.submitassignment" + schema + " values ($1, $2, $3, $4)";
+
+    db.query(query, [submissionPath, req.session.username, assignmentPath, datetime])
+    .then(result => {
+        console.log("Submitted assignment stored in submitassignment");
+        res.status(200).end();
+    })
+    .catch(e => {
+        console.error(e.stack);
+        res.status(500).end();
+    })
+    
 });
 
 module.exports = router;

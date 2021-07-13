@@ -163,7 +163,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
     const formData = new FormData();
     
     formData.append("assignments", file as any);
-    formData.append("submission", JSON.stringify(assignment as any));
+    formData.append("postedAssignment", JSON.stringify(assignment as any));
     
     
     
