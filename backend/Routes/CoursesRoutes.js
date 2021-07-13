@@ -40,27 +40,13 @@ router.get('/getVideos', auth, async (req, res) => {
 
 
 /**
- * Get assignments and upload info associated with the assignments
- *
- * SELECT *
- * FROM postfile pf join postassignment pa on pf.file_path=pa.file_path
- * ORDER BY upload_date 
- * 
- * 
- * All assignments and whether the currently logged-in user has submitted them
- * 
- * SELECT *
- * FROM (postfile pf join postassignment pa on (pf.file_path=pa.file_path)) left outer join (select *
- *                                                                                           from submitassignment sa
- *                                                                                           where sa.submission_user = $1) as sa2 on pa.file_path=sa2.assignment_file_path 
- * 
- * ORDER BY upload_date 
- * 
+ * Get assignments and submission info associated with the assignments. Submission info pertains
+ * to the currently logged-in user.
  * 
  */
 router.get('/getAssignments', auth, async (req, res) => {
     try{
-        req.session.username = "Aaron"; //uncomment this for testing
+        //req.session.username = "Aaron"; //uncomment this for testing
         let query = "SELECT * " +
                     "FROM (post_schema.postfile pf join post_schema.postassignment pa on (pf.file_path=pa.file_path)) left outer join (select * " +
                                                                                                                 "from post_schema.submitassignment sa " +
@@ -92,7 +78,7 @@ router.get('/getAssignments', auth, async (req, res) => {
 });
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    req.session.username = "Aaron"; //uncomment this for testing
+    //req.session.username = "Aaron"; //uncomment this for testing
     //console.log("In upload route");
     //console.log(req.files);
 
@@ -160,14 +146,11 @@ router.post('/upload/assignment/teacher', function (req, res) {
 });
 
 
-// include assignment url and submission url in the json body
+
 /**
  * For simplicity, entrepreneur can make one submission per assignment
  * Most recent submission is stored
- * Allow for resubmission
- * 
- * INSERT INTO submitassignment values ($1, $2, $3)
- * 
+ * Allows for resubmission
  */
 router.post('/upload/assignment/entrepreneur',  function (req, res) { 
     console.log("In entrepreneur route");
@@ -187,18 +170,37 @@ router.post('/upload/assignment/entrepreneur',  function (req, res) {
     console.log(req.session.username);
     console.log("In entrepreneur route");
 
+    let getUserPrevSubmission = "SELECT sa.submission_file_path as file_path FROM post_schema.submitassignment sa where sa.submission_user = $1 AND sa.assignment_file_path = $2  ";
+    let deleteQuerySubmitAssignment = "DELETE FROM post_schema.submitassignment sa WHERE sa.submission_user = $1 AND sa.assignment_file_path = $2";
+    let deleteQueryPostFile = "DELETE FROM post_schema.postfile pf WHERE pf.file_path = $1";
     let schema = "(submission_file_path, submission_user, assignment_file_path, submission_date)";
-    let query = "INSERT INTO post_schema.submitassignment" + schema + " values ($1, $2, $3, $4)";
+    let insertQuery = "INSERT INTO post_schema.submitassignment" + schema + " values ($1, $2, $3, $4)";
 
-    db.query(query, [submissionPath, req.session.username, assignmentPath, datetime])
+    var prevSubmissionFilePath;
+    db.query(getUserPrevSubmission, [req.session.username, assignmentPath])
     .then(result => {
-        console.log("Submitted assignment stored in submitassignment");
+        if (result.rows[0]) {
+            prevSubmissionFilePath = result.rows[0].file_path;
+        } else {
+            prevSubmissionFilePath = "";
+        }
+        console.log("In P1");
+        console.log(prevSubmissionFilePath);
+        return db.query(deleteQueryPostFile, [prevSubmissionFilePath])
+    })
+    .then(result => {
+        console.log("Deleted submission stored in postfile");
+        return db.query(insertQuery, [submissionPath, req.session.username, assignmentPath, datetime]);
+    })
+    .then(result => {
+        console.log("Submitted assignment inserted in submitassignment");
         res.status(200).end();
     })
     .catch(e => {
         console.error(e.stack);
         res.status(500).end();
     })
+
     
 });
 

@@ -103,7 +103,7 @@ CREATE TABLE PostAssignment (
   total_marks INT, -- Only applies to assignments (i.e. category=x). Should be optional. Ex. essay submission may not have total marks.
 
   FOREIGN KEY(file_path) REFERENCES PostFile(file_path)
-    on delete restrict
+    on delete cascade
 );
 
 
@@ -118,11 +118,13 @@ CREATE TABLE SubmitAssignment (
   submission_date timestamp, 
   grade INT,
   feedback TEXT,
-  
+
+  -- user can only submit 1 file per assignment
+  UNIQUE(submission_user, assignment_file_path), 
   FOREIGN KEY(submission_user) REFERENCES profile_schema.aic_user(username)
     on delete restrict,
   FOREIGN KEY(submission_file_path) REFERENCES PostFile(file_path)
-    on delete restrict,
+    on delete cascade,
   FOREIGN KEY(assignment_file_path) REFERENCES PostAssignment(file_path)
     on delete restrict
 
@@ -146,3 +148,8 @@ INSERT INTO PostCategory VALUES
 (1, 'Reading'), 
 (2, 'Video'), 
 (3, 'Assignment')
+
+
+INSERT INTO profile_schema.aic_user VALUES
+('Aaron', '12345678', 2, null, 'Aaron', 'Jacob'), -- sample entrepreneur
+('Karen', '12345678', 1, null, 'Karen', 'Reid'); -- sample teacher
