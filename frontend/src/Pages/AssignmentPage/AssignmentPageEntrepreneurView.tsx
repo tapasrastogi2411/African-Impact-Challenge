@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     width: "85%",
     height: 3,
     marginTop: 15,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   profilePic: {
     width: 200,
@@ -131,9 +131,12 @@ function AssignmentPageEntrepreneurView(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState(defaultFileVals);
+  const [assignment, setAssignment] = React.useState(defaultFileVals);
   const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
+    let tmp:any = assignment;
+    console.log(tmp);
     setOpen(true);
   };
 
@@ -158,10 +161,14 @@ function AssignmentPageEntrepreneurView(prop: any) {
     }
     
     const formData = new FormData();
-    formData.append("assignments", file.name);
+    
+    formData.append("assignments", file as any);
+    formData.append("submission", JSON.stringify(assignment as any));
+    
+    
     
 
-    const response = await fetch("http://localhost:8080/api/course/upload", {
+    const response = await fetch("http://localhost:8080/api/course/upload/assignment/entrepreneur/", {
       method: "POST",
       body: formData,
       credentials: 'include',
@@ -184,20 +191,24 @@ function AssignmentPageEntrepreneurView(prop: any) {
   };
 
   const handleGet = async () => {
-    const response = await fetch(
-      "http://localhost:8080/api/course/getAssignments",
-      {
-        method: "GET",
-        credentials: 'include',
-        mode: "cors",
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/course/getAssignments",
+        {
+          method: "GET",
+          credentials: 'include',
+          mode: "cors",
+        }
+      );
+      const responseData = await response.json();
+      if (response.status > 300 || response.status < 200) {
+        throw responseData;
       }
-    );
-    const responseData = await response.json();
-    if (response.status > 300 || response.status < 200) {
-      throw responseData;
+      setAssignmentItems(responseData);
+
+    } catch (err) {
+      console.log(err);
     }
-    
-    setAssignmentItems(responseData);
   };
 
   const handleUpload = (e: any) => {
@@ -205,11 +216,10 @@ function AssignmentPageEntrepreneurView(prop: any) {
   };
 
   
-
-    const renderAssignments = (item: any) => {  // item is an object containing assignment data
+    const renderAssignments = (item: any, index: any) => {  // item is an object containing assignment data
     // call event handler in main and set state to the current assignment
     return(
-      <Accordion className={classes.assignmentCard}>
+      <Accordion className={classes.assignmentCard} onClick={() => {setAssignment(assignmentItems[index])}}>
         <AccordionSummary 
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -332,8 +342,8 @@ function AssignmentPageEntrepreneurView(prop: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-          {assignmentItems.length > 0 ?  assignmentItems.map((item) => (
-      renderAssignments(item)
+          {assignmentItems.length > 0 ?  assignmentItems.map((item, index) => (
+      renderAssignments(item, index)
     )) : ( 
             <Typography align="center" className={classes.noAssignmentHeader}>
               There are currently no assignments!

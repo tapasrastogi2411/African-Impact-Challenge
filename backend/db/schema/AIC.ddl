@@ -1,5 +1,6 @@
-DROP DATABASE aic IF EXISTS aic CASCADE;
-CREATE DATABASE aic;
+--DROP DATABASE IF EXISTS aic;
+--CREATE DATABASE aic;
+--CONNECT TO "aic" AS USER postgres IDENTIFIED BY "connectpw";
 
 -- Profile Schema
 DROP SCHEMA IF EXISTS profile_schema CASCADE;
@@ -73,6 +74,7 @@ INSERT INTO aic_role VALUES
 (2, 'Entrepreneur'), 
 (3, 'Partner');
 
+
 -- Post Schema
 DROP SCHEMA IF EXISTS post_schema CASCADE;
 CREATE SCHEMA post_schema;
@@ -90,27 +92,38 @@ CREATE TABLE PostFile (
   upload_user TEXT not NULL, 
   title TEXT,
   description TEXT, 
-  total_marks INT, -- Only applies to assignments (i.e. category=x). Should be optional. Ex. essay submission may not have total marks.
 
   FOREIGN KEY(category) REFERENCES PostCategory
     on delete restrict
 );
 
 
+CREATE TABLE PostAssignment (
+  file_path TEXT PRIMARY KEY,
+  total_marks INT, -- Only applies to assignments (i.e. category=x). Should be optional. Ex. essay submission may not have total marks.
+
+  FOREIGN KEY(file_path) REFERENCES PostFile(file_path)
+    on delete restrict
+);
+
+
 --  Assignment submissions
 
+-- maybe include grade and feedback here
 CREATE TABLE SubmitAssignment (
 
   submission_file_path TEXT PRIMARY KEY, -- each user assignment submission is unique
   submission_user TEXT,
   assignment_file_path TEXT,
   submission_date timestamp, 
+  grade INT,
+  feedback TEXT,
   
-  FOREIGN KEY(submission_user) REFERENCES aic_user(username)
+  FOREIGN KEY(submission_user) REFERENCES profile_schema.aic_user(username)
     on delete restrict,
   FOREIGN KEY(submission_file_path) REFERENCES PostFile(file_path)
     on delete restrict,
-  FOREIGN KEY(assignment_file_path) REFERENCES PostFile(file_path)
+  FOREIGN KEY(assignment_file_path) REFERENCES PostAssignment(file_path)
     on delete restrict
 
 );
