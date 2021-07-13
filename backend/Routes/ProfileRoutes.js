@@ -321,5 +321,61 @@ router.get('/logout', auth, function (req, res) {
 
 });
 
+router.get('/getEntrepreneurs', auth, async (req, res) => {
+    try{
+        let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=2'
+        const result = await db.query(query)
+        const entrepreneurs = result.rows.map(row => `${row.first_name} ${row.last_name}`)
+        res.status(200).json(entrepreneurs)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+});
+
+router.get('/getInstructors', auth, async(req,res) => {
+    try{
+        let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=1'
+        const result = await db.query(query)
+        const instructors = result.rows.map(row => `${row.first_name} ${row.last_name}`)
+        res.status(200).json(instructors)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+});
+
+router.get('/getPartners', auth, async(req, res) => {
+    try{
+        let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=3'
+        const result = await db.query(query)
+        const partners = result.rows.map(row => `${row.first_name} ${row.last_name}`)
+        res.status(200).json(partners)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+});
+
+router.get('/getStartups', auth, async(req, res) => {
+    try{
+        let query = 'SELECT name FROM profile_schema.company'
+        const result = await db.query(query)
+        const startups = result.rows.map(row => `${row.name}`)
+        res.status(200).json({'startups': startups})
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
+
 
 module.exports = router;

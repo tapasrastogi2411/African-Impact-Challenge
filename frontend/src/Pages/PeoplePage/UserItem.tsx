@@ -26,8 +26,9 @@ export default function UserItem(props: any) {
                 />
             </ListItemAvatar>
             <ListItemText
-                primary="User"
+                //primary="User"
             //primary={props.username}
+                primary={props.name}
 
             />
         </ListItem>

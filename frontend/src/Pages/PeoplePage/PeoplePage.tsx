@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -42,6 +42,52 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
 
 export default function PeoplePage(props: any) {
     const classes = useStyles();
+    const [instructors, setInstructors] = React.useState([]); // array of instructors
+    const [entrepreneurs, setEntrepreneurs] = React.useState([]); // array of entrepreneurs
+    const [startups, setStartups] = React.useState([]); // array of startups
+    const [partners, setPartners] = React.useState([]); // array of partners
+
+    const fetchInstructors = async() => {
+        const response = await fetch('http://localhost:8080/api/profile/getInstructors',
+        {
+            method: "GET",
+            credentials: "include",
+            mode: "cors"
+        })
+
+        const responseData = await response.json()
+        setInstructors(responseData)
+    }
+
+    const fetchEntrepreneurs = async() => {
+        const response = await fetch('http://localhost:8080/api/profile/getEntrepreneurs',
+        {
+            method: "GET",
+            credentials: "include",
+            mode: "cors"
+        })
+
+        const responseData = await response.json()
+        setEntrepreneurs(responseData)
+    }
+    
+    const fetchPartners = async() => {
+        const response = await fetch('http://localhost:8080/api/profile/getPartners',
+        {
+            method: "GET",
+            credentials: "include",
+            mode: "cors"
+        })
+
+        const responseData = await response.json()
+        setPartners(responseData)
+    }
+
+    useEffect(() => {
+        fetchInstructors()
+        fetchEntrepreneurs()
+        fetchPartners()
+    }, [])
 
     return (
         <div >
@@ -53,11 +99,7 @@ export default function PeoplePage(props: any) {
                             Instructors
                     </Typography>
                         <List >
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
+                            {instructors.length > 0 && instructors.map(item => <UserItem name={item}/>)}
                         </List>
                     </Grid>
                 </Grid>
@@ -67,11 +109,7 @@ export default function PeoplePage(props: any) {
                             Partners
                     </Typography>
                         <List >
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
+                            {partners.length > 0 && partners.map(item => <UserItem name={item}/>)}
                         </List>
                     </Grid>
                 </Grid>
@@ -81,11 +119,7 @@ export default function PeoplePage(props: any) {
                             Entrepreneurs
                     </Typography>
                         <List >
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
+                            {entrepreneurs.length > 0 && entrepreneurs.map(item => <UserItem name={item}/>)}
                         </List>
                     </Grid>
                 </Grid>
