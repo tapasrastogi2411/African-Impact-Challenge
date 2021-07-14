@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   divider: {
-    width: "100%",
+    width: "95%",
     height: 3,
     marginTop: 10,
     marginBottom: 10,
