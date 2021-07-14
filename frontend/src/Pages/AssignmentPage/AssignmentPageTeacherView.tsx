@@ -118,15 +118,65 @@ const RedTextTypography = withStyles({
   },
 })(Typography);
 
+
+
+
+function getCurrentDateTime(){
+
+  var currentdate = new Date(); 
+  var datetime = [currentdate.getFullYear(), (currentdate.getMonth()+1), currentdate.getDate(), 
+                  currentdate.getHours(),currentdate.getMinutes(), currentdate.getSeconds()];
+  for (let i = 0; i < datetime.length; i++) {
+    if (datetime[i] >= 0 && datetime[i] < 10 ) {
+      datetime[i] = ('0' + datetime[i]) as any ;
+    }
+  }
+
+  datetime = (datetime[0] + "-" 
+          + datetime[1] + "-"
+          + datetime[2] + "T"
+          + datetime[3] + ":"  
+          + datetime[4] + ":" 
+          + datetime[5]) as any;
+
+  return datetime;
+  
+}
+
+// 2021-07-14T03:38:31.000Z
+//["Tue", "Jul", "13", "2021", "11:38:31 PM"]
+function parseDeadline(deadline: string) {
+    console.log(deadline);
+    let datetime = new Date(deadline).toString().split(' ', 5);
+    let time = new Date(deadline).toLocaleTimeString('en-US');
+    datetime[4] = time;
+    console.log(datetime);
+    let datetimeString = "";
+    for (let i = 0; i < datetime.length; i++) {
+      datetimeString += datetime[i] + " ";
+    }
+    return datetimeString;
+}
+
+
+
 function AssignmentPage(prop: any) {
+  
+  
+  var currentdate = getCurrentDateTime() as any;
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [deadline, setDeadline] = React.useState("");
+  const [totalMarks, setTotalMarks] = React.useState(0);
+  const [deadline, setDeadline] = React.useState(currentdate);
   const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
+
+  
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -147,6 +197,8 @@ function AssignmentPage(prop: any) {
     formData.append("assignments", file);
     formData.append("title", title);
     formData.append("description", description);
+    formData.append("totalMarks", totalMarks as any);
+    formData.append("deadline", deadline);
 
     const response = await fetch("http://localhost:8080/api/course/upload/assignment/teacher/", {
       method: "POST",
@@ -200,12 +252,14 @@ function AssignmentPage(prop: any) {
         >
           <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
           <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
-          <Typography className={classes.upload} style={{marginLeft: 600}} >Posted: {item.upload_date.substring(0,10)}</Typography>
+          <Typography className={classes.upload} style={{marginLeft: 600}} >Due: {parseDeadline(item.deadline)}</Typography>
         </AccordionSummary>
         
         <AccordionDetails style={{flexDirection: "column"}} >
           <div style={{flexBasis: "33.33%"}}>
-
+          <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 14}}>
+              Posted: {item.upload_date.substring(0,10)}
+            </Typography>
             <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
               Created by {item.upload_user}
             </Typography>
@@ -243,6 +297,7 @@ function AssignmentPage(prop: any) {
   useEffect(() => {
     handleGet();
   }, []);
+
 
   return (
     <div>
@@ -286,6 +341,23 @@ function AssignmentPage(prop: any) {
                     fullWidth
                     onChange={(e) => setTitle(e.target.value)}
                   />
+
+                  <TextField
+                    
+                    margin="dense"
+                    id="totalMarks"
+                    name="totalMarks"
+                    label="Total Marks"
+                    type="number"
+                    variant="standard"
+                    defaultValue={0}
+                    inputProps={{min: "0"}}
+                    style={{marginRight: 40, marginTop: 11, width: 100}}
+                    onChange={(e) => {
+                      setTotalMarks((e.target as any).value);
+                      }
+                    }
+                  />
                  
                  
                   <TextField
@@ -293,14 +365,18 @@ function AssignmentPage(prop: any) {
                     id="datetime-local"
                     label="Deadline"
                     type="datetime-local"
-                    defaultValue="2017-05-24T10:30"
+                    defaultValue={currentdate}
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    onChange={(e) => {
+                      console.log((e.target as any).value);
+                      setDeadline((e.target as any).value);
+                      }
+                    }
                   />
 
                    <TextField
-                   
                    label="Description"
                    variant="outlined"
                    fullWidth

@@ -46,7 +46,7 @@ router.get('/getVideos', auth, async (req, res) => {
  */
 router.get('/getAssignments', auth, async (req, res) => {
     try{
-        //req.session.username = "Aaron"; //uncomment this for testing
+        req.session.username = "Karen"; //uncomment this for testing
         let query = "SELECT * " +
                     "FROM (post_schema.postfile pf join post_schema.postassignment pa on (pf.file_path=pa.file_path)) left outer join (select * " +
                                                                                                                 "from post_schema.submitassignment sa " +
@@ -78,7 +78,7 @@ router.get('/getAssignments', auth, async (req, res) => {
 });
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    //req.session.username = "Aaron"; //uncomment this for testing
+    req.session.username = "Karen"; //uncomment this for testing
     //console.log("In upload route");
     //console.log(req.files);
 
@@ -128,13 +128,19 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
 });
 
 
-
+// 2017-05-27T10:30
 router.post('/upload/assignment/teacher', function (req, res) { 
-    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
-    let totalMarks = 0; // update when feature is implemented
-    var query = "INSERT INTO post_schema.PostAssignment VALUES ($1, $2)";
+    console.log("In teacher route");
 
-    db.query(query, [filePath, totalMarks])
+    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    let totalMarks = req.body.totalMarks;
+    let deadline = req.body.deadline.replace("T", " ");
+    console.log(deadline);
+    var query = "INSERT INTO post_schema.PostAssignment VALUES ($1, $2, $3)";
+
+    console.log("In teacher route");
+
+    db.query(query, [filePath, totalMarks, deadline])
     .then(result => {
         //console.log("Assignment stored in PostAssignment");
         res.status(200).end();

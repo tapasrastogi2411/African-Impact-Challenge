@@ -101,6 +101,7 @@ CREATE TABLE PostFile (
 CREATE TABLE PostAssignment (
   file_path TEXT PRIMARY KEY,
   total_marks INT, -- Only applies to assignments (i.e. category=x). Should be optional. Ex. essay submission may not have total marks.
+  deadline timestamp,
 
   FOREIGN KEY(file_path) REFERENCES PostFile(file_path)
     on delete cascade
