@@ -20,6 +20,8 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Alert from '@material-ui/lab/Alert';
 
+import { Link } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -309,7 +311,9 @@ function AssignmentPageEntrepreneurView(prop: any) {
                       {renderResubmit(assignmentItems[index])}
                     </Grid>
                     <Grid item>
-                      <Button variant="contained" className={classes.viewSubmissionBtn} onClick={handleClickOpen} >View Submission</Button> 
+                      <Link to="/assignments/entrepreneur/submission" style={{textDecoration: "none"}}> 
+                        <Button variant="contained" className={classes.viewSubmissionBtn} onClick={handleClickOpen} >View Submission</Button> 
+                      </Link>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -327,7 +331,13 @@ function AssignmentPageEntrepreneurView(prop: any) {
     // assignmentItems[index]
     
     return(
-      <Accordion className={classes.assignmentCard} onClick={() => {setAssignment(assignmentItems[index])}}>
+      <Accordion className={classes.assignmentCard} onClick={() => {
+        
+          setAssignment(assignmentItems[index]);
+          prop.setAssignment(assignmentItems[index]);
+      
+      
+        }}>
         <AccordionSummary 
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
