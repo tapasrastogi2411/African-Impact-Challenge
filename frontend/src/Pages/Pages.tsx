@@ -83,8 +83,8 @@ export default function Pages(props: any) {
                 <Route exact path="/readings" component={ReadingsPage} />
 
 
-                <Route exact path="/test" component={GuestVideoPage} />    
-                <Route exact path="/test2" component={GuestReadingPage} />   
+                <Route exact path="/guestVideos" component={GuestVideoPage} />    
+                <Route exact path="/guestReadings" component={GuestReadingPage} />   
                 {/* added this ^ */}
             </Switch>
         //</div>

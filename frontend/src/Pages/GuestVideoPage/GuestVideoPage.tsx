@@ -52,7 +52,7 @@ const RedTextTypography = withStyles({
 
 function GuestVideoPage(prop: any) {
   const classes = useStyles();
-  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [videoItems, setvideoItems] = React.useState([]);
 
   const handleGet = async () => {
     const response = await fetch(
@@ -68,8 +68,14 @@ function GuestVideoPage(prop: any) {
       throw responseData;
     }
 
-    setAssignmentItems(responseData.file_paths);
+    setvideoItems(responseData);
   };
+
+  const renderVideoCard = (item: any) => {
+    return(
+      <VideoCard video={"http://localhost:8080" + item.file_path} title={item.title} uploader={item.upload_user}></VideoCard>
+    );
+  }
 
   useEffect(() => {
     handleGet();
@@ -82,9 +88,9 @@ function GuestVideoPage(prop: any) {
         
       <Divider className={classes.divider} />
       <div className={classes.videoGrid}>
-        {assignmentItems.length > 0 ? (
-          assignmentItems.map((item) => (
-              <VideoCard video={"http://localhost:8080" + item} title="Harry Potter" uploader="Aaron Tan"></VideoCard>
+        {videoItems.length > 0 ? (
+          videoItems.map((item) => (
+            renderVideoCard(item)
           ))
         ) : (
           <Typography align="center" className={classes.noVideoHeader}>

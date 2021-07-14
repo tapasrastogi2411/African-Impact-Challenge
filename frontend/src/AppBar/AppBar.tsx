@@ -65,10 +65,10 @@ function Appbar(props: any) {
         history.push('/login')
     }
     const videosPage = () => {
-        history.push('/test')
+        history.push('/guestVideos')
     }
     const readingsPage = () => {
-        history.push('/test2')
+        history.push('/guestReadings')
     }
     const classes = useStyles();
 

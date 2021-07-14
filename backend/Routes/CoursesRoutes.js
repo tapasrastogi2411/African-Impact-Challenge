@@ -23,7 +23,7 @@ router.get('/getReadings', async (req, res) => {
             }
         }
        
-        console.log(fileArray);
+        // console.log(fileArray);
         return res.status(200).json(fileArray);
     }
 
@@ -36,11 +36,11 @@ router.get('/getReadings', async (req, res) => {
 // Route for getting the `Videos`
 router.get('/getVideos', async (req, res) => {
     try{
-        let query = `SELECT file_path, upload_user FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
+        let query = `SELECT file_path, upload_user, title FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
         const result = await db.query(query);
         // const filePaths = result.rows.map(row => row.file_path);
         var fileArray = result.rows;
-        console.log(fileArray);
+        // console.log(fileArray);
         return res.status(200).json(fileArray);
     }
 
@@ -67,7 +67,7 @@ router.get('/getAssignments', auth, async (req, res) => {
             }
         }
        
-        console.log(fileArray);
+        // console.log(fileArray);
         return res.status(200).json(fileArray);
     }
 
@@ -93,17 +93,17 @@ router.post('/upload', auth, upload.any(), function (req, res) {
             + currentdate.getSeconds();
 
     var fieldName = req.files[0].fieldname;
-    var title = "";
+    var title = "" || req.body.title;
+    
+    console.log("title is: " + title);
 
     var category;
     if (fieldName === 'readings') {
         category = 1;
-        title = req.body.title;
     } else if (fieldName === 'videos') {
         category = 2;
     } else if (fieldName === 'assignments') {
         category = 3;
-        title = req.body.title
     } 
 
     var postfileSchema = "(file_path, category, upload_date, upload_user, description, title)";

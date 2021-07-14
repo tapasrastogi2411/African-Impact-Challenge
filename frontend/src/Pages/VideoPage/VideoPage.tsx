@@ -12,7 +12,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 import VideoCard from "../GuestVideoPage/VideoCard";
-
+import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,8 +77,8 @@ function VideoPage(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [title, settitle] = React.useState("");
+  const [videoItems, setvideoItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
@@ -98,7 +98,7 @@ function VideoPage(prop: any) {
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
     formData.append("videos", file);
-    formData.append("description", description);
+    formData.append("title", title);
 
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
@@ -114,8 +114,9 @@ function VideoPage(prop: any) {
     handleGet();
   };
 
-  const parseItem = (e: string) => {
-    return e.substring(e.indexOf("_") + 1, e.length);
+  const parseItem = (e: any) => {
+    var filePath = e.file_path;
+    return filePath.substring(filePath.indexOf('_')+1,filePath.length)
   };
 
   const handleGet = async () => {
@@ -132,8 +133,16 @@ function VideoPage(prop: any) {
       throw responseData;
     }
 
-    setAssignmentItems(responseData.file_paths);
+    setvideoItems(responseData);
+    console.log(responseData);
   };
+
+
+  const renderVideoCard = (item: any) => {
+    return(
+      <VideoCard video={"http://localhost:8080" + item.file_path} title={item.title} uploader={item.upload_user}></VideoCard>
+    );
+  }
 
   useEffect(() => {
     handleGet();
@@ -172,13 +181,13 @@ function VideoPage(prop: any) {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="description"
-                            name="description"
-                            label="description"
+                            id="title"
+                            name="title"
+                            label="title"
                             type="text"
                             fullWidth
                             onChange={(e) =>
-                            setDescription(e.target.value)}
+                            settitle(e.target.value)}
                             />
                     </DialogContent>
                     <DialogContent>
@@ -190,7 +199,7 @@ function VideoPage(prop: any) {
                     inputProps={{ accept: ".mp4" }}
                     onChange={handleUploadedFile}
                     ></TextField>
-                    <AssignmentIcon />
+                    <VideoLibraryOutlinedIcon />
                     </DialogContent>
                     <DialogContent>
                         {alertMessage.length > 0 ? (
@@ -211,9 +220,9 @@ function VideoPage(prop: any) {
         <Divider className={classes.divider} />
       </div>
       <div className={classes.videoGrid}>
-        {assignmentItems.length > 0 ? (
-          assignmentItems.map((item) => (
-              <VideoCard video={"http://localhost:8080" + item} title="Harry Potter" uploader="Aaron Tan"></VideoCard>
+        {videoItems.length > 0 ? (
+          videoItems.map((item) => (
+            renderVideoCard(item)
           ))
         ) : (
           <Typography align="center" className={classes.noVideoHeader}>
