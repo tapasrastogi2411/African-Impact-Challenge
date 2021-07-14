@@ -134,7 +134,6 @@ function VideoPage(prop: any) {
     }
 
     setvideoItems(responseData);
-    console.log(responseData);
   };
 
 

@@ -95,8 +95,6 @@ router.post('/upload', auth, upload.any(), function (req, res) {
     var fieldName = req.files[0].fieldname;
     var title = "" || req.body.title;
     
-    console.log("title is: " + title);
-
     var category;
     if (fieldName === 'readings') {
         category = 1;

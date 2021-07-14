@@ -269,6 +269,7 @@ router.post('/login/', async function (req, res) {
                     // create a session and return a 200 response
                     req.session.loggedIn = true
                     req.session.username = username
+                    res.cookie('loggedIn', true, {sameSite: true});
                     return res.status(200).json("");
                 }
             }
@@ -316,7 +317,7 @@ router.delete('/delete/', auth, function (req, res) {
 router.get('/logout', auth, function (req, res) { 
     req.session.destroy(function(err) {
         if(err) return res.status(500).end(err);
-        return res.status(200).end();
+        return res.clearCookie('loggedIn').status(200).end();
     });
 
 });

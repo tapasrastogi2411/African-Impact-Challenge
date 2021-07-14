@@ -134,6 +134,7 @@ export const SignInAjax =  async (
            }
            console.log(response);
            onSuccess(responseData);
+           window.location.reload()
            
         }
         

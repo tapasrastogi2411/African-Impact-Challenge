@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             marginLeft: 50,
         },
+        hideIcon: {
+            visibility: "hidden"
+        },
         link: {
             textDecoration: "none",
         },
@@ -62,15 +65,42 @@ const useStyles = makeStyles((theme: Theme) =>
 function Appbar(props: any) {
     const history = useHistory();
     const onSuccess = () => {
-        history.push('/login')
+        history.push('/login');
     }
     const videosPage = () => {
-        history.push('/guestVideos')
+        history.push('/guestVideos');
     }
     const readingsPage = () => {
-        history.push('/guestReadings')
+        history.push('/guestReadings');
     }
     const classes = useStyles();
+
+    const renderGuestPage = () => {
+        let cookie = document.cookie.split('; ');
+        for(let i in cookie){
+            var keyval = cookie[i].split('=');
+            if(keyval[0] === 'loggedIn' && keyval[1]) {
+                return (
+                    <IconButton onClick={logoutUser} className={classes.btn}>
+                        <InputIcon />
+                        <Typography variant="button" noWrap className={classes.btnTxt}>Sign Out</Typography>
+                    </IconButton>
+                );
+            }
+        }
+        return (
+            <div>
+            <IconButton onClick={videosPage} className={classes.btn}>
+                <VideoLibraryOutlinedIcon />
+                <Typography variant="button" noWrap className={classes.btnTxt}>Videos</Typography>
+            </IconButton>
+            <IconButton onClick={readingsPage} className={classes.btn}>
+                <LocalLibraryOutlinedIcon />
+                <Typography variant="button" noWrap className={classes.btnTxt}>Readings</Typography>
+            </IconButton>
+            </div>
+        );
+    }
 
     // session should be destroyed and user taken back to the login page
     function logoutUser() {
@@ -80,6 +110,7 @@ function Appbar(props: any) {
         })
         .then(() => {
             onSuccess();
+            window.location.reload();
         })
     }
 
@@ -100,7 +131,7 @@ function Appbar(props: any) {
                 </div>
             
                 <div>
-                    <IconButton onClick={videosPage} className={classes.btn}>
+                    {/* <IconButton onClick={videosPage} className={classes.btn}>
                         <VideoLibraryOutlinedIcon />
                         <Typography variant="button" noWrap className={classes.btnTxt}>Videos</Typography>
                     </IconButton>
@@ -111,7 +142,8 @@ function Appbar(props: any) {
                     <IconButton onClick={logoutUser} className={classes.btn}>
                         <InputIcon />
                         <Typography variant="button" noWrap className={classes.btnTxt}>Sign Out</Typography>
-                    </IconButton>
+                    </IconButton> */}
+                    {renderGuestPage()}
                 </div>
                 
             </Toolbar>
