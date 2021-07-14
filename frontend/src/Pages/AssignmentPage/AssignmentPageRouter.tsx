@@ -10,6 +10,7 @@ import Navbar from "../../NavBar/Navbar";
 export default function AssignmentPageRouter(props: any) {
 
     const [userRole, setUserRole] = React.useState("");
+    const [assignment, setAssignment] = React.useState(""); // assignment for view submission
     let location = useLocation();
     let history = useHistory();
     
@@ -45,8 +46,10 @@ export default function AssignmentPageRouter(props: any) {
                 <Switch>
                 
                     <Route exact path="/assignments/teacher" render={() => <AssignmentPageTeacherView  />}  />
-                    <Route exact path="/assignments/entrepreneur" render={() => <AssignmentPageEntrepreneurView   />}  />
-                    <Route exact path="/assignments/entrepreneur/submission" render={() => <ViewSubmission   />}  />
+                    <Route exact path="/assignments/entrepreneur" render={() => <AssignmentPageEntrepreneurView  setAssignment={setAssignment} />}  />
+                    <Route exact path="/assignments/entrepreneur/submission" >
+                        <ViewSubmission assignment={assignment} />
+                    </Route>
                     <Route exact path="/assignments">
                         {
                             userRole == "Teacher" ? <Redirect  to="/assignments/teacher" />  : <Redirect  to="/assignments/entrepreneur" /> 
