@@ -46,7 +46,7 @@ router.get('/getVideos', auth, async (req, res) => {
  */
 router.get('/getAssignments', auth, async (req, res) => {
     try{
-        req.session.username = "Karen"; //uncomment this for testing
+        req.session.username = "Aaron"; //uncomment this for testing
         let query = "SELECT * " +
                     "FROM (post_schema.postfile pf join post_schema.postassignment pa on (pf.file_path=pa.file_path)) left outer join (select * " +
                                                                                                                 "from post_schema.submitassignment sa " +
@@ -78,7 +78,7 @@ router.get('/getAssignments', auth, async (req, res) => {
 });
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    req.session.username = "Karen"; //uncomment this for testing
+    req.session.username = "Aaron"; //uncomment this for testing
     //console.log("In upload route");
     //console.log(req.files);
 

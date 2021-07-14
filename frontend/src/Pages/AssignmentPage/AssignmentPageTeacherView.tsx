@@ -314,7 +314,7 @@ function AssignmentPage(prop: any) {
            
             
               <Button
-                variant="outlined"
+                variant="contained"
                 onClick={handleClickOpen}
                 className={classes.uploadButton}
               >

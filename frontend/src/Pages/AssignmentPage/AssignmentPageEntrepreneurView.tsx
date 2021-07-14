@@ -1,5 +1,5 @@
 import React, { Component, Fragment, useState, useEffect} from "react";
-import Grid from "@material-ui/core/Grid";
+import {Grid, Tooltip} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": { background: "#e69113" },
     borderRadius: 20,
     marginRight: 269,
+    marginBottom: 20,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 12,
@@ -58,10 +59,11 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": { background: "#e69113" },
     borderRadius: 20,
     marginRight: 50,
+    marginBottom: 20,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
   },
   viewSubmissionBtn: {
     backgroundColor: "#fcb040",
@@ -117,8 +119,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12px",
     fontWeight: 400,
     marginTop: 8,
+  },
 
-  }
 }));
 
 const defaultFileVals = {
@@ -130,6 +132,61 @@ const RedTextTypography = withStyles({
     color: "#e43132",
   },
 })(Typography);
+
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    border: '1px solid #dadde9',
+    marginRight: 20,
+  },
+}))(Tooltip);
+
+
+function parseDeadline(deadline: string) {
+  console.log(deadline);
+  let datetime = new Date(deadline).toString().split(' ', 5);
+  let time = new Date(deadline).toLocaleTimeString('en-US');
+  datetime[4] = time;
+  console.log(datetime);
+  let datetimeString = "";
+  for (let i = 0; i < datetime.length; i++) {
+    datetimeString += datetime[i] + " ";
+  }
+  return datetimeString;
+}
+
+function Submit(props: any) {
+  const classes = useStyles();
+  return <Button variant="contained" className={classes.submitBtn} onClick={props.openHandler} >Submit</Button>
+}
+
+function DisabledSubmit(props: any) {
+  const classes = useStyles();
+  return <LightTooltip placement="bottom-start" title="The deadline for this assignment has passed">
+      <span >
+        <Button variant="contained" className={classes.submitBtn}  disabled>Submit</Button>
+      </span>
+  </LightTooltip>
+}
+
+function Resubmit(props: any) {
+  const classes = useStyles();
+  return <Button variant="contained" className={classes.reSubmitBtn} onClick={props.openHandler} >Resubmit</Button>
+}
+
+function DisabledResubmit(props: any) {
+  const classes = useStyles();
+  return <LightTooltip placement="bottom-start" title="The deadline for this assignment has passed">
+      <span >
+        <Button variant="contained" className={classes.reSubmitBtn}  disabled>Resubmit</Button>
+      </span>
+  </LightTooltip>
+}
+
+
 
 function AssignmentPageEntrepreneurView(prop: any) {
   const classes = useStyles();
@@ -218,13 +275,31 @@ function AssignmentPageEntrepreneurView(prop: any) {
     console.log(e);
   };
 
+  const renderSubmit = (assignmentItem: any) => {
+      let deadline = Date.parse(assignmentItem.deadline);
+      let currentTime = Date.now();
+      if (deadline < currentTime) {
+        return <DisabledSubmit />
+      }
+      return <Submit openHandler={handleClickOpen} />
+  }
+
+  const renderResubmit = (assignmentItem: any) => {
+    let deadline = Date.parse(assignmentItem.deadline);
+    let currentTime = Date.now();
+    if (deadline < currentTime) {
+      return <DisabledResubmit />
+    }
+    return <Resubmit openHandler={handleClickOpen} />
+}
+
   const renderButtons = (index:any) => {
     let submissionUser:any = (assignmentItems[index] as any).submission_user;
 
     if (!submissionUser) {
       return (
               <Grid item>
-                <Button className={classes.submitBtn} onClick={handleClickOpen} >Submit</Button>
+                {renderSubmit(assignmentItems[index])}
               </Grid>
               );
     } else {
@@ -233,10 +308,10 @@ function AssignmentPageEntrepreneurView(prop: any) {
                 <Grid item>
                   <Grid container direction="row" spacing={0}>
                     <Grid item>
-                      <Button className={classes.reSubmitBtn} onClick={handleClickOpen} >Resubmit</Button> 
+                      {renderResubmit(assignmentItems[index])}
                     </Grid>
                     <Grid item>
-                      <Button className={classes.viewSubmissionBtn} onClick={handleClickOpen} >View Submission</Button> 
+                      <Button variant="contained" className={classes.viewSubmissionBtn} onClick={handleClickOpen} >View Submission</Button> 
                     </Grid>
                   </Grid>
                 </Grid>
@@ -262,12 +337,15 @@ function AssignmentPageEntrepreneurView(prop: any) {
         >
           <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
           <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
-          <Typography className={classes.upload} style={{marginLeft: 600}} >Posted: {item.upload_date.substring(0,10)}</Typography>
+          <Typography className={classes.upload} style={{marginLeft: 600}} >Due: {parseDeadline(item.deadline)}</Typography>
+      
         </AccordionSummary>
         
         <AccordionDetails style={{flexDirection: "column"}} >
           <div style={{flexBasis: "33.33%"}}>
-
+          <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 14}}>
+              Posted: {item.upload_date.substring(0,10)}
+            </Typography>
             <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
               Created by {item.upload_user}
             </Typography>
@@ -310,10 +388,18 @@ function AssignmentPageEntrepreneurView(prop: any) {
 
   }
 
+ 
+  
+
   
 
   useEffect(() => {
     handleGet();
+    // initialize timer
+    /* setInterval(() => {
+      console.log("hello");
+    }, 5000); */
+    //setTimeout(checkDeadline() as any, 2000);
   }, []);
 
   return (
