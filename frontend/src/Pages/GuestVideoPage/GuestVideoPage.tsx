@@ -1,27 +1,12 @@
-import React, { Component, Fragment, useState, useEffect } from "react";
-import SignIn from "../UserProfile/LogIn";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import React, { useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
-import Navbar from "../../NavBar/Navbar";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Avatar, Divider, Toolbar } from "@material-ui/core";
-import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import { Divider } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import VideoCard from "./VideoCard";
+
 const useStyles = makeStyles((theme) => ({
-  root: { //uncomment pages.tsk root
+  root: { 
     marginTop: 100,
     marginLeft: 200,   
     marginRight: "10%",
@@ -83,10 +68,9 @@ function GuestVideoPage(prop: any) {
 
   return (
     <div className={classes.root}>
-      
       <Typography variant="h4" className={classes.pageTitle}>Videos</Typography>
-        
       <Divider className={classes.divider} />
+      
       <div className={classes.videoGrid}>
         {videoItems.length > 0 ? (
           videoItems.map((item) => (
@@ -98,7 +82,6 @@ function GuestVideoPage(prop: any) {
           </Typography>
         )}
       </div>
-
     </div>
   );
 }

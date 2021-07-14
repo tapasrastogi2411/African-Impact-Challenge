@@ -1,7 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({ 
     details: {
@@ -35,8 +33,6 @@ function VideoCard({video, title, uploader} : any) {
         </div>
     );
 }
-
-//"http://localhost:8080/uploads/videos/1626128398710_a.mp4"
 
 export default VideoCard;
 

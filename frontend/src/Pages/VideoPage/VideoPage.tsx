@@ -1,10 +1,9 @@
-import React, { Component, Fragment, useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
-import AssignmentIcon from "@material-ui/icons/Assignment";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -16,10 +15,6 @@ import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // position: "absolute",
-    // top: 130,
-    // left: 300,
-    // width: 1400,
     display: "flex",
   },
   combine: {
@@ -40,19 +35,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between"
   },
-  btn: {
-    backgroundColor: "#fcb040",
-    color: "#ffffff",
-    width: 180,
-    "&:hover": { background: "#e69113" },
-    marginLeft: 10,
-    borderRadius: 20,
-    marginBottom: 10,
-    marginTop: 10,
-  },
-  input: {
-    display: "none",
-  },
   pageTitle: {
     marginLeft: 10,
   },
@@ -63,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexWrap: "wrap"
   }
-
 }));
 
 const RedTextTypography = withStyles({
@@ -71,7 +52,6 @@ const RedTextTypography = withStyles({
     color: "#e43132",
   },
 })(Typography);
-
 
 function VideoPage(prop: any) {
   const classes = useStyles();
@@ -150,30 +130,28 @@ function VideoPage(prop: any) {
   return (
     <div className={classes.root}>
       <div>
-        <Navbar></Navbar>
+          <Navbar></Navbar>
       </div>
-
       <div className={classes.combine}>
-      <div>
-        <div className={classes.vidTitle}>
-            <div>
-                <Typography variant="h4" className={classes.pageTitle}>Videos</Typography>
-            </div>
-            
-            <div>
-                <Button
-                    variant="outlined"
-                    onClick={handleClickOpen}
-                    // className={classes.uploadButton}
-                    >
-                Upload Videos
-                </Button>
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="form-dialog-title"
-                    >
-                    <DialogContent>
+          <div>
+            <div className={classes.vidTitle}>
+                <div>
+                  <Typography variant="h4" className={classes.pageTitle}>Videos</Typography>
+                </div>
+                <div>
+                  <Button
+                      variant="outlined"
+                      onClick={handleClickOpen}
+                      // className={classes.uploadButton}
+                      >
+                  Upload Videos
+                  </Button>
+                  <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title"
+                      >
+                      <DialogContent>
                         <DialogContentText>
                             Please fill in the following fields
                         </DialogContentText>
@@ -188,49 +166,48 @@ function VideoPage(prop: any) {
                             onChange={(e) =>
                             settitle(e.target.value)}
                             />
-                    </DialogContent>
-                    <DialogContent>
-                    <TextField
-                    type={"file"}
-                    name="videos"
-                    id="videos"
-                    label="videos"
-                    inputProps={{ accept: ".mp4" }}
-                    onChange={handleUploadedFile}
-                    ></TextField>
-                    <VideoLibraryOutlinedIcon />
-                    </DialogContent>
-                    <DialogContent>
+                      </DialogContent>
+                      <DialogContent>
+                      <TextField
+                      type={"file"}
+                      name="videos"
+                      id="videos"
+                      label="videos"
+                      inputProps={{ accept: ".mp4" }}
+                      onChange={handleUploadedFile}
+                      ></TextField>
+                      <VideoLibraryOutlinedIcon />
+                      </DialogContent>
+                      <DialogContent>
                         {alertMessage.length > 0 ? (
                         <RedTextTypography>{alertMessage}</RedTextTypography>
                         ) : null}
-                    </DialogContent>
-                    <DialogActions>
+                      </DialogContent>
+                      <DialogActions>
                         <Button onClick={handleSubmit} color="primary">
                         Submit
                         </Button>
                         <Button onClick={handleClose} color="primary">
                         Cancel
                         </Button>
-                    </DialogActions>
-                </Dialog>
+                      </DialogActions>
+                  </Dialog>
+                </div>
             </div>
-        </div>
-        <Divider className={classes.divider} />
-      </div>
-      <div className={classes.videoGrid}>
-        {videoItems.length > 0 ? (
-          videoItems.map((item) => (
+            <Divider className={classes.divider} />
+          </div>
+          <div className={classes.videoGrid}>
+            {videoItems.length > 0 ? (
+            videoItems.map((item) => (
             renderVideoCard(item)
-          ))
-        ) : (
-          <Typography align="center" className={classes.noVideoHeader}>
-            There are currently no Videos!
-          </Typography>
-        )}
+            ))
+            ) : (
+            <Typography align="center" className={classes.noVideoHeader}>
+                There are currently no Videos!
+            </Typography>
+            )}
+          </div>
       </div>
-      </div>
-      
     </div>
     
   );

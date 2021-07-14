@@ -1,11 +1,9 @@
-import React, { Component, Fragment, useState, useEffect} from "react";
-import Grid from "@material-ui/core/Grid";
+import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
-import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import List from "@material-ui/core/List";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -13,60 +11,33 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
-
-import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import LocalLibraryOutlinedIcon from '@material-ui/icons/LocalLibraryOutlined';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
-    position: "absolute",
-    top: 130,
-    left: 300,
-    width: 1400,
+    display: "flex",
   },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
+  combine: {
+    display: "flex",
+    flexDirection: "column",
+    marginTop: 100,
+    marginLeft:200,
+    marginRight: "5%",
+    width: "100%"
   },
   divider: {
-    width: "85%",
+    width: "100%",
     height: 3,
-    marginTop: 15,
+    marginTop: 5,
     marginBottom: 10,
   },
-  profilePic: {
-    width: 200,
-    marginTop: 20,
-    borderRadius: 5,
-  },
-  info: {
-    marginTop: 3,
-    marginLeft: 15,
-    maxWidth: 1100,
-  },
-  category: {
-    fontSize: 22,
-    fontWeight: 700,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-  btn: {
-    backgroundColor: "#fcb040",
-    color: "#ffffff",
-    width: 180,
-    "&:hover": { background: "#e69113" },
-    marginLeft: 10,
-    borderRadius: 20,
-    marginBottom: 10,
-    marginTop: 10,
-  },
-  input: {
-    display: "none",
+  readingTitle: {
+    display: "flex",
+    justifyContent: "space-between"
   },
   pageTitle: {
     marginLeft: 10,
@@ -75,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     display: "inline",
   },
   uploadButton: {
-    //marginLeft: 800,
     marginBottom: "10px",
     width: 200,
   },
@@ -87,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 22,
   },
   assignmentCard: {
-    width: 1200,
+    // width: 1200,
   },
   cardBody: {
     marginBottom: 25,
@@ -106,8 +76,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12px",
     fontWeight: 400,
     marginTop: 8,
-    
-
   }
 }));
 
@@ -185,8 +153,6 @@ function ReadingsPage(prop: any) {
     setreadingItems(responseData);
   };
 
-  
-
     const renderReadings = (item: any) => {  // item is an object containing assignment data
     // call event handler in main and set state to the current assignment
     return(
@@ -196,7 +162,7 @@ function ReadingsPage(prop: any) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
+          <LocalLibraryOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
           <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
           <Typography className={classes.upload} style={{marginLeft: 600}} >Posted: {item.upload_date.substring(0,10)}</Typography>
         </AccordionSummary>
@@ -227,118 +193,105 @@ function ReadingsPage(prop: any) {
             </a>
         </AccordionDetails>
       </Accordion>
-      
-    
     ); 
-
-
-
-
   }
-
-  
 
   useEffect(() => {
     handleGet();
   }, []);
 
   return (
-    <div>
-      {handleGet}
-      <Navbar></Navbar>
-      <Grid container className={classes.root}>
-        <Grid item xs={12} container spacing={2}>
-          
-          <Grid>
-
-            <Typography variant="h4" className={classes.pageTitle}>
-              Readings
-            </Typography>
-           
-            
-              <Button
-                variant="outlined"
-                onClick={handleClickOpen}
-                className={classes.uploadButton}
-              >
-                Upload Readings
-              </Button>
-              
-              
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="form-dialog-title"
-              >
-                <DialogContent>
-                  <DialogContentText>
-                    Please fill in the following fields
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="title"
-                    name="title"
-                    label="title"
-                    type="text"
-                    fullWidth
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <TextField
-      
-                    margin="dense"
-                    id="description"
-                    name="description"
-                    label="description"
-                    type="text"
-                    fullWidth
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </DialogContent>
-
-                <DialogContent>
-                  <TextField
-                    type={"file"}
-                    name="readings"
-                    id="readings"
-                    label="readings"
-                    inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
-                    onChange={handleUploadedFile}
-                  ></TextField>
-                  <LocalLibraryIcon />
-                </DialogContent>
-                <DialogContent>
-                  {alertMessage.length > 0 ? (
-                    <RedTextTypography>{alertMessage}</RedTextTypography>
-                  ) : null}
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleSubmit} color="primary">
-                    Submit
+    <div className={classes.root}>
+      <div>
+          <Navbar></Navbar>
+      </div>
+      <div className={classes.combine}>
+          <div>
+            <div className={classes.readingTitle}>
+                <div>
+                  <Typography variant="h4" className={classes.pageTitle}>Readings</Typography>
+                </div>
+                <div>
+                  <Button
+                      variant="outlined"
+                      onClick={handleClickOpen}
+                      className={classes.uploadButton}
+                      >
+                  Upload Readings
                   </Button>
-                  <Button onClick={handleClose} color="primary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            
-          </Grid>
-        </Grid>
-
-        <Divider className={classes.divider} />
-        <List component="nav" aria-labelledby="readingList">
-          {readingItems.length > 0 ?  readingItems.map((item) => (
-      renderReadings(item)
-    )) : ( 
-            <Typography align="center" className={classes.noAssignmentHeader}>
-              There are currently no Readings!
-            </Typography>
-          )}
-        </List>
-      </Grid>
+                  <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title"
+                      >
+                      <DialogContent>
+                        <DialogContentText>
+                            Please fill in the following fields
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="title"
+                            name="title"
+                            label="title"
+                            type="text"
+                            fullWidth
+                            onChange={(e) =>
+                        setTitle(e.target.value)}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="description"
+                            name="description"
+                            label="description"
+                            type="text"
+                            fullWidth
+                            onChange={(e) =>
+                            setDescription(e.target.value)}
+                            />
+                      </DialogContent>
+                      <DialogContent>
+                      <TextField
+                      type={"file"}
+                      name="readings"
+                      id="readings"
+                      label="readings"
+                      inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
+                      onChange={handleUploadedFile}
+                      ></TextField>
+                      <LocalLibraryOutlinedIcon />
+                      </DialogContent>
+                      <DialogContent>
+                        {alertMessage.length > 0 ? (
+                        <RedTextTypography>{alertMessage}</RedTextTypography>
+                        ) : null}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleSubmit} color="primary">
+                        Submit
+                        </Button>
+                        <Button onClick={handleClose} color="primary">
+                        Cancel
+                        </Button>
+                      </DialogActions>
+                  </Dialog>
+                </div>
+            </div>
+            <Divider className={classes.divider} />
+          </div>
+          <div>
+            <List component="nav" aria-labelledby="readingList">
+                {readingItems.length > 0 ?  readingItems.map((item) => (
+                renderReadings(item)
+                )) : ( 
+                <Typography align="center" className={classes.noAssignmentHeader}>
+                  There are currently no Readings!
+                </Typography>
+                )}
+            </List>
+          </div>
+      </div>
     </div>
-
-    
   );
 }
 
