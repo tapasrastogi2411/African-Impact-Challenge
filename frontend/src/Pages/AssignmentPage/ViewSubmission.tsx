@@ -58,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
         objectPosition: 'left top',
         marginRight: 180,
         borderRadius: "10px",
-        padding: "5px",
         boxShadow: "0px 0px 16px",
         // overflowY: 'auto'
       },
