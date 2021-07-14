@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { Switch, Route, useLocation, useHistory, Redirect } from "react-router-dom";
 import AssignmentPageTeacherView from './AssignmentPageTeacherView';
 import AssignmentPageEntrepreneurView from './AssignmentPageEntrepreneurView';
+import ViewSubmission from './ViewSubmission';
 import Navbar from "../../NavBar/Navbar";
 
 
@@ -45,6 +46,7 @@ export default function AssignmentPageRouter(props: any) {
                 
                     <Route exact path="/assignments/teacher" render={() => <AssignmentPageTeacherView  />}  />
                     <Route exact path="/assignments/entrepreneur" render={() => <AssignmentPageEntrepreneurView   />}  />
+                    <Route exact path="/assignments/entrepreneur/submission" render={() => <ViewSubmission   />}  />
                     <Route exact path="/assignments">
                         {
                             userRole == "Teacher" ? <Redirect  to="/assignments/teacher" />  : <Redirect  to="/assignments/entrepreneur" /> 

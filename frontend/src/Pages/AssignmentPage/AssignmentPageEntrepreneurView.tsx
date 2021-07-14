@@ -395,11 +395,6 @@ function AssignmentPageEntrepreneurView(prop: any) {
 
   useEffect(() => {
     handleGet();
-    // initialize timer
-    /* setInterval(() => {
-      console.log("hello");
-    }, 5000); */
-    //setTimeout(checkDeadline() as any, 2000);
   }, []);
 
   return (
