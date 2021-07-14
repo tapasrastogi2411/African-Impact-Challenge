@@ -83,10 +83,23 @@ export default function PeoplePage(props: any) {
         setPartners(responseData)
     }
 
+    const fetchStartups = async() => {
+        const response = await fetch('http://localhost:8080/api/profile/getStartups',
+        {
+            method: "GET",
+            credentials: "include",
+            mode: "cors"
+        })
+
+        const responseData = await response.json()
+        setStartups(responseData)
+    }
+
     useEffect(() => {
         fetchInstructors()
         fetchEntrepreneurs()
         fetchPartners()
+        fetchStartups()
     }, [])
 
     return (
@@ -99,7 +112,7 @@ export default function PeoplePage(props: any) {
                             Instructors
                     </Typography>
                         <List >
-                            {instructors.length > 0 && instructors.map(item => <UserItem name={item}/>)}
+                            {instructors.length > 0 && instructors.map(item => <UserItem name={`${item['first_name']} ${item['last_name']}`}/>)}
                         </List>
                     </Grid>
                 </Grid>
@@ -109,7 +122,7 @@ export default function PeoplePage(props: any) {
                             Partners
                     </Typography>
                         <List >
-                            {partners.length > 0 && partners.map(item => <UserItem name={item}/>)}
+                            {partners.length > 0 && partners.map(item => <UserItem name={`${item['first_name']} ${item['last_name']}`}/>)}
                         </List>
                     </Grid>
                 </Grid>
@@ -119,7 +132,7 @@ export default function PeoplePage(props: any) {
                             Entrepreneurs
                     </Typography>
                         <List >
-                            {entrepreneurs.length > 0 && entrepreneurs.map(item => <UserItem name={item}/>)}
+                            {entrepreneurs.length > 0 && entrepreneurs.map(item => <UserItem name={`${item['first_name']} ${item['last_name']}`}/>)}
                         </List>
                     </Grid>
                 </Grid>
@@ -129,11 +142,7 @@ export default function PeoplePage(props: any) {
                             Startups
                     </Typography>
                         <List >
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
-                            <UserItem />
+                            {startups.length > 0 && startups.map(item => <UserItem name={`${item['name']}`}/>)}
                         </List>
                     </Grid>
                 </Grid>
