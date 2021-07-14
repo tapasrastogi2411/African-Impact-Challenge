@@ -146,11 +146,11 @@ const LightTooltip = withStyles((theme) => ({
 
 
 function parseDeadline(deadline: string) {
-  console.log(deadline);
+  //console.log(deadline);
   let datetime = new Date(deadline).toString().split(' ', 5);
   let time = new Date(deadline).toLocaleTimeString('en-US');
   datetime[4] = time;
-  console.log(datetime);
+  //console.log(datetime);
   let datetimeString = "";
   for (let i = 0; i < datetime.length; i++) {
     datetimeString += datetime[i] + " ";
@@ -196,8 +196,6 @@ function AssignmentPageEntrepreneurView(prop: any) {
   const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
-    let tmp:any = assignment;
-    console.log(tmp);
     setOpen(true);
   };
 
@@ -215,7 +213,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
     setAlertMessage(e);
   };
   const handleSubmit = async (e: any) => { // upload selected file to the server
-    console.log(file);
+    //console.log(file);
     if (file.name == "") {
       handleAlert("Please select a file");
       return false;
@@ -263,7 +261,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
       if (response.status > 300 || response.status < 200) {
         throw responseData;
       }
-      console.log(responseData);
+      //console.log(responseData);
       setAssignmentItems(responseData);
 
     } catch (err) {

@@ -146,11 +146,11 @@ function getCurrentDateTime(){
 // 2021-07-14T03:38:31.000Z
 //["Tue", "Jul", "13", "2021", "11:38:31 PM"]
 function parseDeadline(deadline: string) {
-    console.log(deadline);
+    //console.log(deadline);
     let datetime = new Date(deadline).toString().split(' ', 5);
     let time = new Date(deadline).toLocaleTimeString('en-US');
     datetime[4] = time;
-    console.log(datetime);
+    //console.log(datetime);
     let datetimeString = "";
     for (let i = 0; i < datetime.length; i++) {
       datetimeString += datetime[i] + " ";
@@ -370,7 +370,7 @@ function AssignmentPage(prop: any) {
                       shrink: true,
                     }}
                     onChange={(e) => {
-                      console.log((e.target as any).value);
+                      // console.log((e.target as any).value);
                       setDeadline((e.target as any).value);
                       }
                     }
