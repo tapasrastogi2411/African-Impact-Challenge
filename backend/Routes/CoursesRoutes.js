@@ -128,13 +128,19 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
 });
 
 
-
+// 2017-05-27T10:30
 router.post('/upload/assignment/teacher', function (req, res) { 
-    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
-    let totalMarks = 0; // update when feature is implemented
-    var query = "INSERT INTO post_schema.PostAssignment VALUES ($1, $2)";
+    console.log("In teacher route");
 
-    db.query(query, [filePath, totalMarks])
+    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    let totalMarks = req.body.totalMarks;
+    let deadline = req.body.deadline.replace("T", " ");
+    console.log(deadline);
+    var query = "INSERT INTO post_schema.PostAssignment VALUES ($1, $2, $3)";
+
+    console.log("In teacher route");
+
+    db.query(query, [filePath, totalMarks, deadline])
     .then(result => {
         //console.log("Assignment stored in PostAssignment");
         res.status(200).end();
@@ -165,10 +171,10 @@ router.post('/upload/assignment/entrepreneur',  function (req, res) {
             + currentdate.getMinutes() + ":" 
             + currentdate.getSeconds();
 
-    console.log(submissionPath);
-    console.log(assignmentPath);
-    console.log(req.session.username);
-    console.log("In entrepreneur route");
+    //console.log(submissionPath);
+    //console.log(assignmentPath);
+    //console.log(req.session.username);
+    //console.log("In entrepreneur route");
 
     let getUserPrevSubmission = "SELECT sa.submission_file_path as file_path FROM post_schema.submitassignment sa where sa.submission_user = $1 AND sa.assignment_file_path = $2  ";
     let deleteQuerySubmitAssignment = "DELETE FROM post_schema.submitassignment sa WHERE sa.submission_user = $1 AND sa.assignment_file_path = $2";
@@ -184,8 +190,8 @@ router.post('/upload/assignment/entrepreneur',  function (req, res) {
         } else {
             prevSubmissionFilePath = "";
         }
-        console.log("In P1");
-        console.log(prevSubmissionFilePath);
+        //console.log("In P1");
+        //console.log(prevSubmissionFilePath);
         return db.query(deleteQueryPostFile, [prevSubmissionFilePath])
     })
     .then(result => {
