@@ -61,6 +61,7 @@ function Appbar(props: any) {
     function logoutUser() {
         fetch('http://localhost:8080/api/profile/logout', {
             method: 'GET', 
+            credentials: 'include',
         })
         .then(() => {
             onSuccess();
