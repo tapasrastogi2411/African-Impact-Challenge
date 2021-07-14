@@ -1,11 +1,9 @@
 import React, { Component, Fragment, useState, useEffect} from "react";
 import SignIn from "../UserProfile/LogIn";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import { Avatar, Divider, Toolbar, TextareaAutosize, Grid, Button, Typography } from "@material-ui/core";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Avatar, Divider, Toolbar } from "@material-ui/core";
+
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import List from "@material-ui/core/List";
 import Dialog from "@material-ui/core/Dialog";
@@ -107,8 +105,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12px",
     fontWeight: 400,
     marginTop: 8,
-    
-
+  }, 
+  textArea: {
+    marginTop: 10,
+    marginBottom: 10
   }
 }));
 
@@ -124,6 +124,7 @@ function AssignmentPage(prop: any) {
   const [file, setFile] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [deadline, setDeadline] = React.useState("");
   const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
@@ -280,21 +281,35 @@ function AssignmentPage(prop: any) {
                     margin="dense"
                     id="title"
                     name="title"
-                    label="title"
+                    label="Title"
                     type="text"
                     fullWidth
                     onChange={(e) => setTitle(e.target.value)}
                   />
+                 
+                 
                   <TextField
-      
-                    margin="dense"
-                    id="description"
-                    name="description"
-                    label="description"
-                    type="text"
-                    fullWidth
-                    onChange={(e) => setDescription(e.target.value)}
+                    style={{marginTop: 10, marginBottom: 10}}
+                    id="datetime-local"
+                    label="Deadline"
+                    type="datetime-local"
+                    defaultValue="2017-05-24T10:30"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                   />
+
+                   <TextField
+                   
+                   label="Description"
+                   variant="outlined"
+                   fullWidth
+                   multiline
+                   className={classes.textArea}
+                   rows={2}
+                   rowsMax={4}
+                   onChange={(e) => setDescription(e.target.value)}
+                 />
                 </DialogContent>
 
                 <DialogContent>
@@ -302,11 +317,9 @@ function AssignmentPage(prop: any) {
                     type={"file"}
                     name="assignments"
                     id="assignments"
-                    label="assignments"
                     inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
                     onChange={handleUploadedFile}
                   ></TextField>
-                  <AssignmentIcon />
                 </DialogContent>
                 <DialogContent>
                   {alertMessage.length > 0 ? (
