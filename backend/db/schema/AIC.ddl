@@ -148,9 +148,9 @@ CREATE TABLE GradeAssignment (
 INSERT INTO PostCategory VALUES 
 (1, 'Reading'), 
 (2, 'Video'), 
-(3, 'Assignment')
+(3, 'Assignment');
 
 
 INSERT INTO profile_schema.aic_user VALUES
-('Aaron', '12345678', 2, null, 'Aaron', 'Jacob'), -- sample entrepreneur
-('Karen', '12345678', 1, null, 'Karen', 'Reid'); -- sample teacher
+('Aaron', '12345678', 2, null, 'Aaron', 'Jacob'), 
+('Karen', '12345678', 1, null, 'Karen', 'Reid'); 
