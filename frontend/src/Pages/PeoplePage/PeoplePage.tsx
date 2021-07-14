@@ -22,7 +22,7 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
   root: {
     position: "absolute",
     top: 120,
-    left: 230,
+    left: 232,
     width: 1400,
   },
   list: {
