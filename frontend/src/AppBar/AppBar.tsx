@@ -5,12 +5,16 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import InputIcon from "@material-ui/icons/Input";
+import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined';
+import LocalLibraryOutlinedIcon from '@material-ui/icons/LocalLibraryOutlined';
 
 import Logo from './LOGO.png'
 import { Link, useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            display: "flex",
+            justifyContent: "space-between",
             minHeight: 70,
             [theme.breakpoints.down("sm")]: {
                 paddingLeft: 8,
@@ -18,6 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
                 minHeight: 56,
             },
             marginLeft: 50,
+        },
+        link: {
+            textDecoration: "none",
         },
         mainAppBar: {
             background: "#FFFFFF",
@@ -31,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.down("sm")]: {
                 marginRight: 5,
             },
+            float: "left",
         },
         title: {
             color: "black",
@@ -38,9 +46,10 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.up("sm")]: {
                 display: "block",
             },
+            
         },
         btn: {
-            position: "absolute",
+            // position: "absolute",
             right: 40,
             color: "black"
         },
@@ -55,12 +64,19 @@ function Appbar(props: any) {
     const onSuccess = () => {
         history.push('/login')
     }
+    const videosPage = () => {
+        history.push('/test')
+    }
+    const readingsPage = () => {
+        history.push('/test2')
+    }
     const classes = useStyles();
 
     // session should be destroyed and user taken back to the login page
     function logoutUser() {
         fetch('http://localhost:8080/api/profile/logout', {
             method: 'GET', 
+            credentials: 'include',
         })
         .then(() => {
             onSuccess();
@@ -70,26 +86,34 @@ function Appbar(props: any) {
     return (
         <AppBar position="fixed" className={classes.mainAppBar}>
             <Toolbar className={classes.root}>
-                <Link to='/'>
-                <img src={Logo} className={classes.logo} />
-                </Link>
-                <Typography
-                    className={classes.title}
-                    variant="h6"
-                    noWrap
-                    >
-                    THE AFRICAN IMPACT CHALLENGE
-                </Typography>
-                <IconButton
-                    onClick={logoutUser}
-                    className={classes.btn}
-                    >
-                    <InputIcon />
-                    <Typography variant="button" noWrap className={classes.btnTxt}
+                <div style={{display: "flex", alignItems: "center"}}>
+                    <Link to='/' className={classes.link}>
+                    <img src={Logo} className={classes.logo}/>
+                    </Link>
+                    <Typography
+                        className={classes.title}
+                        variant="h6"
+                        noWrap
                         >
-                        Sign Out
+                        THE AFRICAN IMPACT CHALLENGE
                     </Typography>
-                </IconButton>
+                </div>
+            
+                <div>
+                    <IconButton onClick={videosPage} className={classes.btn}>
+                        <VideoLibraryOutlinedIcon />
+                        <Typography variant="button" noWrap className={classes.btnTxt}>Videos</Typography>
+                    </IconButton>
+                    <IconButton onClick={readingsPage} className={classes.btn}>
+                        <LocalLibraryOutlinedIcon />
+                        <Typography variant="button" noWrap className={classes.btnTxt}>Readings</Typography>
+                    </IconButton>
+                    <IconButton onClick={logoutUser} className={classes.btn}>
+                        <InputIcon />
+                        <Typography variant="button" noWrap className={classes.btnTxt}>Sign Out</Typography>
+                    </IconButton>
+                </div>
+                
             </Toolbar>
         </AppBar>
     );

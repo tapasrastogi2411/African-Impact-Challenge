@@ -18,7 +18,7 @@ import { People } from "@material-ui/icons";
 import VideoPage from "./VideoPage/VideoPage";
 import ReadingsPage from "./ReadingsPage/ReadingsPage";
 import GuestVideoPage from "./GuestVideoPage/GuestVideoPage";
-
+import GuestReadingPage from "./GuestReadingPage/GuestReadingPage";
 
 
 // const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
@@ -81,7 +81,10 @@ export default function Pages(props: any) {
                 <Route exact path="/people" component={PeoplePage} />
                 <Route exact path="/videos" component={VideoPage} />
                 <Route exact path="/readings" component={ReadingsPage} />
-                <Route exact path="/test" component={GuestVideoPage} />     
+
+
+                <Route exact path="/test" component={GuestVideoPage} />    
+                <Route exact path="/test2" component={GuestReadingPage} />   
                 {/* added this ^ */}
             </Switch>
         //</div>

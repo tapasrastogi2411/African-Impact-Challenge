@@ -281,7 +281,7 @@ router.post('/login/', async function (req, res) {
 })
 
 router.put('/update/', auth, function (req, res) {
-    if (!req.session.username) return res.status(400).end("Forbidden");
+    //if (!req.session.username) return res.status(400).send("Forbidden");
     var whitelist = ["first_name", "last_name", "email", "phone_number", "country", "address"];
     var data = JSON.parse(JSON.stringify(req.body, whitelist));
     var updateString = Object.keys(data).map(key => `${key} = '${data[key]}'`).join(", ");

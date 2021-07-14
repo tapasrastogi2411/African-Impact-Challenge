@@ -7,13 +7,24 @@ var upload = require('../Middleware/upload');
 
 
 // Route for gettings the `Readings`
-router.get('/getReadings', auth, async (req, res) => {
+router.get('/getReadings', async (req, res) => {
     try{
 
-        let query = `SELECT file_path FROM post_schema.postfile WHERE category=1 ORDER BY upload_date DESC`;
+        let query = `SELECT * FROM post_schema.postfile WHERE category=1 ORDER BY upload_date DESC`;
         const result = await db.query(query);
-        const filePaths = result.rows.map(row => row.file_path);
-        return res.status(200).json({file_paths: filePaths});
+        //const filePaths = result.rows.map(row => row.file_path);
+        var fileArray = result.rows;
+        for (obj of fileArray) {
+            if (obj['description'] == "") {
+                obj['description'] = "Description not provided";
+            }
+            if (obj['upload_user'] == "") {
+                obj['upload_user'] = "Unknown";
+            }
+        }
+       
+        console.log(fileArray);
+        return res.status(200).json(fileArray);
     }
 
     catch(err){
@@ -23,13 +34,14 @@ router.get('/getReadings', auth, async (req, res) => {
 });
 
 // Route for getting the `Videos`
-router.get('/getVideos', auth, async (req, res) => {
+router.get('/getVideos', async (req, res) => {
     try{
-
-        let query = `SELECT file_path FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
+        let query = `SELECT file_path, upload_user FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
         const result = await db.query(query);
-        const filePaths = result.rows.map(row => row.file_path);
-        return res.status(200).json({file_paths: filePaths});
+        // const filePaths = result.rows.map(row => row.file_path);
+        var fileArray = result.rows;
+        console.log(fileArray);
+        return res.status(200).json(fileArray);
     }
 
     catch(err){
@@ -66,7 +78,7 @@ router.get('/getAssignments', auth, async (req, res) => {
 });
 
 router.post('/upload', auth, upload.any(), function (req, res) { 
-    req.session.username = "Aaron JACOB"; //uncomment this for testing
+    //req.session.username = "Aaron JACOB"; //uncomment this for testing
 
     if(req.files.length === 0) {
         return res.status(400).end();
@@ -86,6 +98,7 @@ router.post('/upload', auth, upload.any(), function (req, res) {
     var category;
     if (fieldName === 'readings') {
         category = 1;
+        title = req.body.title;
     } else if (fieldName === 'videos') {
         category = 2;
     } else if (fieldName === 'assignments') {

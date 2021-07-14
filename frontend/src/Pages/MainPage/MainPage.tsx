@@ -107,8 +107,7 @@ function MainPage(props: any) {
             
             <div>
                 <img src={pic} className={classes.pic}></img>
-            </div>
-            
+            </div>            
         </div >
     );
 }
