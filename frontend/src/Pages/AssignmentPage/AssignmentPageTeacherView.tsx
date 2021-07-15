@@ -1,11 +1,9 @@
 import React, { Component, Fragment, useState, useEffect} from "react";
 import SignIn from "../UserProfile/LogIn";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import { Avatar, Divider, Toolbar, TextareaAutosize, Grid, Button, Typography } from "@material-ui/core";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Avatar, Divider, Toolbar } from "@material-ui/core";
+
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import List from "@material-ui/core/List";
 import Dialog from "@material-ui/core/Dialog";
@@ -37,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     width: "85%",
     height: 3,
     marginTop: 15,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   profilePic: {
     width: 200,
@@ -71,12 +69,20 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     marginLeft: 10,
-    marginRight: 790,
+    marginRight: 712,
     marginTop: 40,
     display: "inline",
   },
   uploadButton: {
     //marginLeft: 800,
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
     marginBottom: "10px",
     width: 200,
   },
@@ -107,9 +113,24 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12px",
     fontWeight: 400,
     marginTop: 8,
-    
-
-  }
+  }, 
+  textArea: {
+    marginTop: 10,
+    marginBottom: 10
+  },
+  viewSubmissionsBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 180,
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
+    marginRight: 30,
+    marginBottom: 20,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+  },
 }));
 
 const RedTextTypography = withStyles({
@@ -118,14 +139,70 @@ const RedTextTypography = withStyles({
   },
 })(Typography);
 
+
+
+
+function getCurrentDateTime(){
+
+  var currentdate = new Date(); 
+  var datetime = [currentdate.getFullYear(), (currentdate.getMonth()+1), currentdate.getDate(), 
+                  currentdate.getHours(),currentdate.getMinutes(), currentdate.getSeconds()];
+  for (let i = 0; i < datetime.length; i++) {
+    if (datetime[i] >= 0 && datetime[i] < 10 ) {
+      datetime[i] = ('0' + datetime[i]) as any ;
+    }
+  }
+
+  datetime = (datetime[0] + "-" 
+          + datetime[1] + "-"
+          + datetime[2] + "T"
+          + datetime[3] + ":"  
+          + datetime[4] + ":" 
+          + datetime[5]) as any;
+
+  return datetime;
+  
+}
+
+// 2021-07-14T03:38:31.000Z
+//["Tue", "Jul", "13", "2021", "11:38:31 PM"]
+function parseDeadline(deadline: string) {
+    //console.log(deadline);
+    let datetime = new Date(deadline).toString().split(' ', 5);
+    let time = new Date(deadline).toLocaleTimeString('en-US');
+    datetime[4] = time;
+    //console.log(datetime);
+    let datetimeString = "";
+    for (let i = 0; i < datetime.length; i++) {
+      datetimeString += datetime[i] + " ";
+    }
+    return datetimeString;
+}
+
+function ViewSubmissions(props: any) {
+  const classes = useStyles();
+  return <Button variant="contained" className={classes.viewSubmissionsBtn} onClick={props.openHandler} >View Submissions</Button>
+}
+
+
+
 function AssignmentPage(prop: any) {
+  
+  
+  var currentdate = getCurrentDateTime() as any;
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [totalMarks, setTotalMarks] = React.useState(0);
+  const [deadline, setDeadline] = React.useState(currentdate);
   const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
   const [alertMessage, setAlertMessage] = React.useState("");
+
+  
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -146,8 +223,10 @@ function AssignmentPage(prop: any) {
     formData.append("assignments", file);
     formData.append("title", title);
     formData.append("description", description);
+    formData.append("totalMarks", totalMarks as any);
+    formData.append("deadline", deadline);
 
-    const response = await fetch("http://localhost:8080/api/course/upload", {
+    const response = await fetch("http://localhost:8080/api/course/upload/assignment/teacher/", {
       method: "POST",
       body: formData,
       credentials: 'include',
@@ -199,14 +278,13 @@ function AssignmentPage(prop: any) {
         >
           <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 8}} /> 
           <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
-          <Typography className={classes.upload} style={{marginLeft: 600}} >Posted: {item.upload_date.substring(0,10)}</Typography>
+          <Typography className={classes.upload} style={{marginLeft: 600}} >Due: {parseDeadline(item.deadline)}</Typography>
         </AccordionSummary>
         
         <AccordionDetails style={{flexDirection: "column"}} >
           <div style={{flexBasis: "33.33%"}}>
-
-            <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
-              Created by {item.upload_user}
+          <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 14}}>
+              Posted: {item.upload_date.substring(0,10)}
             </Typography>
           </div>
 
@@ -216,16 +294,34 @@ function AssignmentPage(prop: any) {
             </Typography>
           </div>
           <Divider style={{marginBottom: "20px"}}/>
-          <Typography variant="body2" style={{marginBottom: 10}}>
-              Download File
-            </Typography>
-          
-          <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
-          <Typography variant="body2" >
-            {parseItem(item)}
-            </Typography>
+          <Grid container direction="row" justify="space-between"> 
+
+            <Grid item>
+                <Grid container direction="column"> 
+                    <Grid item>   
+                        <Typography variant="body2" style={{marginBottom: 10}}>
+                            Download File
+                        </Typography>
+                    </Grid>
+
+                    <Grid item>
+                        <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+                            <Typography variant="body2" >
+                                {parseItem(item)}
+                            </Typography>
+                        </a>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <Grid item> 
+              <Button variant="contained" className={classes.viewSubmissionsBtn} onClick={prop.openHandler} >View Submissions</Button>
+            </Grid>
+
             
-            </a>
+              {/* {renderButtons(index)} */}
+            
+        </Grid>
         </AccordionDetails>
       </Accordion>
       
@@ -243,6 +339,7 @@ function AssignmentPage(prop: any) {
     handleGet();
   }, []);
 
+
   return (
     <div>
       {handleGet}
@@ -253,12 +350,12 @@ function AssignmentPage(prop: any) {
           <Grid>
 
             <Typography variant="h4" className={classes.pageTitle}>
-              Assignments
+              Your Assignments
             </Typography>
            
             
               <Button
-                variant="outlined"
+                variant="contained"
                 onClick={handleClickOpen}
                 className={classes.uploadButton}
               >
@@ -280,21 +377,56 @@ function AssignmentPage(prop: any) {
                     margin="dense"
                     id="title"
                     name="title"
-                    label="title"
+                    label="Title"
                     type="text"
                     fullWidth
                     onChange={(e) => setTitle(e.target.value)}
                   />
+
                   <TextField
-      
+                    
                     margin="dense"
-                    id="description"
-                    name="description"
-                    label="description"
-                    type="text"
-                    fullWidth
-                    onChange={(e) => setDescription(e.target.value)}
+                    id="totalMarks"
+                    name="totalMarks"
+                    label="Total Marks"
+                    type="number"
+                    variant="standard"
+                    defaultValue={0}
+                    inputProps={{min: "0"}}
+                    style={{marginRight: 40, marginTop: 11, width: 100}}
+                    onChange={(e) => {
+                      setTotalMarks((e.target as any).value);
+                      }
+                    }
                   />
+                 
+                 
+                  <TextField
+                    style={{marginTop: 10, marginBottom: 10}}
+                    id="datetime-local"
+                    label="Deadline"
+                    type="datetime-local"
+                    defaultValue={currentdate}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(e) => {
+                      // console.log((e.target as any).value);
+                      setDeadline((e.target as any).value);
+                      }
+                    }
+                  />
+
+                   <TextField
+                   label="Description"
+                   variant="outlined"
+                   fullWidth
+                   multiline
+                   className={classes.textArea}
+                   rows={2}
+                   rowsMax={4}
+                   onChange={(e) => setDescription(e.target.value)}
+                 />
                 </DialogContent>
 
                 <DialogContent>
@@ -302,11 +434,9 @@ function AssignmentPage(prop: any) {
                     type={"file"}
                     name="assignments"
                     id="assignments"
-                    label="assignments"
                     inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
                     onChange={handleUploadedFile}
                   ></TextField>
-                  <AssignmentIcon />
                 </DialogContent>
                 <DialogContent>
                   {alertMessage.length > 0 ? (
