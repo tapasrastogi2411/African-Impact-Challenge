@@ -26,7 +26,7 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
   root: {
     position: "absolute",
     top: 120,
-    left: 232,
+    left: 225,
     width: 1400,
   },
   list: {
@@ -124,7 +124,7 @@ export default function PeoplePage(props: any) {
         className={classes.root}
       >
         <Grid container xs={3}>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={5} md={10}>
             <Typography variant="h6" className={classes.txt}>
               Instructors
             </Typography>
@@ -157,7 +157,7 @@ export default function PeoplePage(props: any) {
           </Grid>
         </Grid>
         <Grid container xs={3}>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={5} md={10}>
             <Typography variant="h6" className={classes.txt}>
               Partners
             </Typography>
@@ -190,7 +190,7 @@ export default function PeoplePage(props: any) {
           </Grid>
         </Grid>
         <Grid container xs={3}>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={5} md={10}>
             <Typography variant="h6" className={classes.txt}>
               Entrepreneurs
             </Typography>
@@ -223,7 +223,7 @@ export default function PeoplePage(props: any) {
           </Grid>
         </Grid>
         <Grid container xs={3}>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={5} md={10}>
             <Typography variant="h6" className={classes.txt}>
               Startups
             </Typography>
