@@ -321,12 +321,29 @@ router.get('/logout', auth, function (req, res) {
 
 });
 
+/* Returns:
+- A list of entrepreneur objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured 
+
+note: an instructor object is of the form
+{
+    username: '',
+    password: '',
+    user_role: X, <- where X is of type int
+    honorifics: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone_number: '',
+    country: '',
+    address: ''
+} 
+*/
 router.get('/getEntrepreneurs', auth, async (req, res) => {
     try{
         let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=2'
         const result = await db.query(query)
-        const entrepreneurs = result.rows.map(row => `${row.first_name} ${row.last_name}`)
-        res.status(200).json(entrepreneurs)
+        res.status(200).json(result.rows)
     }
     catch(err){
         // print the error and return a 500
@@ -335,12 +352,15 @@ router.get('/getEntrepreneurs', auth, async (req, res) => {
     }
 });
 
+
+/* Returns:
+- A list of instructor objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured */
 router.get('/getInstructors', auth, async(req,res) => {
     try{
         let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=1'
         const result = await db.query(query)
-        const instructors = result.rows.map(row => `${row.first_name} ${row.last_name}`)
-        res.status(200).json(instructors)
+        res.status(200).json(result.rows)
     }
     catch(err){
         // print the error and return a 500
@@ -349,12 +369,15 @@ router.get('/getInstructors', auth, async(req,res) => {
     }
 });
 
+
+/* Returns:
+- A list of partner objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured */
 router.get('/getPartners', auth, async(req, res) => {
     try{
         let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=3'
         const result = await db.query(query)
-        const partners = result.rows.map(row => `${row.first_name} ${row.last_name}`)
-        res.status(200).json(partners)
+        res.status(200).json(result.rows)
     }
     catch(err){
         // print the error and return a 500
@@ -363,12 +386,15 @@ router.get('/getPartners', auth, async(req, res) => {
     }
 });
 
+
+/* Returns:
+- A list of startup objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured */
 router.get('/getStartups', auth, async(req, res) => {
     try{
         let query = 'SELECT name FROM profile_schema.company'
         const result = await db.query(query)
-        const startups = result.rows.map(row => `${row.name}`)
-        res.status(200).json({'startups': startups})
+        res.status(200).json(result.rows)
     }
     catch(err){
         // print the error and return a 500

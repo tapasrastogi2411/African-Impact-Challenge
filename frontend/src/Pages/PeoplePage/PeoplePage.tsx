@@ -84,14 +84,28 @@ export default function PeoplePage(props: any) {
       }
     );
 
+
     const responseData = await response.json();
     setPartners(responseData);
   };
 
+  const fetchStartups = async() => {
+        const response = await fetch('http://localhost:8080/api/profile/getStartups',
+        {
+            method: "GET",
+            credentials: "include",
+            mode: "cors"
+        })
+
+        const responseData = await response.json()
+        setStartups(responseData)
+    }
+  
   useEffect(() => {
     fetchInstructors();
     fetchEntrepreneurs();
     fetchPartners();
+    fetchStartups()
   }, []);
 
   return (
@@ -209,4 +223,3 @@ export default function PeoplePage(props: any) {
       </Grid>
     </div>
   );
-}
