@@ -14,6 +14,12 @@ import { Controller, useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import CountrySelect from  './countries';
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
+    root: {
+        marginTop: 240,
+        [theme.breakpoints.down('lg')]: {
+            marginTop: 145,
+        },
+    },
     fst: {
         paddingLeft: 147
     },
@@ -336,7 +342,7 @@ export default function SignUp(props: any) {
    
 
     return (
-        <Container component="main" maxWidth="md">
+        <Container component="main" maxWidth="md" className={classes.root}>
 
             <div className={classes.fst}>
                 <Typography variant="h5" className={classes.text}>
