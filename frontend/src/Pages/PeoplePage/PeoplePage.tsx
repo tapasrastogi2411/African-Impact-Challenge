@@ -16,8 +16,12 @@ import {
 import Navbar from "../../NavBar/Navbar";
 import List from "@material-ui/core/List";
 import UserItem from "./UserItem";
-import { Accordion, AccordionSummary, Divider } from "@material-ui/core";
+import { Accordion, AccordionSummary, Divider, ListItem } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { textSpanIsEmpty } from "typescript";
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -84,28 +88,29 @@ export default function PeoplePage(props: any) {
       }
     );
 
-
     const responseData = await response.json();
     setPartners(responseData);
   };
 
-  const fetchStartups = async() => {
-        const response = await fetch('http://localhost:8080/api/profile/getStartups',
-        {
-            method: "GET",
-            credentials: "include",
-            mode: "cors"
-        })
+  const fetchStartups = async () => {
+    const response = await fetch(
+      "http://localhost:8080/api/profile/getStartups",
+      {
+        method: "GET",
+        credentials: "include",
+        mode: "cors",
+      }
+    );
 
-        const responseData = await response.json()
-        setStartups(responseData)
-    }
-  
+    const responseData = await response.json();
+    setStartups(responseData);
+  };
+
   useEffect(() => {
     fetchInstructors();
     fetchEntrepreneurs();
     fetchPartners();
-    fetchStartups()
+    fetchStartups();
   }, []);
 
   return (
@@ -133,7 +138,15 @@ export default function PeoplePage(props: any) {
               </AccordionSummary>
               <List>
                 {instructors.length > 0 ? (
-                  instructors.map((item) => <UserItem name={item}> </UserItem>)
+                  instructors.map((item) => (
+                    <UserItem
+                      name={`${item["first_name"]} ${item["last_name"]}`}
+                      object={item}
+                      peopleProps={props}
+                    >
+                      {" "}
+                    </UserItem>
+                  ))
                 ) : (
                   <Typography align="center">
                     There are currently no Instructors!
@@ -158,7 +171,13 @@ export default function PeoplePage(props: any) {
               </AccordionSummary>
               <List>
                 {partners.length > 0 ? (
-                  partners.map((item) => <UserItem name={item}> </UserItem>)
+                  partners.map((item) => (
+                    <UserItem
+                      name={`${item["first_name"]} ${item["last_name"]}`}
+                    >
+                      {" "}
+                    </UserItem>
+                  ))
                 ) : (
                   <Typography align="center">
                     There are currently no Partners!
@@ -184,7 +203,11 @@ export default function PeoplePage(props: any) {
               <List>
                 {entrepreneurs.length > 0 ? (
                   entrepreneurs.map((item) => (
-                    <UserItem name={item}> </UserItem>
+                    <UserItem
+                      name={`${item["first_name"]} ${item["last_name"]}`}
+                    >
+                      {" "}
+                    </UserItem>
                   ))
                 ) : (
                   <Typography align="center">
@@ -210,7 +233,17 @@ export default function PeoplePage(props: any) {
               </AccordionSummary>
               <List>
                 {startups.length > 0 ? (
-                  startups.map((item) => <UserItem name={item}> </UserItem>)
+                  startups.map((item) => (
+                  <ListItem button onClick={() => props.changeViewComapnyData(item)} component={RouterLink} to="/viewCompany" >
+                    <ListItemAvatar>
+                    <Avatar
+                      src='/ProfilePage/profilepic.jpeg'
+                    />
+                    </ListItemAvatar>
+                  <ListItemText primary={`${item["company_name"]}`}/>
+                  </ListItem>
+
+                  ))
                 ) : (
                   <Typography align="center">
                     There are currently no Startups!
@@ -223,3 +256,4 @@ export default function PeoplePage(props: any) {
       </Grid>
     </div>
   );
+}
