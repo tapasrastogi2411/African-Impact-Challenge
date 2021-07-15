@@ -8,7 +8,7 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Toolbar } from "@material-ui/core";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import AssignmentIcon from "@material-ui/icons/Assignment";
+import videoIcon from "@material-ui/icons/video";
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -18,7 +18,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import videoOutlinedIcon from '@material-ui/icons/videoOutlined';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 22,
   },
 
-  assignmentCard: {
+  videoCard: {
     width: 800,
   },
   cardBody: {
@@ -116,7 +116,7 @@ function VideoPage(prop: any) {
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [videoItems, setVideoItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
@@ -161,7 +161,7 @@ function VideoPage(prop: any) {
     //config vid src
 
     return (
-      <Accordion className={classes.assignmentCard}>
+      <Accordion className={classes.videoCard}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -173,7 +173,7 @@ function VideoPage(prop: any) {
         <AccordionDetails style={{ flexDirection: "column" }} >
           <div style={{ flexBasis: "33.33%", marginRight: 20, marginLeft: 35 }} >
             <video width="533" height="300" controls>
-              <source src={"http://localhost:8080" + item} type="video/mp4" />
+              <source src={"http://localhost:8080" + item.file_path} type="video/mp4" />
             </video>
           </div>
           <div style={{ flexBasis: "33.33%" }}>
@@ -203,7 +203,7 @@ function VideoPage(prop: any) {
       throw responseData;
     }
 
-    setAssignmentItems(responseData.file_paths);
+    setVideoItems(responseData.file_paths);
   };
 
   useEffect(() => {
@@ -279,8 +279,8 @@ function VideoPage(prop: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-        {assignmentItems.length > 0 ? (
-          assignmentItems.map((item) => (
+        {videoItems.length > 0 ? (
+          videoItems.map((item) => (
             renderVideos(item)
           ))
         ) : (
@@ -289,7 +289,7 @@ function VideoPage(prop: any) {
             </Typography>
           )}
 
-        {/* <Accordion className={classes.assignmentCard}>
+        {/* <Accordion className={classes.videoCard}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"

@@ -82,13 +82,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 22,
   },
 
-  assignmentHeader: {
+ 
+  noreadingHeader: {
     fontSize: 22,
   },
-  noAssignmentHeader: {
-    fontSize: 22,
-  },
-  assignmentCard: {
+  readingCard: {
     width: 800,
   },
   cardBody: {
@@ -117,7 +115,7 @@ function ReadingPage(prop: any) {
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [readingItems, setreadingItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
@@ -164,10 +162,10 @@ function ReadingPage(prop: any) {
     return filePath.substring(filePath.indexOf('_') + 1, filePath.length)
   };
 
-  const renderReadings = (item: any) => {  // item is an object containing assignment data
-    // call event handler in main and set state to the current assignment
+  const renderReadings = (item: any) => {  // item is an object containing reading data
+    // call event handler in main and set state to the current reading
     return (
-      <Accordion className={classes.assignmentCard}>
+      <Accordion className={classes.readingCard}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -232,7 +230,7 @@ function ReadingPage(prop: any) {
       throw responseData;
     }
 
-    setAssignmentItems(responseData.file_paths);
+    setreadingItems(responseData.file_paths);
   };
 
   useEffect(() => {
@@ -308,8 +306,8 @@ function ReadingPage(prop: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-        {assignmentItems.length > 0 ? (
-          assignmentItems.map((item) => (
+        {readingItems.length > 0 ? (
+          readingItems.map((item) => (
             renderReadings(item)
           ))
         ) : (
@@ -318,7 +316,7 @@ function ReadingPage(prop: any) {
             </Typography>
           )}
 
-        {/* <Accordion className={classes.assignmentCard}>
+        {/* <Accordion className={classes.readingCard}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
