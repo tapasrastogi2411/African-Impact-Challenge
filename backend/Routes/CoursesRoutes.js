@@ -78,6 +78,39 @@ router.get('/getAssignments', auth, async (req, res) => {
     }
 });
 
+/**
+ *  create view CompanyFiles as 
+ *  select cf.file_path
+ *  from 
+ *  (select company_name
+ *      from works_for
+ *      where username= $1
+ *      ) as cn join CompanyFile cf on (cn.company_name = cf.company_name);
+ * 
+ *  select *
+ *  from CompanyFiles cf join PostFile pf on (cf.file_path=pf.file_path);
+ */ 
+router.get('/getCompanyFiles', function (req, res) { 
+    console.log("In getCompanyFiles route");
+
+    let getFilesQuery = "create view CompanyFiles as " +
+                        "select cf.file_path " +
+                        "from (select company_name from works_for where username= $1 ) as cn join CompanyFile cf on (cn.company_name = cf.company_name)"   
+
+    console.log("In getCompanyFiles route");
+
+    db.query(query, [filePath, totalMarks, deadline])
+    .then(result => {
+        //console.log("Assignment stored in PostAssignment");
+        res.status(200).end();
+    })
+    .catch(e => {
+        console.error(e.stack);
+        res.status(500).end();
+    })
+});
+
+
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
     //req.session.username = "Aaron"; //uncomment this for testing
 
@@ -103,6 +136,8 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
         category = 2;
     } else if (fieldName === 'assignments') {
         category = 3;
+    } else if (fieldName === 'company') {
+        category = 4;
     } 
 
     var postfileSchema = "(file_path, category, upload_date, upload_user, title, description)";
@@ -123,6 +158,53 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
             res.status(500).end();
         })
 });
+
+
+// /upload is already authenticated so no need to reauthenticate
+/**
+ *  create view CompanyFiles as 
+ *  select cf.file_path
+ *  (select company_name
+ *      from works_for
+ *      where username= $1
+ *      ) as cn join CompanyFile cf on (cn.company_name = cf.company_name);
+ * 
+ *  select *
+ *  from CompanyFiles cf join PostFile pf on (cf.file_path=pf.file_path);
+ * 
+ * 
+ *  select company_name
+ *  from works_for
+ *  where username= $1
+ * 
+ * 
+ */
+router.post('/upload/companyFile', function (req, res) { 
+    console.log("In uploadCompanyFile route");
+
+    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    let companyNameQuery =  "select company_name " +
+                            "from profile_schema.works_for " +
+                            "where username=$1 ";
+
+    let insertFile =  "INSERT INTO post_schema.CompanyFile VALUES ($1, $2)";
+    db.query(companyNameQuery, [req.session.username])
+    .then(pgRes => {
+        //console.log("Assignment stored in PostAssignment");
+        let companyName = pgRes.rows[0].company_name;
+        return db.query(insertFile, [companyName, filePath]);
+    })
+    .then(pgRes => {
+        res.status(200).end();
+    })
+    .catch(e => {
+        console.error(e.stack);
+        res.status(500).end();
+    });
+                    
+});
+
+
 
 
 // 2017-05-27T10:30
