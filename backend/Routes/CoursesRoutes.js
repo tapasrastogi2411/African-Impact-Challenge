@@ -5,39 +5,39 @@ const db = require('../db');
 const path = require('path');
 var upload = require('../Middleware/upload');
 
-
-// Route for gettings the `Readings`
-router.get('/getReadings', auth, async (req, res) => {
+router.get('/getReadings', async (req, res) => {
     try{
-
-        let query = `SELECT file_path FROM post_schema.postfile WHERE category=1 ORDER BY upload_date DESC`;
+        let query = `SELECT * FROM post_schema.postfile WHERE category=1 ORDER BY upload_date DESC`;
         const result = await db.query(query);
-        const filePaths = result.rows.map(row => row.file_path);
-        return res.status(200).json({file_paths: filePaths});
+        var fileArray = result.rows;
+        for (obj of fileArray) {
+            if (obj['description'] == "") {
+                obj['description'] = "Description not provided";
+            }
+            if (obj['upload_user'] == "") {
+                obj['upload_user'] = "Unknown";
+            }
+        }
+        return res.status(200).json(fileArray);
     }
-
     catch(err){
         console.log(err)
         res.status(500).end('Server Error ...');
     }
 });
 
-// Route for getting the `Videos`
-router.get('/getVideos', auth, async (req, res) => {
+outer.get('/getVideos', async (req, res) => {
     try{
-
-        let query = `SELECT file_path FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
+        let query = `SELECT file_path, upload_user, title FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
         const result = await db.query(query);
-        const filePaths = result.rows.map(row => row.file_path);
-        return res.status(200).json({file_paths: filePaths});
+        var fileArray = result.rows;
+        return res.status(200).json(fileArray);
     }
-
     catch(err){
         console.log(err)
         res.status(500).end('Server Error ...');
     }
 });
-
 
 /**
  * Get assignments and submission info associated with the assignments. Submission info pertains
@@ -79,8 +79,6 @@ router.get('/getAssignments', auth, async (req, res) => {
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
     //req.session.username = "Aaron"; //uncomment this for testing
-    //console.log("In upload route");
-    //console.log(req.files);
 
     if(req.files.length === 0) {
         return res.status(400).end();
@@ -95,7 +93,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
             + currentdate.getSeconds();
 
     var fieldName = req.files[0].fieldname;
-    var title = "";
+    var title = "" || req.body.title;
 
     var category;
     if (fieldName === 'readings') {
@@ -104,7 +102,6 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
         category = 2;
     } else if (fieldName === 'assignments') {
         category = 3;
-        title = req.body.title
     } 
 
     var postfileSchema = "(file_path, category, upload_date, upload_user, title, description)";
@@ -115,7 +112,6 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
     db
         .query(query, values)
         .then(result => {
-            //console.log("File successfully uploaded.");
             if (fieldName === 'assignments') {
                 next();
             }
@@ -126,7 +122,6 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
             res.status(500).end();
         })
 });
-
 
 // 2017-05-27T10:30
 router.post('/upload/assignment/teacher', function (req, res) { 
