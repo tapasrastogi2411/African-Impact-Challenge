@@ -174,6 +174,8 @@ export default function PeoplePage(props: any) {
                   partners.map((item) => (
                     <UserItem
                       name={`${item["first_name"]} ${item["last_name"]}`}
+                      object={item}
+                      peopleProps={props}
                     >
                       {" "}
                     </UserItem>
@@ -205,6 +207,8 @@ export default function PeoplePage(props: any) {
                   entrepreneurs.map((item) => (
                     <UserItem
                       name={`${item["first_name"]} ${item["last_name"]}`}
+                      object={item}
+                      peopleProps={props}
                     >
                       {" "}
                     </UserItem>
