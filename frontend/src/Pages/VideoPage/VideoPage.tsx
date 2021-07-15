@@ -6,9 +6,10 @@ import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Avatar, Divider, Toolbar } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Toolbar } from "@material-ui/core";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import YouTubeIcon from '@material-ui/icons/YouTube';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -16,6 +17,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
@@ -84,6 +87,22 @@ const useStyles = makeStyles((theme) => ({
   noVideoHeader: {
     fontSize: 22,
   },
+
+  assignmentCard: {
+    width: 800,
+  },
+  cardBody: {
+    marginBottom: 25,
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400
+  },
+  cardDesc: {
+    fontSize: "13px",
+    fontWeight: 400,
+    marginBottom: 35
+  },
+
 }));
 
 const RedTextTypography = withStyles({
@@ -137,6 +156,39 @@ function VideoPage(prop: any) {
     return e.substring(e.indexOf("_") + 1, e.length);
   };
 
+  const renderVideos = (item: any) => {
+
+    //config vid src
+
+    return (
+      <Accordion className={classes.assignmentCard}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <YouTubeIcon style={{ marginTop: 4, marginRight: 10 }} />
+          <Typography variant="h6" style={{ flexBasis: "73.33%" }} >{item.title}</Typography>
+        </AccordionSummary>
+        <AccordionDetails style={{ flexDirection: "column" }} >
+          <div style={{ flexBasis: "33.33%", marginRight: 20, marginLeft: 35 }} >
+            <video width="533" height="300" controls>
+              <source src={"http://localhost:8080" + item} type="video/mp4" />
+            </video>
+          </div>
+          <div style={{ flexBasis: "33.33%" }}>
+            <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 14 }}>
+              Uploaded on {item.upload_date.substring(0, 10)}
+            </Typography>
+            <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 25 }}>
+              Created by {item.upload_user}
+            </Typography>
+          </div>
+        </AccordionDetails>
+      </Accordion>
+    );
+
+  }
   const handleGet = async () => {
     const response = await fetch(
       "http://localhost:8080/api/course/getVideos",
@@ -206,7 +258,7 @@ function VideoPage(prop: any) {
                     inputProps={{ accept: ".mp4" }}
                     onChange={handleUploadedFile}
                   ></TextField>
-                  <AssignmentIcon />
+                  <YouTubeIcon />
                 </DialogContent>
                 <DialogContent>
                   {alertMessage.length > 0 ? (
@@ -227,23 +279,41 @@ function VideoPage(prop: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-        <List component="nav" aria-labelledby="readingList">
-          {assignmentItems.length > 0 ? (
-            assignmentItems.map((item) => (
-              <ListItem key={item} button>
-                <ListItemIcon>
-                </ListItemIcon>
-                <video width="320" height="240" controls>
-                  <source src={"http://localhost:8080" + item} type="video/mp4"/>
-                </video>
-              </ListItem>
-            ))
-          ) : (
+        {assignmentItems.length > 0 ? (
+          assignmentItems.map((item) => (
+            renderVideos(item)
+          ))
+        ) : (
             <Typography align="center" className={classes.noVideoHeader}>
               There are currently no videos!
             </Typography>
           )}
-        </List>
+
+        {/* <Accordion className={classes.assignmentCard}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <YouTubeIcon style={{ marginTop: 4, marginRight: 10 }} />
+            <Typography variant="h6" style={{ flexBasis: "73.33%" }} >title</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ flexDirection: "row" }} >
+            <div style={{ flexBasis: "33.33%", marginRight: 20, marginLeft: 35 }} >
+              <video width="533" height="300" controls>
+                vid
+            </video>
+            </div>
+            <div style={{ flexBasis: "33.33%" }}>
+              <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 14 }}>
+                Posted: asfgasga
+            </Typography>
+              <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 25 }}>
+                Created by asgasga
+            </Typography>
+            </div>
+          </AccordionDetails>
+        </Accordion> */}
       </Grid>
     </div>
   );

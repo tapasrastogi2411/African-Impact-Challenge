@@ -7,17 +7,12 @@ import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Toolbar } from "@material-ui/core";
-import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
@@ -107,14 +102,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     marginBottom: 35
   },
-  upload: {
-    flexBasis: "23.33%",
-    color: "#5f6368",
-    fontSize: "12px",
-    fontWeight: 400,
-    marginTop: 8,
 
-  },
 
 }));
 
@@ -176,7 +164,7 @@ function ReadingPage(prop: any) {
     return filePath.substring(filePath.indexOf('_') + 1, filePath.length)
   };
 
-  const renderAssignments = (item: any) => {  // item is an object containing assignment data
+  const renderReadings = (item: any) => {  // item is an object containing assignment data
     // call event handler in main and set state to the current assignment
     return (
       <Accordion className={classes.assignmentCard}>
@@ -185,7 +173,7 @@ function ReadingPage(prop: any) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <AssignmentOutlinedIcon style={{ marginTop: 2, marginRight: 8 }} />
+          <MenuBookIcon style={{ marginTop: 3, marginRight: 10 }} />
           <Typography variant="h6" style={{ flexBasis: "73.33%" }} >{item.title}</Typography>
         </AccordionSummary>
 
@@ -299,7 +287,7 @@ function ReadingPage(prop: any) {
                     inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
                     onChange={handleUploadedFile}
                   ></TextField>
-                  <AssignmentIcon />
+                  <MenuBookIcon />
                 </DialogContent>
                 <DialogContent>
                   {alertMessage.length > 0 ? (
@@ -322,7 +310,7 @@ function ReadingPage(prop: any) {
         <Divider className={classes.divider} />
         {assignmentItems.length > 0 ? (
           assignmentItems.map((item) => (
-            renderAssignments(item)
+            renderReadings(item)
           ))
         ) : (
             <Typography align="center" className={classes.noReadingHeader}>
@@ -336,7 +324,8 @@ function ReadingPage(prop: any) {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <AssignmentOutlinedIcon style={{ marginTop: 2, marginRight: 8 }} />
+            <MenuBookIcon style={{ marginTop: 3, marginRight: 10 }}/>
+
             <Typography variant="h6" style={{ flexBasis: "73.33%" }} >title</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ flexDirection: "column" }} >
