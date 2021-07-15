@@ -174,6 +174,8 @@ export default function PeoplePage(props: any) {
                   partners.map((item) => (
                     <UserItem
                       name={`${item["first_name"]} ${item["last_name"]}`}
+                      object={item}
+                      peopleProps={props}
                     >
                       {" "}
                     </UserItem>
@@ -205,6 +207,8 @@ export default function PeoplePage(props: any) {
                   entrepreneurs.map((item) => (
                     <UserItem
                       name={`${item["first_name"]} ${item["last_name"]}`}
+                      object={item}
+                      peopleProps={props}
                     >
                       {" "}
                     </UserItem>
@@ -234,7 +238,7 @@ export default function PeoplePage(props: any) {
               <List>
                 {startups.length > 0 ? (
                   startups.map((item) => (
-                  <ListItem button onClick={() => props.changeViewComapnyData(item)} component={RouterLink} to="/viewCompany" >
+                  <ListItem button onClick={() => props.changeViewCompanyData(item)} component={RouterLink} to="/viewCompany" >
                     <ListItemAvatar>
                     <Avatar
                       src='/ProfilePage/profilepic.jpeg'
