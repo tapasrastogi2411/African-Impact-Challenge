@@ -10,6 +10,7 @@ router.get('/getReadings', async (req, res) => {
         let query = `SELECT * FROM post_schema.postfile WHERE category=1 ORDER BY upload_date DESC`;
         const result = await db.query(query);
         var fileArray = result.rows;
+
         for (obj of fileArray) {
             if (obj['description'] == "") {
                 obj['description'] = "Description not provided";
@@ -26,7 +27,7 @@ router.get('/getReadings', async (req, res) => {
     }
 });
 
-outer.get('/getVideos', async (req, res) => {
+router.get('/getVideos', async (req, res) => {
     try{
         let query = `SELECT file_path, upload_user, title FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
         const result = await db.query(query);
@@ -122,6 +123,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
             res.status(500).end();
         })
 });
+
 
 // 2017-05-27T10:30
 router.post('/upload/assignment/teacher', function (req, res) { 
