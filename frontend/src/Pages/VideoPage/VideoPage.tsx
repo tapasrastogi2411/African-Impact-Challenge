@@ -8,7 +8,6 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Toolbar } from "@material-ui/core";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import videoIcon from "@material-ui/icons/video";
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -18,7 +17,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import videoOutlinedIcon from '@material-ui/icons/videoOutlined';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
@@ -203,7 +201,7 @@ function VideoPage(prop: any) {
       throw responseData;
     }
 
-    setVideoItems(responseData.file_paths);
+    setVideoItems(responseData);
   };
 
   useEffect(() => {
