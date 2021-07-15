@@ -5,12 +5,16 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import InputIcon from "@material-ui/icons/Input";
+import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined';
+import LocalLibraryOutlinedIcon from '@material-ui/icons/LocalLibraryOutlined';
 
 import Logo from './LOGO.png'
 import { Link, useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            display: "flex",
+            justifyContent: "space-between",
             minHeight: 70,
             [theme.breakpoints.down("sm")]: {
                 paddingLeft: 8,
@@ -18,6 +22,12 @@ const useStyles = makeStyles((theme: Theme) =>
                 minHeight: 56,
             },
             marginLeft: 50,
+        },
+        hideIcon: {
+            visibility: "hidden"
+        },
+        link: {
+            textDecoration: "none",
         },
         mainAppBar: {
             background: "#FFFFFF",
@@ -31,6 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.down("sm")]: {
                 marginRight: 5,
             },
+            float: "left",
         },
         title: {
             color: "black",
@@ -38,9 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.up("sm")]: {
                 display: "block",
             },
+            
         },
         btn: {
-            position: "absolute",
+            // position: "absolute",
             right: 40,
             color: "black"
         },
@@ -53,9 +65,42 @@ const useStyles = makeStyles((theme: Theme) =>
 function Appbar(props: any) {
     const history = useHistory();
     const onSuccess = () => {
-        history.push('/login')
+        history.push('/login');
+    }
+    const videosPage = () => {
+        history.push('/guestVideos');
+    }
+    const readingsPage = () => {
+        history.push('/guestReadings');
     }
     const classes = useStyles();
+
+    const renderGuestPage = () => {
+        let cookie = document.cookie.split('; ');
+        for(let i in cookie){
+            var keyval = cookie[i].split('=');
+            if(keyval[0] === 'loggedIn' && keyval[1]) {
+                return (
+                    <IconButton onClick={logoutUser} className={classes.btn}>
+                        <InputIcon />
+                        <Typography variant="button" noWrap className={classes.btnTxt}>Sign Out</Typography>
+                    </IconButton>
+                );
+            }
+        }
+        return (
+            <div>
+            <IconButton onClick={videosPage} className={classes.btn}>
+                <VideoLibraryOutlinedIcon />
+                <Typography variant="button" noWrap className={classes.btnTxt}>Videos</Typography>
+            </IconButton>
+            <IconButton onClick={readingsPage} className={classes.btn}>
+                <LocalLibraryOutlinedIcon />
+                <Typography variant="button" noWrap className={classes.btnTxt}>Readings</Typography>
+            </IconButton>
+            </div>
+        );
+    }
 
     // session should be destroyed and user taken back to the login page
     function logoutUser() {
@@ -65,32 +110,30 @@ function Appbar(props: any) {
         })
         .then(() => {
             onSuccess();
+            window.location.reload();
         })
     }
 
     return (
         <AppBar position="fixed" className={classes.mainAppBar}>
             <Toolbar className={classes.root}>
-                <Link to='/'>
-                    <img src={Logo} className={classes.logo} />
-                </Link>
-                <Typography
-                    className={classes.title}
-                    variant="h6"
-                    noWrap
-                >
-                    THE AFRICAN IMPACT CHALLENGE
-        </Typography>
-                <IconButton
-                    onClick={logoutUser}
-                    className={classes.btn}
-                >
-                    <InputIcon />
-                    <Typography variant="button" noWrap className={classes.btnTxt}
-                    >
-                        Sign Out
-            </Typography>
-                </IconButton>
+                <div style={{display: "flex", alignItems: "center"}}>
+                    <Link to='/' className={classes.link}>
+                    <img src={Logo} className={classes.logo}/>
+                    </Link>
+                    <Typography
+                        className={classes.title}
+                        variant="h6"
+                        noWrap
+                        >
+                        THE AFRICAN IMPACT CHALLENGE
+                    </Typography>
+                </div>
+            
+                <div>
+                    {renderGuestPage()}
+                </div>
+                
             </Toolbar>
         </AppBar>
     );
