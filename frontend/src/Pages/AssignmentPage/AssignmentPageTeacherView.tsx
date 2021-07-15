@@ -69,12 +69,20 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     marginLeft: 10,
-    marginRight: 790,
+    marginRight: 712,
     marginTop: 40,
     display: "inline",
   },
   uploadButton: {
     //marginLeft: 800,
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
     marginBottom: "10px",
     width: 200,
   },
@@ -109,7 +117,20 @@ const useStyles = makeStyles((theme) => ({
   textArea: {
     marginTop: 10,
     marginBottom: 10
-  }
+  },
+  viewSubmissionsBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 180,
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
+    marginRight: 30,
+    marginBottom: 20,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+  },
 }));
 
 const RedTextTypography = withStyles({
@@ -156,6 +177,11 @@ function parseDeadline(deadline: string) {
       datetimeString += datetime[i] + " ";
     }
     return datetimeString;
+}
+
+function ViewSubmissions(props: any) {
+  const classes = useStyles();
+  return <Button variant="contained" className={classes.viewSubmissionsBtn} onClick={props.openHandler} >View Submissions</Button>
 }
 
 
@@ -260,9 +286,6 @@ function AssignmentPage(prop: any) {
           <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 14}}>
               Posted: {item.upload_date.substring(0,10)}
             </Typography>
-            <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
-              Created by {item.upload_user}
-            </Typography>
           </div>
 
           <div style={{flexBasis: "33.33%"}}>
@@ -271,16 +294,34 @@ function AssignmentPage(prop: any) {
             </Typography>
           </div>
           <Divider style={{marginBottom: "20px"}}/>
-          <Typography variant="body2" style={{marginBottom: 10}}>
-              Download File
-            </Typography>
-          
-          <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
-          <Typography variant="body2" >
-            {parseItem(item)}
-            </Typography>
+          <Grid container direction="row" justify="space-between"> 
+
+            <Grid item>
+                <Grid container direction="column"> 
+                    <Grid item>   
+                        <Typography variant="body2" style={{marginBottom: 10}}>
+                            Download File
+                        </Typography>
+                    </Grid>
+
+                    <Grid item>
+                        <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+                            <Typography variant="body2" >
+                                {parseItem(item)}
+                            </Typography>
+                        </a>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <Grid item> 
+              <Button variant="contained" className={classes.viewSubmissionsBtn} onClick={prop.openHandler} >View Submissions</Button>
+            </Grid>
+
             
-            </a>
+              {/* {renderButtons(index)} */}
+            
+        </Grid>
         </AccordionDetails>
       </Accordion>
       
@@ -309,7 +350,7 @@ function AssignmentPage(prop: any) {
           <Grid>
 
             <Typography variant="h4" className={classes.pageTitle}>
-              Assignments
+              Your Assignments
             </Typography>
            
             
