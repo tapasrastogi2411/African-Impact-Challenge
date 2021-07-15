@@ -13,6 +13,7 @@ import book from "./books.jpg";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import VideoCard from "../GuestVideoPage/VideoCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,15 +43,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-
-
-
 export default function Dashboard(props: any) {
 
   const classes = useStyles();
-  const [videoItems, setVideos] = React.useState([]);
-  const [readingsItems, setReadings] = React.useState([]);
+  const [videoItems, setvideoItems] = React.useState([]);
+  const [readingItems, setreadingItems] = React.useState([]);
 
   const getVideos = async () => {
     const response = await fetch(
@@ -66,14 +63,22 @@ export default function Dashboard(props: any) {
       throw responseData;
     }
 
-    setVideos(responseData.file_paths);
+    setvideoItems(responseData);
+    console.log(videoItems[0]);
   };
+
+  const renderVideoCard = (item: any) => {
+    return(
+      <VideoCard video={"http://localhost:8080" + item.file_path} title={item.title} uploader={item.upload_user}></VideoCard>
+    );
+  }
+
   const getReadings = async () => {
     const response = await fetch(
       "http://localhost:8080/api/course/getReadings",
       {
         method: "GET",
-        credentials: "include",
+        credentials: 'include',
         mode: "cors",
       }
     );
@@ -81,9 +86,10 @@ export default function Dashboard(props: any) {
     if (response.status > 300 || response.status < 200) {
       throw responseData;
     }
-
-    setReadings(responseData.file_paths);
+    
+    setreadingItems(responseData);
   };
+
   useEffect(() => {
     getVideos();
     getReadings();
@@ -119,9 +125,7 @@ export default function Dashboard(props: any) {
             <>
               {videoItems.slice(0, 4).map((item) => (
                 <Grid item xs={3}>
-                  <video width="300" height="160" controls>
-                    <source src={"http://localhost:8080" + item} type="video/mp4" />
-                  </video>
+                  {renderVideoCard(item)}
                 </Grid>
               ))}
               <Button
@@ -140,29 +144,6 @@ export default function Dashboard(props: any) {
                 There are currently no videos!
               </Typography>
             )}
-          {/* <Grid item xs={3}>
-            <Card src={player} />
-          </Grid>
-          <Grid item xs={3}>
-            <Card src={player} />
-          </Grid>
-          <Grid item xs={3}>
-            <Card src={player} />
-          </Grid>
-          <Grid item xs={3}>
-            <Card src={player} />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              className={classes.btn}
-              endIcon={<MoreHorizIcon />}
-              component={Link}
-              to="/videos"
-            >
-              More
-            </Button>
-          </Grid> */}
         </Grid>
 
 
@@ -171,9 +152,9 @@ export default function Dashboard(props: any) {
             <Typography variant="h5">Readings</Typography>
           </Grid>
 
-          {readingsItems.length > 0 ? (
+          {readingItems.length > 0 ? (
             <>
-              {readingsItems.slice(0, 4).map((item) => (
+              {readingItems.slice(0, 4).map((item) => (
                 <Grid item xs={3}>
                   <Card src={book} />
                 </Grid>
@@ -195,29 +176,7 @@ export default function Dashboard(props: any) {
                 There are currently no readings!
               </Typography>
             )}
-          {/* <Grid item xs={3}>
-            <Card src={book} />
-          </Grid>
-          <Grid item xs={3}>
-            <Card src={book} />
-          </Grid>
-          <Grid item xs={3}>
-            <Card src={book} />
-          </Grid>
-          <Grid item xs={3}>
-            <Card src={book} />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              className={classes.btn}
-              endIcon={<MoreHorizIcon />}
-              component={Link}
-              to="/readings"
-            >
-              More
-            </Button>
-          </Grid> */}
+          
         </Grid>
 
 
