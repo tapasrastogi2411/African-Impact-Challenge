@@ -104,8 +104,8 @@ CREATE TABLE CompanyFile (
   company_name TEXT NOT NULL,
   file_path TEXT NOT NULL,
   
-  FOREIGN KEY(company_name) REFERENCES company(company_name)
-    on delete restrict
+  FOREIGN KEY(company_name) REFERENCES profile_schema.company(company_name)
+    on delete restrict,
   FOREIGN KEY(file_path) REFERENCES PostFile(file_path)
     on delete restrict
 );

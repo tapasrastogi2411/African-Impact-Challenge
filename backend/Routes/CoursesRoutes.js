@@ -88,29 +88,34 @@ router.get('/getAssignments', auth, async (req, res) => {
  *      ) as cn join CompanyFile cf on (cn.company_name = cf.company_name);
  * 
  *  select *
- *  from CompanyFiles cf join PostFile pf on (cf.file_path=pf.file_path);
+ *  from CompanyFiles cf join PostFile pf on (cf.file_path=pf.file_path) order by cf.upload_date;
+ * 
+ * [{}, {}]
  */ 
 router.get('/getCompanyFiles', function (req, res) { 
+    req.session.username="Agnes"
     console.log("In getCompanyFiles route");
 
-    let companyFilesView = "create view CompanyFiles as " +
-                        "select cf.file_path " +
-                        "from (select company_name from profile_schema.works_for where username= $1 ) as cn " +
-                        "join post_schema.CompanyFile cf on (cn.company_name = cf.company_name)";   
+    let companyFilesView = `drop view if exists CompanyFiles; ` +
+                        `create view CompanyFiles as (select cf.file_path ` +
+                        `from (select company_name from profile_schema.works_for where username = '${req.session.username}' ) as cn ` +
+                        `join post_schema.CompanyFile cf on (cn.company_name = cf.company_name));`;   
 
     let getFiles = "select * from CompanyFiles cf join post_schema.PostFile pf on (cf.file_path=pf.file_path)";    
     let dropView = "drop view CompanyFiles";         
     console.log("In getCompanyFiles route");
-    let files = "";
+    let files = [];
 
-    db.query(companyFilesView, [req.session.username])
+    db.query(companyFilesView, [])
     .then(pgRes => {
-        //console.log("Assignment stored in PostAssignment");
         return db.query(getFiles, []);
     })
     .then(pgRes => {
-        //console.log("Assignment stored in PostAssignment");
-        files = pgRes.rows;
+        pgRows = pgRes.rows;
+        for (let file of pgRows) {
+            files.push(file);
+        }
+        files = JSON.stringify(files);
         return db.query[dropView, []];
     })
     .then(pgRes => {
@@ -125,6 +130,7 @@ router.get('/getCompanyFiles', function (req, res) {
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
     //req.session.username = "Aaron"; //uncomment this for testing
+    console.log("In upload route");
 
     if(req.files.length === 0) {
         return res.status(400).end();
@@ -160,7 +166,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
     db
         .query(query, values)
         .then(result => {
-            if (fieldName === 'assignments') {
+            if (fieldName === 'assignments' || fieldName === 'company') {
                 next();
             }
             res.status(200).end();
@@ -191,7 +197,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
  * 
  * 
  */
-router.post('/upload/companyFile', function (req, res) { 
+router.post('/upload/companyFile/', function (req, res) { 
     console.log("In uploadCompanyFile route");
 
     let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
