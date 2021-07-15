@@ -17,6 +17,8 @@ import {
 import { People } from "@material-ui/icons";
 import VideoPage from "./VideoPage/VideoPage";
 import ReadingsPage from "./ReadingsPage/ReadingsPage";
+import ViewProfilepage from "./ProfilePage/ViewProfilepage";
+import ViewCompanyPage from "./CompanyPage/ViewCompanyPage";
 
 
 
@@ -49,7 +51,25 @@ const defaultUserData = {
     showCompanyBtn: true, // unused
 }
 
-
+const viewUserData = {
+    username: "",
+    user_role: "",
+    honorifics: "",
+    first_name: "",
+    last_name : "",
+    email: "",
+    phone_number: "",
+    country: "",
+    address: "",
+  }
+  
+  const ViewCompanyData = {
+    company_name: "",
+    address: "",
+    industry: "",
+    bio: "",
+    creator: ""
+  };
 
 export default function Pages(props: any) {
     const classes = useStyles();
@@ -57,6 +77,8 @@ export default function Pages(props: any) {
 
     const [reg, setReg] = React.useState("false"); // used to track whether the user is logged-in so the LoginPage can display "User is succesfully registered" alert
     const [userData, setUserData] = React.useState(defaultUserData);
+    const [viewuserData, setViewUserData] = React.useState(viewUserData);
+    const [viewcompanyData, setViewCompanyData] = React.useState(ViewCompanyData);
 
     const updateReg = (val:string) => {
         setReg(val);
@@ -78,9 +100,11 @@ export default function Pages(props: any) {
                 <Route exact path="/company" render={() => <CompanyPage  />}  />
                 <Route exact path="/assignments" component={AssignmentPage} /> 
                 <Route exact path="/dashboard" component={Dashboard} />
-                <Route exact path="/people" component={PeoplePage} />
+                <Route exact path="/people" render = {() => <PeoplePage changeViewCompanyData={(object: React.SetStateAction<{ company_name: string; address: string; industry: string; bio: string; creator: string; }>) => setViewCompanyData(object)} changeViewUserData={(object: React.SetStateAction<{ username: string; user_role: string; honorifics: string; first_name: string; last_name: string; email: string; phone_number: string; country: string; address: string; }>) => setViewUserData(object) } />} />
                 <Route exact path="/videos" component={VideoPage} />
                 <Route exact path="/readings" component={ReadingsPage} />
+                <Route exact path="/viewProfile" render={() => <ViewProfilepage viewUserDataProp={viewuserData} />} />
+                <Route exact path="/viewCompany" render={() => <ViewCompanyPage viewCompanyDataProp={viewcompanyData} />} />
             </Switch>
         </div>
     );

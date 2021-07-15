@@ -234,7 +234,7 @@ export default function PeoplePage(props: any) {
               <List>
                 {startups.length > 0 ? (
                   startups.map((item) => (
-                  <ListItem button onClick={() => props.changeViewComapnyData(item)} component={RouterLink} to="/viewCompany" >
+                  <ListItem button onClick={() => props.changeViewCompanyData(item)} component={RouterLink} to="/viewCompany" >
                     <ListItemAvatar>
                     <Avatar
                       src='/ProfilePage/profilepic.jpeg'
