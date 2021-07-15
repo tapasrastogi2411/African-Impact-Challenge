@@ -166,7 +166,7 @@ function CompanyPage(props: any) {
         <Grid container>
             <Grid item xs={12}>
                     
-                    <Button startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
+                    <Button variant="contained" startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
             </Grid>
 
             <Grid item xs={12}>
@@ -179,7 +179,7 @@ function CompanyPage(props: any) {
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <img src={building} className={classes.profilePic} />
-          <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
+          <Button variant="contained" component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
         </Grid>
         <Grid
           item

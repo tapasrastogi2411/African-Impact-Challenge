@@ -171,7 +171,7 @@ function Profilepage(props: any) {
         )
       } else {
         return (
-          <Grid item xs={12} > <Button  startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company</Button></Grid>
+          <Grid item xs={12} > <Button variant="contained" startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company</Button></Grid>
         )
       }
     }
@@ -211,8 +211,8 @@ function Profilepage(props: any) {
         <Grid xs={2} item alignItems="center">
           <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography>
           <img src={profilepic} className={classes.profilePic} />
-          <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
-          <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
+          <Button variant="contained" startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
+          <Button variant="contained" component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
         </Grid>
         <Grid
           item
