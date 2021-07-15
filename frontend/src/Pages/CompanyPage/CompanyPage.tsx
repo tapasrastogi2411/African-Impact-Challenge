@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
     height: "auto",
     marginTop: 2
-  }
+  },
 
   /* relatedUser: {
     marginRight: 40
@@ -233,6 +233,7 @@ function CompanyPage(props: any) {
         <Divider className={classes.divider} />
       
           <Typography variant="h5">Resources</Typography>
+          <Button startIcon={<AddIcon />}  className={classes.invBtn}>Resources</Button>
           
           
         
