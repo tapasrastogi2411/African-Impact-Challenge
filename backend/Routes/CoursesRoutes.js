@@ -55,10 +55,7 @@ router.get('/getAssignments', auth, async (req, res) => {
                     "ORDER BY upload_date";
 
         const result = await db.query(query, [req.session.username]);
-        //console.log(result.rows);
-        // const filePaths = result.rows.map(row => row.file_path);
         var fileArray = result.rows;
-        //console.log(fileArray);
         for (obj of fileArray) {
             if (obj['description'] == "") {
                 obj['description'] = "Description not provided";
@@ -68,7 +65,7 @@ router.get('/getAssignments', auth, async (req, res) => {
             }
         }
        
-        //console.log(fileArray);
+        
         return res.status(200).json(fileArray);
     }
 
@@ -90,7 +87,6 @@ router.get('/getAssignments', auth, async (req, res) => {
  *  select *
  *  from CompanyFiles cf join PostFile pf on (cf.file_path=pf.file_path) order by cf.upload_date;
  * 
- * [{}, {}]
  */ 
 router.get('/getCompanyFiles', function (req, res) { 
     req.session.username="Agnes"

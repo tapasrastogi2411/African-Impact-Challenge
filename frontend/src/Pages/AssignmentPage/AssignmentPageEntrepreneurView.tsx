@@ -214,7 +214,8 @@ function AssignmentPageEntrepreneurView(prop: any) {
   const handleAlert = (e: string) => {
     setAlertMessage(e);
   };
-  /* const handleSubmit = async (e: any) => { // upload selected file to the server
+  
+  const handleSubmit = async (e: any) => { // upload selected file to the server
     //console.log(file);
     if (file.name == "") {
       handleAlert("Please select a file");
@@ -242,9 +243,9 @@ function AssignmentPageEntrepreneurView(prop: any) {
     handleAlert("Successfully Uploaded");
     handleClose();
     handleGet();
-  }; */
+  };
 
-  const handleSubmit = async (e: any) => { // upload selected file to the server
+  /* const handleSubmit = async (e: any) => { // upload selected file to the server
     //console.log(file);
     try{
 
@@ -255,11 +256,11 @@ function AssignmentPageEntrepreneurView(prop: any) {
     
     const formData = new FormData();
     
-    // formData.append("company", file as any);
+    formData.append("company", file as any);
     console.log("exec");
     
 
-    const response = await fetch("http://localhost:8080/api/course/getCompanyFiles/", {
+    const response = await fetch("http://localhost:8080/api/course/upload/companyFile", {
       method: "GET",
       credentials: 'include',
       mode: "cors",
@@ -280,7 +281,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
     console.log("Invalid JSON");
     console.log(e);
   }
-  };
+  }; */
 
   const parseItem = (e: any) => {
     var filePath = e.file_path;
