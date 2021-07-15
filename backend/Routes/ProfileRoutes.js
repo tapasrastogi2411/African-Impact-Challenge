@@ -303,7 +303,7 @@ note: an instructor object is of the form
 */
 router.get('/getEntrepreneurs', auth, async (req, res) => {
     try{
-        let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=2'
+        let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=2'
         const result = await db.query(query)
         res.status(200).json(result.rows)
     }
@@ -320,7 +320,7 @@ router.get('/getEntrepreneurs', auth, async (req, res) => {
 - 500 status code if an error occured */
 router.get('/getInstructors', auth, async(req,res) => {
     try{
-        let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=1'
+        let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=1'
         const result = await db.query(query)
         res.status(200).json(result.rows)
     }
@@ -337,7 +337,7 @@ router.get('/getInstructors', auth, async(req,res) => {
 - 500 status code if an error occured */
 router.get('/getPartners', auth, async(req, res) => {
     try{
-        let query = 'SELECT * FROM profile_schema.aic_user WHERE user_role=3'
+        let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=3'
         const result = await db.query(query)
         res.status(200).json(result.rows)
     }

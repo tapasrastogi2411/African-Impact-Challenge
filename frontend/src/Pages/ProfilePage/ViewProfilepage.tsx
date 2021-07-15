@@ -95,7 +95,7 @@ function Alert(props: AlertProps) {
 
 const viewUserData = {
   username: "",
-  user_role: "",
+  role_name: "",
   honorifics: "",
   first_name: "",
   last_name : "",
@@ -177,7 +177,7 @@ function ViewProfilepage(props: any) {
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <Typography className={classes.role} variant="caption" align="center">
-            {userData.user_role}
+            {userData.role_name}
           </Typography>
           <img src={profilepic} className={classes.profilePic} />
           <Button startIcon={<ChatIcon />} className={classes.btn}>

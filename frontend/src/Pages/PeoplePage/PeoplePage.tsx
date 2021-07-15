@@ -62,6 +62,7 @@ export default function PeoplePage(props: any) {
 
     const responseData = await response.json();
     setInstructors(responseData);
+    console.log("HERE: " + responseData);
   };
 
   const fetchEntrepreneurs = async () => {

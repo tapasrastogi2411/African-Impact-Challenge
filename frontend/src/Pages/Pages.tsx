@@ -34,7 +34,7 @@ const defaultUserData = {
 
 const viewUserData = {
     username: "",
-    user_role: "",
+    role_name: "",
     honorifics: "",
     first_name: "",
     last_name : "",
@@ -79,7 +79,7 @@ export default function Pages(props: any) {
             <Route exact path="/company" render={() => <CompanyPage  />}  />
             <Route path="/assignments" render={() => <AssignmentPageRouter userDataProp={userData} />}   /> 
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route exact path="/people" render = {() => <PeoplePage changeViewCompanyData={(object: React.SetStateAction<{ company_name: string; address: string; industry: string; bio: string; creator: string; }>) => setViewCompanyData(object)} changeViewUserData={(object: React.SetStateAction<{ username: string; user_role: string; honorifics: string; first_name: string; last_name: string; email: string; phone_number: string; country: string; address: string; }>) => setViewUserData(object) } />} />
+            <Route exact path="/people" render = {() => <PeoplePage changeViewCompanyData={(object: React.SetStateAction<{ company_name: string; address: string; industry: string; bio: string; creator: string; }>) => setViewCompanyData(object)} changeViewUserData={(object: React.SetStateAction<{ username: string; role_name: string; honorifics: string; first_name: string; last_name: string; email: string; phone_number: string; country: string; address: string; }>) => setViewUserData(object) } />} />
             <Route exact path="/videos" component={VideoPage} />
             <Route exact path="/readings" component={ReadingsPage} />
             <Route exact path="/viewProfile" render={() => <ViewProfilepage viewUserDataProp={viewuserData} />} />
