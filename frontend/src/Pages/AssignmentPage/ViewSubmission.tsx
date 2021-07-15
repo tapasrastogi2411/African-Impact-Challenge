@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
       top: 130,
       left: 300,
       width: 1400,
+      background: "#faf6f2",
     },
     content: {
       flexGrow: 1,
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     embed: {
         backgroundColor: 'white',
         objectPosition: 'left top',
-        marginRight: 180,
+        marginRight: 170,
         borderRadius: "10px",
         boxShadow: "0px 0px 16px",
         // overflowY: 'auto'
@@ -126,7 +127,7 @@ function ViewSubmission(props: any) {
 
                             <embed type="application/pdf"
                             src={"http://localhost:8080" + assignment.submission_file_path}
-                            width="1000"
+                            width="900"
                             height="800" 
                             />
                 

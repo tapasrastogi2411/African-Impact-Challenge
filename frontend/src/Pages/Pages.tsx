@@ -25,7 +25,6 @@ import ReadingsPage from "./ReadingsPage/ReadingsPage";
 
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) =>
     createStyles({
-
         root: {
             background: "#faf6f2",
             display: "flex",
