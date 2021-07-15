@@ -24,7 +24,6 @@ export default function AssignmentPageRouter(props: any) {
             return response.json();
         })
         .then(responseJson => {
-            console.log(responseJson);
             setUserRole(responseJson['user_role']);
         })
         .catch(err => { 
@@ -38,7 +37,6 @@ export default function AssignmentPageRouter(props: any) {
 
     return (
             <div>
-                {console.log(userRole)}
                 {
                     userRole == "Teacher" ? <Redirect  to="/assignments/teacher" />  : <Redirect   to="/assignments/entrepreneur" /> 
                 }

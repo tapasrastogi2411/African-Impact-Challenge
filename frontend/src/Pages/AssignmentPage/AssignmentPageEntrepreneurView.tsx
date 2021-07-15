@@ -214,9 +214,9 @@ function AssignmentPageEntrepreneurView(prop: any) {
   const handleAlert = (e: string) => {
     setAlertMessage(e);
   };
-  
+
   const handleSubmit = async (e: any) => { // upload selected file to the server
-    //console.log(file);
+    
     if (file.name == "") {
       handleAlert("Please select a file");
       return false;
@@ -236,7 +236,6 @@ function AssignmentPageEntrepreneurView(prop: any) {
 
     });
 
-    console.log(response.status);
     if (response.status > 300 || response.status < 200) {
       handleAlert("Failed to upload");
     }
@@ -302,7 +301,6 @@ function AssignmentPageEntrepreneurView(prop: any) {
       if (response.status > 300 || response.status < 200) {
         throw responseData;
       }
-      //console.log(responseData);
       setAssignmentItems(responseData);
 
     } catch (err) {
@@ -363,6 +361,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
 
   };
 
+  
   
     const renderAssignments = (item: any, index: any) => {  // item is an object containing assignment data
     // call event handler in main and set state to the current assignment.
@@ -435,10 +434,6 @@ function AssignmentPageEntrepreneurView(prop: any) {
 
   }
 
- 
-  
-
-  
 
   useEffect(() => {
     handleGet();

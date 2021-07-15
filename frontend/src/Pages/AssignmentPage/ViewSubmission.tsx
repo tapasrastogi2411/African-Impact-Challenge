@@ -73,17 +73,14 @@ const useStyles = makeStyles((theme) => ({
   
   }));
 
-// 2021-07-14T03:38:31.000Z
-//["Tue", "Jul", "13", "2021", "11:38:31 PM"]
+
 function parseSubmissionTime(submitTime: string) {
-    //console.log(deadline);
     let datetimeObj:any = {};
     
     let datetime = new Date(submitTime).toString().split(' ', 4);
     let time = new Date(submitTime).toLocaleTimeString('en-US');
     
     datetimeObj['time'] = time;
-    //console.log(datetime);
     let datetimeString = "";
     for (let i = 0; i < datetime.length; i++) {
         if (i == 2) {

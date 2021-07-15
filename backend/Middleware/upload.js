@@ -27,7 +27,6 @@ const fileFilter = function (req, file, cb) {
     var fieldName = file.fieldname;
     var fileTypes;
     
-    //console.log(file);
 
     if (fieldName === 'videos') { //videos should be label of input attribute
         fileTypes = /mp4/;    
