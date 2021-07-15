@@ -2,10 +2,9 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../Middleware/auth');
 const db = require('../db');
-const bcrypt = require("bcrypt"); // used for hashing and salting passwords
+const bcrypt = require("bcrypt"); 
 const session = require('express-session');
 const path = require('path');
-
 
 /*
 * HTTP Status codes used:
@@ -15,13 +14,11 @@ const path = require('path');
 *
 */
 router.post('/register/', function (req, res, next) {
-
     var registerData = req.body;
-    //console.log(registerData);
     var mandatoryFields = ["username", "password", "user_role","first_name", "last_name"];
     var optionalFields = ["honorifics", "email", "phone_number", "country", "address"];
     var schemaOrder = ["username", "password", "user_role","honorifics","first_name", "last_name","email", "phone_number", "country", "address"];
-    // first check for malformed input
+
     if (Object.values(registerData).length != 10) {
         return res.status(400).json({err: 'Should be 10 fields'});
     }
@@ -32,7 +29,7 @@ router.post('/register/', function (req, res, next) {
 
     for (let i = 0; i < schemaOrder.length; i++) {
         var value = schemaOrder[i];
-        // console.log(value);
+
         if (mandatoryFields.includes(value)){
             if (!(value in registerData)){
                 invalidMandatoryFields.push(value);
@@ -57,8 +54,6 @@ router.post('/register/', function (req, res, next) {
         optional: invalidOptionalFields, data: userData});
     } 
 
-    // all 10 fields are provided and they have the correct names
-    //console.log(userData[2]);
     userData[2] = parseInt(userData[2]);
 
     var userSchema = "(username,password,user_role,honorifics,first_name,last_name,email,phone_number,country,address)";
@@ -71,15 +66,13 @@ router.post('/register/', function (req, res, next) {
         return bcrypt.hash(registerData['password'], salt);
     })
     .then(hash => {
-        // Store hash in DB
-        userData[1] = hash; // 2nd value in userData is password
+        userData[1] = hash;
         return db.query(query, userData);
     })
-    .then(pgRes => { // user successfully added to the db
-        //console.log(pgRes);
-        return res.status(201).json(''); // 201 Created. Any payload to send to the client?
+    .then(pgRes => { 
+        return res.status(201).json(''); 
     })
-    .catch(err => { // user already exists or some other db error
+    .catch(err => { 
         switch (err.message){
             case "duplicate key value violates unique constraint \"aic_user_pkey\"":
                 return res.status(409).json({ err: 'Username already exists'}); 
@@ -94,7 +87,6 @@ router.post('/register/', function (req, res, next) {
 
 
 router.get('/inCompany/', auth, function (req, res, next) {
-
     var inCompany = "SELECT * FROM profile_schema.works_for WHERE username=$1";
     db.query(inCompany, [req.session.username])
     .then(pgRes => {
@@ -111,27 +103,23 @@ router.get('/inCompany/', auth, function (req, res, next) {
 });
 
 router.get('/getCompany/', auth, function (req, res, next) {
-
     var inCompany = "SELECT * FROM profile_schema.works_for WHERE username=$1";
     db.query(inCompany, [req.session.username])
     .then(pgRes => {
-        if (pgRes.rowCount > 0) { // get company data
+        if (pgRes.rowCount > 0) { 
             var companyName = pgRes.rows[0].company_name;
             var companyDataQuery = "SELECT * FROM profile_schema.company WHERE company_name=$1";
             return db.query(companyDataQuery, [companyName]);
         }
         return res.status(404).json('');
     })
-    .then(pgRes => { // extract company data and send to client
+    .then(pgRes => { 
         var companyDataJson = pgRes.rows[0];
-        // companyDataJson["industry"] = value;
         for (var key in companyDataJson) {
-            
             var value = companyDataJson[key];
             if (value == "null") {
                 companyDataJson[key] = "Not Provided";
-            } 
-                
+            }  
         }
         return res.status(200).json(companyDataJson);
     })
@@ -142,9 +130,8 @@ router.get('/getCompany/', auth, function (req, res, next) {
 });
 
 router.post('/createCompany/', auth, function (req, res, next) {
-    
     var orderedFields = ["companyName", "companyAddress", "industry", "size", "about"];
-    var orderedValues = []; // values to be inserted into db
+    var orderedValues = []; 
     for (var key of orderedFields) {
         var value = req.body[key];
         if (value == "") {
@@ -160,21 +147,16 @@ router.post('/createCompany/', auth, function (req, res, next) {
     
     orderedValues.push(req.session.username);
     
-
-    
     var companyExists = "SELECT * FROM profile_schema.company WHERE company_name=$1";
-    // first check if the company already exists in the db
     db.query(companyExists, [req.body['companyName']])
     .then(pgRes => {
         if (pgRes.rowCount > 0) {
             throw new Error("Company name already exists");
         }
-        // add the company to the db
         var insertCompany = "INSERT INTO profile_schema.company VALUES ($1,$2,$3,$4,$5,$6)";
         return db.query(insertCompany, orderedValues);
     })
     .then(pgRes => {
-        // add username,company to works_for
         var worksFor = "INSERT INTO profile_schema.works_for VALUES($1,$2)";
         return db.query(worksFor, [req.session.username, req.body['companyName']]);
     })
@@ -193,9 +175,7 @@ router.post('/createCompany/', auth, function (req, res, next) {
                 res.status(500).json({ error: err.message});
                 break;
         }
-
     })
-
 });
 
 router.get('/getUser/', auth, function (req, res) {
@@ -205,7 +185,7 @@ router.get('/getUser/', auth, function (req, res) {
         if (pgRes.rowCount == 0) {
             throw new Error("Cannot find user");
         }
-        var userData = pgRes.rows[0]; // prevent password from getting sent (although it's hashed+salted)
+        var userData = pgRes.rows[0]; 
         if (userData["user_role"] == 1) {
             userData["user_role"] = "Teacher";
         } else if (userData["user_role"] == 2) {
@@ -235,53 +215,36 @@ router.get('/getUser/', auth, function (req, res) {
                 break;
         }
     })
-
-
 });
 
-/* Status response codes:
-400 = BadRequest - No user with the given user name
-401 = Unauthorized - Incorrect password has been provided for the given username
-200 = OK - Correct credentials have been provided */
 router.post('/login/', async function (req, res) {
-    // // check if user is already logged in
-    // if(req.session.loggedIn){
-    //     res.status(200)
-    // }
-    // else{
+    try {
+        const { username, password } = req.body;
+        let query = `SELECT * FROM profile_schema.aic_user WHERE username='${username}'`;
+        const result = await db.query(query);
 
-        try {
-            // get the password and username from the request object
-            const { username, password } = req.body;
-            // Checking the database to authenticate the user
-            let query = `SELECT * FROM profile_schema.aic_user WHERE username='${username}'`
-            const result = await db.query(query)
-            // if the query returned no rows (i.e no user with the given username) return a 400
-            if (result.rows.length === 0){
-                return res.status(400).end('Invalid username')
+        if (result.rows.length === 0){
+            return res.status(400).end('Invalid username');
+        } else {
+            const isMatch = await bcrypt.compare(password, result.rows[0].password);
+
+            if(!isMatch){
+                return res.status(401).end('Invalid password');
             } else {
-                // check if the passwords match (the passwords in the database have been hashed)
-                const isMatch = await bcrypt.compare(password, result.rows[0].password)
-                // return a 401 if passwords dont match
-                if(!isMatch){
-                    return res.status(401).end('Invalid password')
-                } else {
-                    // create a session and return a 200 response
-                    req.session.loggedIn = true
-                    req.session.username = username
-                    return res.status(200).json("");
-                }
+                req.session.loggedIn = true;
+                req.session.username = username;
+                res.cookie('loggedIn', true, {sameSite: true});
+                return res.status(200).json("");
             }
-            
-        } catch (error) {
-            console.log(error);
         }
         
-    // }
+    } catch (error) {
+        console.log(error);
+    }
+        
 })
 
 router.put('/update/', auth, function (req, res) {
-    if (!req.session.username) return res.status(400).end("Forbidden");
     var whitelist = ["first_name", "last_name", "email", "phone_number", "country", "address"];
     var data = JSON.parse(JSON.stringify(req.body, whitelist));
     var updateString = Object.keys(data).map(key => `${key} = '${data[key]}'`).join(", ");
@@ -301,7 +264,6 @@ router.put('/update/', auth, function (req, res) {
 });
 
 router.delete('/delete/', auth, function (req, res) {
-    // uses JS promises
     db.query("DELETE FROM profile_schema.aic_user WHERE username = $1::text", ['Entrepreneur_1'])
 		.then(pgRes => {
             res.status(200).json("Deletion Completed");
@@ -312,14 +274,95 @@ router.delete('/delete/', auth, function (req, res) {
         });
 });
 
-// (Added by Tapas) - For the API Logout Request
 router.get('/logout', auth, function (req, res) { 
     req.session.destroy(function(err) {
-        if(err) return res.status(500).end(err);
-        return res.status(200).end();
+        if(err) {
+            return res.status(500).end(err);
+        }
+        return res.clearCookie('loggedIn').status(200).end();
     });
-
 });
 
+/* Returns:
+- A list of entrepreneur objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured 
+
+note: an instructor object is of the form
+{
+    username: '',
+    password: '',
+    user_role: X, <- where X is of type int
+    honorifics: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone_number: '',
+    country: '',
+    address: ''
+} 
+*/
+router.get('/getEntrepreneurs', auth, async (req, res) => {
+    try{
+        let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=2'
+        const result = await db.query(query)
+        res.status(200).json(result.rows)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+});
+
+
+/* Returns:
+- A list of instructor objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured */
+router.get('/getInstructors', auth, async(req,res) => {
+    try{
+        let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=1'
+        const result = await db.query(query)
+        res.status(200).json(result.rows)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+});
+
+
+/* Returns:
+- A list of partner objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured */
+router.get('/getPartners', auth, async(req, res) => {
+    try{
+        let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=3'
+        const result = await db.query(query)
+        res.status(200).json(result.rows)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+});
+
+
+/* Returns:
+- A list of startup objects and a 200 status code upon successful execution of the query
+- 500 status code if an error occured */
+router.get('/getStartups', auth, async(req, res) => {
+    try{
+        let query = 'SELECT name FROM profile_schema.company'
+        const result = await db.query(query)
+        res.status(200).json(result.rows)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
 
 module.exports = router;
