@@ -93,21 +93,33 @@ router.get('/getAssignments', auth, async (req, res) => {
 router.get('/getCompanyFiles', function (req, res) { 
     console.log("In getCompanyFiles route");
 
-    let getFilesQuery = "create view CompanyFiles as " +
+    let companyFilesView = "create view CompanyFiles as " +
                         "select cf.file_path " +
-                        "from (select company_name from works_for where username= $1 ) as cn join CompanyFile cf on (cn.company_name = cf.company_name)"   
+                        "from (select company_name from profile_schema.works_for where username= $1 ) as cn " +
+                        "join post_schema.CompanyFile cf on (cn.company_name = cf.company_name)";   
 
+    let getFiles = "select * from CompanyFiles cf join post_schema.PostFile pf on (cf.file_path=pf.file_path)";    
+    let dropView = "drop view CompanyFiles";         
     console.log("In getCompanyFiles route");
+    let files = "";
 
-    db.query(query, [filePath, totalMarks, deadline])
-    .then(result => {
+    db.query(companyFilesView, [req.session.username])
+    .then(pgRes => {
         //console.log("Assignment stored in PostAssignment");
-        res.status(200).end();
+        return db.query(getFiles, []);
+    })
+    .then(pgRes => {
+        //console.log("Assignment stored in PostAssignment");
+        files = pgRes.rows;
+        return db.query[dropView, []];
+    })
+    .then(pgRes => {
+        return res.status(200).json(files);
     })
     .catch(e => {
         console.error(e.stack);
         res.status(500).end();
-    })
+    });
 });
 
 
