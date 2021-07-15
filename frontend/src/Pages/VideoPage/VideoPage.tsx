@@ -113,7 +113,7 @@ function VideoPage(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [title, settitle] = React.useState("");
   const [videoItems, setVideoItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
@@ -134,7 +134,7 @@ function VideoPage(prop: any) {
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
     formData.append("videos", file);
-    formData.append("description", description);
+    formData.append("title", title);
 
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
@@ -155,8 +155,6 @@ function VideoPage(prop: any) {
   };
 
   const renderVideos = (item: any) => {
-
-    //config vid src
 
     return (
       <Accordion className={classes.videoCard}>
@@ -238,12 +236,12 @@ function VideoPage(prop: any) {
                   <TextField
                     autoFocus
                     margin="dense"
-                    id="description"
-                    name="description"
-                    label="description"
+                    id="title"
+                    name="title"
+                    label="title"
                     type="text"
                     fullWidth
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => settitle(e.target.value)}
                   />
                 </DialogContent>
 

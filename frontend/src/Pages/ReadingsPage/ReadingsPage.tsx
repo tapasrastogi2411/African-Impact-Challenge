@@ -230,7 +230,7 @@ function ReadingPage(prop: any) {
       throw responseData;
     }
 
-    setreadingItems(responseData.file_paths);
+    setreadingItems(responseData);
   };
 
   useEffect(() => {
