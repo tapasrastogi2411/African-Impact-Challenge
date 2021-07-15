@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Avatar, Divider, Toolbar } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Toolbar } from "@material-ui/core";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import List from "@material-ui/core/List";
@@ -16,6 +16,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
@@ -33,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     width: "150%",
     height: 3,
-    marginTop: 5,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 15,
   },
   profilePic: {
     width: 200,
@@ -71,6 +73,12 @@ const useStyles = makeStyles((theme) => ({
   },
   uploadButton: {
     marginLeft: 800,
+    fontWeight: 600,
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 180,
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
   },
   readingHeader: {
     fontSize: 22,
@@ -78,6 +86,36 @@ const useStyles = makeStyles((theme) => ({
   noReadingHeader: {
     fontSize: 22,
   },
+
+  assignmentHeader: {
+    fontSize: 22,
+  },
+  noAssignmentHeader: {
+    fontSize: 22,
+  },
+  assignmentCard: {
+    width: 800,
+  },
+  cardBody: {
+    marginBottom: 25,
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400
+  },
+  cardDesc: {
+    fontSize: "13px",
+    fontWeight: 400,
+    marginBottom: 35
+  },
+  upload: {
+    flexBasis: "23.33%",
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400,
+    marginTop: 8,
+
+  },
+
 }));
 
 const RedTextTypography = withStyles({
@@ -112,7 +150,7 @@ function ReadingPage(prop: any) {
     const formData = new FormData();
     formData.append("readings", file);
     formData.append("description", description);
-    
+
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
       body: formData,
@@ -130,10 +168,68 @@ function ReadingPage(prop: any) {
     handleGet();
   };
 
-  const parseItem = (e: string) => {
-    return e.substring(e.indexOf("_") + 1, e.length);
+  // const parseItem = (e: string) => {
+  //   return e.substring(e.indexOf("_") + 1, e.length);
+  // };
+  const parseItem = (e: any) => {
+    var filePath = e.file_path;
+    return filePath.substring(filePath.indexOf('_') + 1, filePath.length)
   };
 
+  const renderAssignments = (item: any) => {  // item is an object containing assignment data
+    // call event handler in main and set state to the current assignment
+    return (
+      <Accordion className={classes.assignmentCard}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <AssignmentOutlinedIcon style={{ marginTop: 2, marginRight: 8 }} />
+          <Typography variant="h6" style={{ flexBasis: "73.33%" }} >{item.title}</Typography>
+        </AccordionSummary>
+
+        <AccordionDetails style={{ flexDirection: "column" }} >
+          <div style={{ flexBasis: "33.33%" }}>
+            <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 14 }}>
+              Uploaded on {item.upload_date.substring(0, 10)}
+            </Typography>
+            <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 25 }}>
+              Created by {item.upload_user}
+            </Typography>
+          </div>
+
+          <div style={{ flexBasis: "33.33%" }}>
+            <Typography variant="body2" className={classes.cardDesc}>
+              {item.description}
+            </Typography>
+          </div>
+          <Divider style={{ marginBottom: "20px" }} />
+          <Grid container direction="row" justify="space-between">
+
+            <Grid item>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography variant="body2" style={{ marginBottom: 10 }}>
+                    Download File
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <a href={"http://localhost:8080" + item.file_path} target='_blank' download>
+                    <Typography variant="body2" >
+                      {parseItem(item)}
+                    </Typography>
+                  </a>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+    );
+
+  }
   const handleGet = async () => {
     const response = await fetch(
       "http://localhost:8080/api/course/getReadings",
@@ -224,28 +320,60 @@ function ReadingPage(prop: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-        <List component="nav" aria-labelledby="readingList">
-          {assignmentItems.length > 0 ? (
-            assignmentItems.map((item) => (
-              <ListItem key={item} button>
-                <ListItemIcon>
-                  <LocalLibraryIcon />
-                </ListItemIcon>
-                <a
-                  href={"http://localhost:8080" + item}
-                  target="_blank"
-                  download
-                >
-                  {parseItem(item)}
-                </a>
-              </ListItem>
-            ))
-          ) : (
+        {assignmentItems.length > 0 ? (
+          assignmentItems.map((item) => (
+            renderAssignments(item)
+          ))
+        ) : (
             <Typography align="center" className={classes.noReadingHeader}>
               There are currently no readings!
             </Typography>
           )}
-        </List>
+
+        {/* <Accordion className={classes.assignmentCard}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <AssignmentOutlinedIcon style={{ marginTop: 2, marginRight: 8 }} />
+            <Typography variant="h6" style={{ flexBasis: "73.33%" }} >title</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ flexDirection: "column" }} >
+            <div style={{ flexBasis: "33.33%" }}>
+              <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 14 }}>
+                Posted:
+            </Typography>
+              <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 25 }}>
+                Created by
+            </Typography>
+            </div>
+            <div style={{ flexBasis: "33.33%" }}>
+              <Typography variant="body2" className={classes.cardDesc}>
+                des
+                </Typography>
+            </div>
+            <Divider style={{ marginBottom: "20px" }} />
+            <Grid container direction="row" justify="space-between">
+              <Grid item>
+                <Grid container direction="column">
+                  <Grid item>
+                    <Typography variant="body2" style={{ marginBottom: 10 }}>
+                      Download File
+                        </Typography>
+                  </Grid>
+                  <Grid item>
+                    <a href={"http://localhost:8080"} target='_blank' download>
+                      <Typography variant="body2" >
+                        item
+                            </Typography>
+                    </a>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </AccordionDetails>
+        </Accordion> */}
       </Grid>
     </div>
   );

@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     width: "150%",
     height: 3,
-    marginTop: 5,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 15,
   },
   profilePic: {
     width: 200,
@@ -70,7 +70,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
   },
   uploadButton: {
-    marginLeft: 800,
+    marginLeft: 840,
+    fontWeight: 600,
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 180,
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
   },
   VideoHeader: {
     fontSize: 22,
@@ -234,7 +240,7 @@ function VideoPage(prop: any) {
             ))
           ) : (
             <Typography align="center" className={classes.noVideoHeader}>
-              There are currently no Videos!
+              There are currently no videos!
             </Typography>
           )}
         </List>
