@@ -107,8 +107,6 @@ function ViewSubmission(props: any) {
     const assignment = props.assignment;
     const datetime = parseSubmissionTime(assignment.submission_date);
 
-
-
     {console.log(props.assignment)}
 
 
