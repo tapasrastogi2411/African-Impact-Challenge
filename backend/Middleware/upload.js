@@ -5,6 +5,7 @@ const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         var destinationPath = path.resolve(__dirname, '..') + '/uploads/';
         var fieldName = file.fieldname;
+        console.log("in upload mw");
 
         if (fieldName === 'videos') { //videos should be label of input attribute
             destinationPath += 'videos/'
@@ -12,6 +13,8 @@ const storage = multer.diskStorage({
             destinationPath += 'readings/'
         } else if (fieldName === 'assignments') {
             destinationPath += 'assignments/'
+        } else if (fieldName === 'company') {
+            destinationPath += 'company/'
         } 
         cb(null, destinationPath);
     },
@@ -23,12 +26,15 @@ const storage = multer.diskStorage({
 const fileFilter = function (req, file, cb) {
     var fieldName = file.fieldname;
     var fileTypes;
+    
 
     if (fieldName === 'videos') { //videos should be label of input attribute
         fileTypes = /mp4/;    
     } else if (fieldName === 'readings') {
         fileTypes = /docx|doc|txt|pdf/;  
     } else if (fieldName === 'assignments') {
+        fileTypes = /docx|doc|txt|pdf/;  
+    } else if (fieldName === 'company') {
         fileTypes = /docx|doc|txt|pdf/;  
     } 
 
