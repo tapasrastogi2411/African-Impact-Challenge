@@ -123,7 +123,6 @@ CREATE TABLE PostAssignment (
 );
 
 
-
 --  Assignment submissions
 
 -- maybe include grade and feedback here

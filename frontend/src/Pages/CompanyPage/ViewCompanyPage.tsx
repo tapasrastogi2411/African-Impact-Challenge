@@ -125,29 +125,13 @@ const defaultCompanyData = {
 };
 
 
-function CompanyPage(props: any) {
+function ViewCompanyPage(props: any) {
   
   const classes = useStyles();
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
 
   const getCompanyData = () => {
-    fetch('http://localhost:8080/api/profile/getCompany/', {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                },
-            credentials: 'include',
-            mode: 'cors',
-        })
-        .then(response => { // company data successfully retrieved
-            return response.json();
-        })
-        .then(responseJson => {
-          setCompanyData(responseJson);
-        })
-        .catch(err => { // company data cannot be retrieved 
-            console.log("error"); 
-        })
+    setCompanyData(props.viewCompanyDataProp);
   }
 
   React.useEffect(() => {
@@ -179,7 +163,7 @@ function CompanyPage(props: any) {
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <img src={building} className={classes.profilePic} />
-          <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
+
         </Grid>
         <Grid
           item
@@ -234,11 +218,10 @@ function CompanyPage(props: any) {
       
           <Typography variant="h5">Resources</Typography>
           
-          
         
       </Grid>
     </div>
   );
 }
 
-export default CompanyPage;
+export default ViewCompanyPage;
