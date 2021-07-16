@@ -69,7 +69,7 @@ export default function Dashboard(props: any) {
 
   const renderVideoCard = (item: any) => {
     return(
-      <VideoCard video={"http://localhost:8080" + item.file_path} title={item.title} uploader={item.upload_user}></VideoCard>
+      <VideoCard video={"http://localhost:8080" + item.file_path} title={item.title} uploader={item.upload_user} upload_date={item.upload_date}></VideoCard>
     );
   }
 
