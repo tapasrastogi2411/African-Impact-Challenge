@@ -55,7 +55,10 @@ router.get('/getAssignments', auth, async (req, res) => {
                     "ORDER BY upload_date";
 
         const result = await db.query(query, [req.session.username]);
+        //console.log(result.rows);
+        // const filePaths = result.rows.map(row => row.file_path);
         var fileArray = result.rows;
+        //console.log(fileArray);
         for (obj of fileArray) {
             if (obj['description'] == "") {
                 obj['description'] = "Description not provided";
