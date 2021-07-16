@@ -665,7 +665,7 @@ const renderResubmit = (assignmentItem: any) => {
                   )) : (
 
                     <Typography align="center" className={classes.noAssignmentHeader}>
-                      There are no assignments at this moment!
+                      There are no files uploaded at this moment!
                     </Typography>
                   )}
                 </Grid>
