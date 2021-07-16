@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 });
 
 
-function VideoCard({video, title, uploader} : any) {
+function VideoCard({video, title, uploader, upload_date} : any) {
     const classes = useStyles();
 
     return (
@@ -28,7 +28,7 @@ function VideoCard({video, title, uploader} : any) {
             </video>
             <div className={classes.details}>
                 <h3>{title}</h3>
-                <p>{uploader}</p>
+                <p>{uploader} • {upload_date.substring(0, 10)} </p>
             </div>
         </div>
     );

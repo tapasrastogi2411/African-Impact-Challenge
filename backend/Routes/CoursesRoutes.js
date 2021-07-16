@@ -29,7 +29,7 @@ router.get('/getReadings', async (req, res) => {
 
 router.get('/getVideos', async (req, res) => {
     try{
-        let query = `SELECT file_path, upload_user, title FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
+        let query = `SELECT file_path, upload_user, title, upload_date FROM post_schema.postfile WHERE category=2 ORDER BY upload_date DESC`;
         const result = await db.query(query);
         var fileArray = result.rows;
         return res.status(200).json(fileArray);
