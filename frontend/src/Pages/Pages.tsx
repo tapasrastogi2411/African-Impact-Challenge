@@ -69,7 +69,6 @@ export default function Pages(props: any) {
     }
    
     return (
-
         <Switch>
             <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
             <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData}  />}  />
