@@ -267,7 +267,8 @@ function CompanyPage(props: any) {
         mode: "cors",
       }
     );
-    const responseData = await response.json();
+    let responseData = await response.json();
+    responseData = JSON.parse(responseData);
     if (response.status > 300 || response.status < 200) {
       throw responseData;
     }
@@ -442,13 +443,7 @@ const renderResubmit = (assignmentItem: any) => {
     // assignmentItems[index]
     
     return(
-      <Accordion className={classes.assignmentCard} onClick={() => {
-        
-          setCompanyFiles(companyFiles[index]);
-          props.setCompany(companyFiles[index]);
-      
-      
-        }}>
+      <Accordion>
         <AccordionSummary 
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -458,17 +453,17 @@ const renderResubmit = (assignmentItem: any) => {
         </AccordionSummary>
         
         <AccordionDetails style={{flexDirection: "column"}} >
-          <div style={{flexBasis: "33.33%"}}>
-          <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 14}}>
+          <div>
+          <Typography variant="body2" >
               Posted: {item.upload_date.substring(0,10)}
             </Typography>
-            <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 25}}>
+            <Typography variant="body2" >
               Created by {item.upload_user}
             </Typography>
           </div>
 
-          <div style={{flexBasis: "33.33%"}}>
-            <Typography variant="body2" className={classes.cardDesc}>
+          <div>
+            <Typography variant="body2">
             {item.description}
             </Typography>
           </div>
@@ -478,7 +473,7 @@ const renderResubmit = (assignmentItem: any) => {
             <Grid item>
                 <Grid container direction="column"> 
                     <Grid item>   
-                        <Typography variant="body2" style={{marginBottom: 10}}>
+                        <Typography variant="body2">
                             Download File
                         </Typography>
                     </Grid>
@@ -486,7 +481,7 @@ const renderResubmit = (assignmentItem: any) => {
                     <Grid item>
                         <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
                             <Typography variant="body2" >
-                                {parseItem(item)}
+                              Hi
                             </Typography>
                         </a>
                     </Grid>
@@ -494,7 +489,7 @@ const renderResubmit = (assignmentItem: any) => {
             </Grid>
 
             
-              {renderButtons(index)}
+      
             
         </Grid>
         </AccordionDetails>
@@ -650,6 +645,7 @@ const renderResubmit = (assignmentItem: any) => {
         <Divider className={classes.divider} />
       
           <Typography variant="h5">Resources</Typography>
+          <Grid item>
           <Button
                 variant="outlined"
                 onClick={handleClickOpen}
@@ -660,23 +656,25 @@ const renderResubmit = (assignmentItem: any) => {
               >
                 Resources
               </Button>
+            </Grid>
+              <Grid item style={{marginLeft: 500}}>
+                {companyFiles.length > 0 ? companyFiles.map((item, index) => (
+
+                  renderCompanyFiles(item, index)
+
+                  )) : (
+
+                    <Typography align="center" className={classes.noAssignmentHeader}>
+                      There are no assignments at this moment!
+                    </Typography>
+                  )}
+                </Grid>
         
       </Grid>
 
 
-      <Divider className={classes.divider} />
-      {companyFiles.length > 0 ? companyFiles.map((item, index) => (
-
-        renderCompanyFiles(item, index)
-
-  )) : (
-
-          <Typography align="center" className={classes.noAssignmentHeader}>
-            There are no assignments at this moment!
-          </Typography>
-
-
-  )}
+      
+      
 
   </div>
   );
