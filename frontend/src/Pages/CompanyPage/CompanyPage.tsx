@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Avatar, Container, Dialog, DialogActions, DialogContent, DialogContentText,  Divider, TextField, Toolbar, withStyles } from "@material-ui/core";
+import { Avatar, Container, Divider, Toolbar } from "@material-ui/core";
 
 import profilepic from "../ProfilePage/profilepic.jpeg";
 import ChatIcon from '@material-ui/icons/Chat';
@@ -19,8 +19,6 @@ import building from "./building.png";
 import member from "./member.jpg";
 import founder from "./founder.jpg";
 import AddIcon from '@material-ui/icons/Add';
-import AssignmentIcon from "@material-ui/icons/Assignment";
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -113,21 +111,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 2
   },
 
-  // Adding the basic structure of the upload button, adapted from AssignmentPage.tsx
-  uploadButton: {
-    //marginLeft: 800,
-    marginBottom: "10px",
-    width: 200,
-  },
-
-  upload: {
-    flexBasis: "23.33%",
-    color: "#5f6368",
-    fontSize: "12px",
-    fontWeight: 400,
-    marginTop: 8,
-  }
-
   /* relatedUser: {
     marginRight: 40
   } */
@@ -141,104 +124,11 @@ const defaultCompanyData = {
   creator: ""
 };
 
-const RedTextTypography = withStyles({
-  root: {
-    color: "#e43132",
-  },
-})(Typography);
 
 function CompanyPage(props: any) {
   
   const classes = useStyles();
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
-
-  const [open, setOpen] = React.useState(false);
-  const [alertMessage, setAlertMessage] = React.useState("");
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [file, setFile] = React.useState("");
-  const [assignmentItems, setAssignmentItems] = React.useState([]); // array of objects
-  
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setAlertMessage("");
-  };
-
-  const handleUploadedFile = (e: any) => {
-    setFile(e.target.files[0]);
-  };
-  const handleAlert = (e: string) => {
-    setAlertMessage(e);
-  };
-
-  const handleGet = async () => {
-    const response = await fetch(
-      "http://localhost:8080/api/course/getAssignments",
-      {
-        method: "GET",
-        credentials: 'include',
-        mode: "cors",
-      }
-    );
-    const responseData = await response.json();
-    if (response.status > 300 || response.status < 200) {
-      throw responseData;
-    }
-    
-    setAssignmentItems(responseData);
-  };
-
-  const handleSubmit = async (e: any) => {
-    const formData = new FormData();
-    formData.append("assignments", file);
-    formData.append("title", title);
-    formData.append("description", description);
-
-    const response = await fetch("http://localhost:8080/api/course/upload", {
-      method: "POST",
-      body: formData,
-      credentials: 'include',
-      mode: "cors",
-
-    });
-
-    console.log(response.status);
-    if (response.status > 300 || response.status < 200) {
-      handleAlert("Failed to upload");
-    }
-    handleAlert("Successfully Uploaded");
-    handleClose();
-    handleGet();
-  };
-
-  const handleCompanyFileSubmit = async (e: any) => {
-    const formData = new FormData();
-    formData.append("company", file);
-    formData.append("title", title);
-    formData.append("description", description);
-
-    const response = await fetch("http://localhost:8080/api/course/upload/companyFile", {
-      method: "POST",
-      body: formData,
-      credentials: 'include',
-      mode: "cors",
-
-    });
-
-    console.log(response.status);
-    if (response.status > 300 || response.status < 200) {
-      handleAlert("Failed to upload");
-    }
-    handleAlert("Successfully Uploaded");
-    handleClose();
-    handleGet();
-  };
-
-
 
   const getCompanyData = () => {
     fetch('http://localhost:8080/api/profile/getCompany/', {
@@ -271,66 +161,6 @@ function CompanyPage(props: any) {
     <div >
       <Navbar></Navbar>
 
-      <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="form-dialog-title"
-              >
-                <DialogContent>
-                  <DialogContentText>
-                    Please fill in the following fields
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="title"
-                    name="title"
-                    label="title"
-                    type="text"
-                    fullWidth
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <TextField
-      
-                    margin="dense"
-                    id="description"
-                    name="description"
-                    label="description"
-                    type="text"
-                    fullWidth
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </DialogContent>
-
-                <DialogContent>
-                  <TextField
-                    type={"file"}
-                    name="assignments"
-                    id="assignments"
-                    label="assignments"
-                    inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
-                    onChange={handleUploadedFile}
-                  ></TextField>
-                  <AssignmentIcon />
-                </DialogContent>
-                <DialogContent>
-                  {alertMessage.length > 0 ? (
-                    <RedTextTypography>{alertMessage}</RedTextTypography>
-                  ) : null}
-                </DialogContent>
-                <DialogActions>
-                  {/* <Button onClick={handleSubmit} color="primary">
-                    Submit
-                  </Button> */}
-                  <Button onClick={handleCompanyFileSubmit} color="primary">
-                    Submit
-                  </Button>
-                  <Button onClick={handleClose} color="primary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
-
       <Grid container className={classes.root}>
     
         <Grid container>
@@ -344,8 +174,6 @@ function CompanyPage(props: any) {
             </Grid>
             
         </Grid>
-
-
 
 
         <Divider className={classes.divider} />
@@ -405,16 +233,7 @@ function CompanyPage(props: any) {
         <Divider className={classes.divider} />
       
           <Typography variant="h5">Resources</Typography>
-          <Button
-                variant="outlined"
-                onClick={handleClickOpen}
-                // className={classes.uploadButton}
-                startIcon={<AddIcon />}
-                style={{marginLeft: 850}}
-                className={classes.invBtn}
-              >
-                Resources
-              </Button>
+          
           
         
       </Grid>
