@@ -17,17 +17,36 @@ import Navbar from "../../NavBar/Navbar";
 import List from "@material-ui/core/List";
 import UserItem from "./UserItem";
 import { Accordion, AccordionSummary, Divider, ListItem } from "@material-ui/core";
+import { Theme } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { textSpanIsEmpty } from "typescript";
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-const useStyles: (props?: any) => any = makeStyles((theme) => ({
+
+const useStyles: (props?: any) => any = makeStyles((theme: Theme) => ({
   root: {
-    position: "absolute",
-    top: 120,
-    left: 225,
-    width: 1400,
+    display: "flex",
+  },
+  people: {
+    display: "flex",
+    width: "100%",
+    marginTop: 100,
+    marginLeft:180,
+    marginRight: 15,
+    justifyContent: "space-between",
+
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: "column",
+    },
+  },
+  item: {
+    width: "25%",
+    marginRight: 10,
+    
+    [theme.breakpoints.down('sm')]: {
+      width: "100%",
+    },
   },
   list: {
     marginBottom: 30,
@@ -115,19 +134,15 @@ export default function PeoplePage(props: any) {
   }, []);
 
   return (
-    <div>
-      <Navbar></Navbar>
-      <Grid
-        container
-        direction="row"
-        justify="space-around"
-        alignItems="center"
-        className={classes.root}
-      >
-        <Grid container xs={3}>
-          <Grid item xs={5} md={10}>
+    <div className={classes.root}>
+      <div>
+        <Navbar></Navbar>
+      </div>
+
+      <div className={classes.people}>
+        <div className={classes.item}>
             <Typography variant="h6" className={classes.txt}>
-              Instructors
+                Instructors
             </Typography>
             <Accordion>
               <AccordionSummary
@@ -155,10 +170,9 @@ export default function PeoplePage(props: any) {
                 )}
               </List>
             </Accordion>
-          </Grid>
-        </Grid>
-        <Grid container xs={3}>
-          <Grid item xs={5} md={10}>
+          </div>
+
+          <div className={classes.item}>
             <Typography variant="h6" className={classes.txt}>
               Partners
             </Typography>
@@ -188,10 +202,9 @@ export default function PeoplePage(props: any) {
                 )}
               </List>
             </Accordion>
-          </Grid>
-        </Grid>
-        <Grid container xs={3}>
-          <Grid item xs={5} md={10}>
+          </div>
+
+          <div className={classes.item}>
             <Typography variant="h6" className={classes.txt}>
               Entrepreneurs
             </Typography>
@@ -221,10 +234,9 @@ export default function PeoplePage(props: any) {
                 )}
               </List>
             </Accordion>
-          </Grid>
-        </Grid>
-        <Grid container xs={3}>
-          <Grid item xs={5} md={10}>
+          </div>
+
+          <div className={classes.item}>
             <Typography variant="h6" className={classes.txt}>
               Startups
             </Typography>
@@ -256,9 +268,8 @@ export default function PeoplePage(props: any) {
                 )}
               </List>
             </Accordion>
-          </Grid>
-        </Grid>
-      </Grid>
+          </div>
+      </div>
     </div>
   );
 }
