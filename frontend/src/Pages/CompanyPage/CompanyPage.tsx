@@ -215,6 +215,29 @@ function CompanyPage(props: any) {
     handleGet();
   };
 
+  const handleCompanyFileSubmit = async (e: any) => {
+    const formData = new FormData();
+    formData.append("company", file);
+    formData.append("title", title);
+    formData.append("description", description);
+
+    const response = await fetch("http://localhost:8080/api/course/upload/companyFile", {
+      method: "POST",
+      body: formData,
+      credentials: 'include',
+      mode: "cors",
+
+    });
+
+    console.log(response.status);
+    if (response.status > 300 || response.status < 200) {
+      handleAlert("Failed to upload");
+    }
+    handleAlert("Successfully Uploaded");
+    handleClose();
+    handleGet();
+  };
+
 
 
   const getCompanyData = () => {
@@ -298,6 +321,9 @@ function CompanyPage(props: any) {
                 <DialogActions>
                   <Button onClick={handleSubmit} color="primary">
                     Submit
+                  </Button>
+                  <Button onClick={handleCompanyFileSubmit} color="primary">
+                    Submit here we go again
                   </Button>
                   <Button onClick={handleClose} color="primary">
                     Cancel
