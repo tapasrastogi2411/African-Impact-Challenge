@@ -435,7 +435,7 @@ const renderResubmit = (assignmentItem: any) => {
     }
 
   };
-
+  
   // Adding an renderCompanyFiles method here using Accordion
   const renderCompanyFiles = (item: any, index: any) => {  // item is an object containing assignment data
     // call event handler in main and set state to the current assignment.
@@ -443,27 +443,25 @@ const renderResubmit = (assignmentItem: any) => {
     // assignmentItems[index]
     
     return(
-      <Accordion>
+      <Accordion className={classes.assignmentCard}>
         <AccordionSummary 
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-      
+          <AssignmentOutlinedIcon style={{marginTop: 2, marginRight: 2}} /> 
+          <Typography variant="h6" style={{flexBasis: "73.33%"}} >{item.title}</Typography>
         </AccordionSummary>
         
         <AccordionDetails style={{flexDirection: "column"}} >
-          <div>
-          <Typography variant="body2" >
-              Posted: {item.upload_date.substring(0,10)}
-            </Typography>
-            <Typography variant="body2" >
-              Created by {item.upload_user}
+          <div style={{flexBasis: "33.33%"}}>
+          <Typography variant="body2" className={classes.cardBody} style={{marginBottom: 14}}>
+              Posted on: {item.upload_date.substring(0,10)}
             </Typography>
           </div>
 
-          <div>
-            <Typography variant="body2">
+          <div style={{flexBasis: "33.33%"}}>
+            <Typography variant="body2" className={classes.cardDesc}>
             {item.description}
             </Typography>
           </div>
@@ -473,7 +471,7 @@ const renderResubmit = (assignmentItem: any) => {
             <Grid item>
                 <Grid container direction="column"> 
                     <Grid item>   
-                        <Typography variant="body2">
+                        <Typography variant="body2" style={{marginBottom: 10}}>
                             Download File
                         </Typography>
                     </Grid>
@@ -481,7 +479,7 @@ const renderResubmit = (assignmentItem: any) => {
                     <Grid item>
                         <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
                             <Typography variant="body2" >
-                              Hi
+                                {parseItem(item)}
                             </Typography>
                         </a>
                     </Grid>
@@ -489,11 +487,13 @@ const renderResubmit = (assignmentItem: any) => {
             </Grid>
 
             
-      
+              {/* {renderButtons(index)} */}
             
         </Grid>
         </AccordionDetails>
       </Accordion>
+      
+    
       
     ); 
 
@@ -657,7 +657,7 @@ const renderResubmit = (assignmentItem: any) => {
                 Resources
               </Button>
             </Grid>
-              <Grid item style={{marginLeft: 500}}>
+              <Grid item style= {{marginTop: '12px'}} >
                 {companyFiles.length > 0 ? companyFiles.map((item, index) => (
 
                   renderCompanyFiles(item, index)
