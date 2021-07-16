@@ -283,7 +283,6 @@ router.get('/logout', auth, function (req, res) {
     });
 });
 
-<<<<<<< HEAD
 /* Returns:
 - A list of entrepreneur objects and a 200 status code upon successful execution of the query
 - 500 status code if an error occured 
@@ -366,6 +365,4 @@ router.get('/getStartups', auth, async(req, res) => {
     }
 })
 
-=======
->>>>>>> parent of 0b1f282... TT-110-Integrated TTT-14 changes onto TT-110
 module.exports = router;

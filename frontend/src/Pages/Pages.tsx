@@ -32,7 +32,6 @@ const defaultUserData = {
     showCompanyBtn: true, // unused
 }
 
-<<<<<<< HEAD
 const viewUserData = {
     username: "",
     role_name: "",
@@ -53,18 +52,13 @@ const viewUserData = {
     creator: ""
   };
 
-=======
->>>>>>> parent of 0b1f282... TT-110-Integrated TTT-14 changes onto TT-110
 export default function Pages(props: any) {
     const currentLocation = useLocation();
 
     const [reg, setReg] = React.useState("false"); // used to track whether the user is logged-in so the LoginPage can display "User is succesfully registered" alert
     const [userData, setUserData] = React.useState(defaultUserData);
-<<<<<<< HEAD
     const [viewuserData, setViewUserData] = React.useState(viewUserData);
     const [viewcompanyData, setViewCompanyData] = React.useState(ViewCompanyData);
-=======
->>>>>>> parent of 0b1f282... TT-110-Integrated TTT-14 changes onto TT-110
 
     const updateReg = (val:string) => {
         setReg(val);
@@ -75,10 +69,6 @@ export default function Pages(props: any) {
     }
    
     return (
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 0b1f282... TT-110-Integrated TTT-14 changes onto TT-110
         <Switch>
             <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
             <Route exact path="/login" render={() => <SignIn regVal={reg} updateUserDataHandler={updateUserData}  />}  />
@@ -88,7 +78,6 @@ export default function Pages(props: any) {
             <Route exact path="/company" render={() => <CompanyPage  />}  />
             <Route path="/assignments" render={() => <AssignmentPageRouter userDataProp={userData} />}   /> 
             <Route exact path="/dashboard" component={Dashboard} />
-<<<<<<< HEAD
             <Route exact path="/people" render = {() => <PeoplePage changeViewCompanyData={(object: React.SetStateAction<{ company_name: string; address: string; industry: string; bio: string; creator: string; }>) => setViewCompanyData(object)} changeViewUserData={(object: React.SetStateAction<{ username: string; role_name: string; honorifics: string; first_name: string; last_name: string; email: string; phone_number: string; country: string; address: string; }>) => setViewUserData(object) } />} />
             <Route exact path="/videos" component={VideoPage} />
             <Route exact path="/readings" component={ReadingsPage} />
@@ -99,15 +88,6 @@ export default function Pages(props: any) {
         </Switch>
         
 
-=======
-            <Route exact path="/people" component={PeoplePage} />
-            <Route exact path="/videos" component={VideoPage} />
-            <Route exact path="/readings" component={ReadingsPage} />
-
-            <Route exact path="/guestVideos" component={GuestVideoPage} />    
-            <Route exact path="/guestReadings" component={GuestReadingPage} />   
-        </Switch>
->>>>>>> parent of 0b1f282... TT-110-Integrated TTT-14 changes onto TT-110
     );
 
 }
