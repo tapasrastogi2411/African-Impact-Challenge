@@ -319,11 +319,11 @@ function CompanyPage(props: any) {
                   ) : null}
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleSubmit} color="primary">
+                  {/* <Button onClick={handleSubmit} color="primary">
                     Submit
-                  </Button>
+                  </Button> */}
                   <Button onClick={handleCompanyFileSubmit} color="primary">
-                    Submit here we go again
+                    Submit
                   </Button>
                   <Button onClick={handleClose} color="primary">
                     Cancel
