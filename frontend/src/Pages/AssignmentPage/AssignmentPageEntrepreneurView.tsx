@@ -298,6 +298,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
         }
       );
       const responseData = await response.json();
+      console.log(responseData);
       if (response.status > 300 || response.status < 200) {
         throw responseData;
       }
