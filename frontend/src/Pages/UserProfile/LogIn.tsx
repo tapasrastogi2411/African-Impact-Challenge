@@ -15,6 +15,12 @@ const axios = require('axios');
 
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
+    root: {
+        marginTop: 250,
+        [theme.breakpoints.down('lg')]: {
+            marginTop: 200,
+        },
+    },
     paper: {
         marginTop: 0,
         display: "flex",
@@ -128,6 +134,7 @@ export const SignInAjax =  async (
            }
            console.log(response);
            onSuccess(responseData);
+           window.location.reload()
            
         }
         
@@ -146,33 +153,10 @@ export default function SignIn(props: any) {
     const onSuccess = (responseData: any) => {  
         history.push('/profile');
         console.log(responseData);
-
-        // get company membership 
-        checkUserInCompany(responseData);
         props.updateUserDataHandler(responseData); 
-
         
     }
-    const checkUserInCompany = (responseData: any) => {
-        fetch('http://localhost:8080/api/profile/inCompany/', {
-          method: "GET",
-          credentials: 'include',
-          mode: 'cors',
-        })
-        .then(response => { // if company exists then show view company button/hide create company button
-            if (response.status == 200) {
-                props.setCompanyCreateBtnHandler(false); // hide
-            } else {
-                props.setCompanyCreateBtnHandler(true); // show
-            }
-
-        })
-        .catch(err => { 
-            console.log("error");
-            props.setCompanyCreateBtnHandler(false); // hide
-        })
-    }
-
+ 
 
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
@@ -205,9 +189,8 @@ export default function SignIn(props: any) {
     }
 
 
-
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" className={classes.root}>
             <Typography variant="h5" className={classes.text}>
                 WELCOME BACK!
             </Typography>

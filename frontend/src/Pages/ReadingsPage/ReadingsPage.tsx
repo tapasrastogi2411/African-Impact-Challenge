@@ -6,16 +6,14 @@ import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Avatar, Divider, Toolbar } from "@material-ui/core";
-import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Toolbar } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import LocalLibraryOutlinedIcon from '@material-ui/icons/LocalLibraryOutlined';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
@@ -33,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     width: "150%",
     height: 3,
-    marginTop: 5,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 15,
   },
   profilePic: {
     width: 200,
@@ -71,6 +69,12 @@ const useStyles = makeStyles((theme) => ({
   },
   uploadButton: {
     marginLeft: 800,
+    fontWeight: 600,
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 180,
+    "&:hover": { background: "#e69113" },
+    borderRadius: 20,
   },
   readingHeader: {
     fontSize: 22,
@@ -78,6 +82,27 @@ const useStyles = makeStyles((theme) => ({
   noReadingHeader: {
     fontSize: 22,
   },
+
+ 
+  noreadingHeader: {
+    fontSize: 22,
+  },
+  readingCard: {
+    width: 800,
+  },
+  cardBody: {
+    marginBottom: 25,
+    color: "#5f6368",
+    fontSize: "12px",
+    fontWeight: 400
+  },
+  cardDesc: {
+    fontSize: "13px",
+    fontWeight: 400,
+    marginBottom: 35
+  },
+
+
 }));
 
 const RedTextTypography = withStyles({
@@ -90,8 +115,9 @@ function ReadingPage(prop: any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState("");
+  const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [assignmentItems, setAssignmentItems] = React.useState([]);
+  const [readingItems, setreadingItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
@@ -111,8 +137,9 @@ function ReadingPage(prop: any) {
   const handleSubmit = async (e: any) => {
     const formData = new FormData();
     formData.append("readings", file);
+    formData.append("title", title);
     formData.append("description", description);
-    
+
     const response = await fetch("http://localhost:8080/api/course/upload", {
       method: "POST",
       body: formData,
@@ -130,10 +157,68 @@ function ReadingPage(prop: any) {
     handleGet();
   };
 
-  const parseItem = (e: string) => {
-    return e.substring(e.indexOf("_") + 1, e.length);
+  // const parseItem = (e: string) => {
+  //   return e.substring(e.indexOf("_") + 1, e.length);
+  // };
+  const parseItem = (e: any) => {
+    var filePath = e.file_path;
+    return filePath.substring(filePath.indexOf('_') + 1, filePath.length)
   };
 
+  const renderReadings = (item: any) => {  // item is an object containing reading data
+    // call event handler in main and set state to the current reading
+    return (
+      <Accordion className={classes.readingCard}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <MenuBookIcon style={{ marginTop: 3, marginRight: 10 }} />
+          <Typography variant="h6" style={{ flexBasis: "73.33%" }} >{item.title}</Typography>
+        </AccordionSummary>
+
+        <AccordionDetails style={{ flexDirection: "column" }} >
+          <div style={{ flexBasis: "33.33%" }}>
+            <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 14 }}>
+              Uploaded on {item.upload_date.substring(0, 10)}
+            </Typography>
+            <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 25 }}>
+              Created by {item.upload_user}
+            </Typography>
+          </div>
+
+          <div style={{ flexBasis: "33.33%" }}>
+            <Typography variant="body2" className={classes.cardDesc}>
+              {item.description}
+            </Typography>
+          </div>
+          <Divider style={{ marginBottom: "20px" }} />
+          <Grid container direction="row" justify="space-between">
+
+            <Grid item>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography variant="body2" style={{ marginBottom: 10 }}>
+                    Download File
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <a href={"http://localhost:8080" + item.file_path} target='_blank' download>
+                    <Typography variant="body2" >
+                      {parseItem(item)}
+                    </Typography>
+                  </a>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+    );
+
+  }
   const handleGet = async () => {
     const response = await fetch(
       "http://localhost:8080/api/course/getReadings",
@@ -148,7 +233,7 @@ function ReadingPage(prop: any) {
       throw responseData;
     }
 
-    setAssignmentItems(responseData.file_paths);
+    setreadingItems(responseData);
   };
 
   useEffect(() => {
@@ -166,86 +251,129 @@ function ReadingPage(prop: any) {
           </Typography>
           <Grid>
             <div>
-              <Button
-                variant="outlined"
-                onClick={handleClickOpen}
-                className={classes.uploadButton}
-              >
-                Upload Readings
-              </Button>
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="form-dialog-title"
-              >
-                <DialogContent>
-                  <DialogContentText>
-                    Please fill in the following fields
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="description"
-                    name="description"
-                    label="description"
-                    type="text"
-                    fullWidth
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </DialogContent>
-
-                <DialogContent>
-                  <TextField
-                    type={"file"}
-                    name="readings"
-                    id="readings"
-                    label="readings"
-                    inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
-                    onChange={handleUploadedFile}
-                  ></TextField>
-                  <AssignmentIcon />
-                </DialogContent>
-                <DialogContent>
-                  {alertMessage.length > 0 ? (
-                    <RedTextTypography>{alertMessage}</RedTextTypography>
-                  ) : null}
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleSubmit} color="primary">
-                    Submit
+            <Button
+                      variant="outlined"
+                      onClick={handleClickOpen}
+                      className={classes.uploadButton}
+                      >
+                  Upload Readings
                   </Button>
-                  <Button onClick={handleClose} color="primary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
+                  <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title"
+                      >
+                      <DialogContent>
+                        <DialogContentText>
+                            Please fill in the following fields
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="title"
+                            name="title"
+                            label="title"
+                            type="text"
+                            fullWidth
+                            onChange={(e) =>
+                        setTitle(e.target.value)}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="description"
+                            name="description"
+                            label="description"
+                            type="text"
+                            fullWidth
+                            onChange={(e) =>
+                            setDescription(e.target.value)}
+                            />
+                      </DialogContent>
+                      <DialogContent>
+                      <TextField
+                      type={"file"}
+                      name="readings"
+                      id="readings"
+                      label="readings"
+                      inputProps={{ accept: "application/pdf,.doc,.docx,.txt" }}
+                      onChange={handleUploadedFile}
+                      ></TextField>
+                      <LocalLibraryOutlinedIcon />
+                      </DialogContent>
+                      <DialogContent>
+                        {alertMessage.length > 0 ? (
+                        <RedTextTypography>{alertMessage}</RedTextTypography>
+                        ) : null}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleSubmit} color="primary">
+                        Submit
+                        </Button>
+                        <Button onClick={handleClose} color="primary">
+                        Cancel
+                        </Button>
+                      </DialogActions>
+                  </Dialog>
             </div>
           </Grid>
         </Grid>
 
         <Divider className={classes.divider} />
-        <List component="nav" aria-labelledby="readingList">
-          {assignmentItems.length > 0 ? (
-            assignmentItems.map((item) => (
-              <ListItem key={item} button>
-                <ListItemIcon>
-                  <LocalLibraryIcon />
-                </ListItemIcon>
-                <a
-                  href={"http://localhost:8080" + item}
-                  target="_blank"
-                  download
-                >
-                  {parseItem(item)}
-                </a>
-              </ListItem>
-            ))
-          ) : (
+        {readingItems.length > 0 ? (
+          readingItems.map((item) => (
+            renderReadings(item)
+          ))
+        ) : (
             <Typography align="center" className={classes.noReadingHeader}>
               There are currently no readings!
             </Typography>
           )}
-        </List>
+
+        {/* <Accordion className={classes.readingCard}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <MenuBookIcon style={{ marginTop: 3, marginRight: 10 }}/>
+
+            <Typography variant="h6" style={{ flexBasis: "73.33%" }} >title</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ flexDirection: "column" }} >
+            <div style={{ flexBasis: "33.33%" }}>
+              <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 14 }}>
+                Posted:
+            </Typography>
+              <Typography variant="body2" className={classes.cardBody} style={{ marginBottom: 25 }}>
+                Created by
+            </Typography>
+            </div>
+            <div style={{ flexBasis: "33.33%" }}>
+              <Typography variant="body2" className={classes.cardDesc}>
+                des
+                </Typography>
+            </div>
+            <Divider style={{ marginBottom: "20px" }} />
+            <Grid container direction="row" justify="space-between">
+              <Grid item>
+                <Grid container direction="column">
+                  <Grid item>
+                    <Typography variant="body2" style={{ marginBottom: 10 }}>
+                      Download File
+                        </Typography>
+                  </Grid>
+                  <Grid item>
+                    <a href={"http://localhost:8080"} target='_blank' download>
+                      <Typography variant="body2" >
+                        item
+                            </Typography>
+                    </a>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </AccordionDetails>
+        </Accordion> */}
       </Grid>
     </div>
   );
