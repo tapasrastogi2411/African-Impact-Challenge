@@ -21,5 +21,5 @@ Brandon Jaipersaud, Aaron Tan, Clement Tran, Tapas Rastogi, Haolong Zhang, Ho Ki
 * Completing some tasks close to the deadline
 
 ### What was your best/worst experience during sprint 2
-* Best: 
+* Best: Having all the features working on both front-end and back-end and the group interactions during the sprint
 * Worst: Merging everyone's code into develop 
