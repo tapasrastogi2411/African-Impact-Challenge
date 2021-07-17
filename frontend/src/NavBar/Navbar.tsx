@@ -96,9 +96,6 @@ export default function PersistentDrawerLeft() {
             <Typography className={classes.txt}>Dashboard</Typography>
           </ListItem>
           <ListItem button className={classes.btn}>
-            <Typography className={classes.txt}>Classes</Typography>
-          </ListItem>
-          <ListItem button className={classes.btn}>
             <Typography className={classes.txt}>Discussions</Typography>
           </ListItem>
           <ListItem button className={classes.btn}>
