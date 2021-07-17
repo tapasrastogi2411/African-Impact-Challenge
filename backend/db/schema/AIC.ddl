@@ -98,6 +98,21 @@ CREATE TABLE PostFile (
 );
 
 
+-- Company Files
+
+CREATE TABLE CompanyFile (
+  company_name TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  
+  FOREIGN KEY(company_name) REFERENCES profile_schema.company(company_name)
+    on delete restrict,
+  FOREIGN KEY(file_path) REFERENCES PostFile(file_path)
+    on delete restrict
+);
+
+
+-- Assignments
+
 CREATE TABLE PostAssignment (
   file_path TEXT PRIMARY KEY,
   total_marks INT, -- Only applies to assignments (i.e. category=x). Should be optional. Ex. essay submission may not have total marks.
@@ -145,10 +160,13 @@ CREATE TABLE GradeAssignment (
 
 
 
+
+
 INSERT INTO PostCategory VALUES 
 (1, 'Reading'), 
 (2, 'Video'), 
-(3, 'Assignment');
+(3, 'Assignment'),
+(4, 'Company');
 
 
 INSERT INTO profile_schema.aic_user VALUES

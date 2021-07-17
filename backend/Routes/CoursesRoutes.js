@@ -55,10 +55,7 @@ router.get('/getAssignments', auth, async (req, res) => {
                     "ORDER BY upload_date";
 
         const result = await db.query(query, [req.session.username]);
-        //console.log(result.rows);
-        // const filePaths = result.rows.map(row => row.file_path);
         var fileArray = result.rows;
-        //console.log(fileArray);
         for (obj of fileArray) {
             if (obj['description'] == "") {
                 obj['description'] = "Description not provided";
@@ -68,7 +65,7 @@ router.get('/getAssignments', auth, async (req, res) => {
             }
         }
        
-        //console.log(fileArray);
+        
         return res.status(200).json(fileArray);
     }
 
@@ -78,8 +75,46 @@ router.get('/getAssignments', auth, async (req, res) => {
     }
 });
 
+/**
+ * Get company files for the company the currently logged-in user works for
+ */ 
+router.get('/getCompanyFiles', function (req, res) { 
+    // req.session.username="Agnes"
+   
+    let companyFilesView = `drop view if exists CompanyFiles; ` +
+                        `create view CompanyFiles as (select cf.file_path ` +
+                        `from (select company_name from profile_schema.works_for where username = '${req.session.username}' ) as cn ` +
+                        `join post_schema.CompanyFile cf on (cn.company_name = cf.company_name));`;   
+
+    let getFiles = "select * from CompanyFiles cf join post_schema.PostFile pf on (cf.file_path=pf.file_path)";    
+    let dropView = "drop view CompanyFiles";         
+    let files = [];
+
+    db.query(companyFilesView, [])
+    .then(pgRes => {
+        return db.query(getFiles, []);
+    })
+    .then(pgRes => {
+        pgRows = pgRes.rows;
+        for (let file of pgRows) {
+            files.push(file);
+        }
+        files = JSON.stringify(files);
+        return db.query[dropView, []];
+    })
+    .then(pgRes => {
+        return res.status(200).json(files);
+    })
+    .catch(e => {
+        console.error(e.stack);
+        res.status(500).end();
+    });
+});
+
+
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
     //req.session.username = "Aaron"; //uncomment this for testing
+   
 
     if(req.files.length === 0) {
         return res.status(400).end();
@@ -103,6 +138,8 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
         category = 2;
     } else if (fieldName === 'assignments') {
         category = 3;
+    } else if (fieldName === 'company') {
+        category = 4;
     } 
 
     var postfileSchema = "(file_path, category, upload_date, upload_user, title, description)";
@@ -113,7 +150,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
     db
         .query(query, values)
         .then(result => {
-            if (fieldName === 'assignments') {
+            if (fieldName === 'assignments' || fieldName === 'company') {
                 next();
             }
             res.status(200).end();
@@ -125,21 +162,49 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
 });
 
 
-// 2017-05-27T10:30
+// /upload is already authenticated so no need to reauthenticate
+/**
+ */
+router.post('/upload/companyFile/', function (req, res) { 
+    
+
+    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    let companyNameQuery =  "select company_name " +
+                            "from profile_schema.works_for " +
+                            "where username=$1 ";
+
+    let insertFile =  "INSERT INTO post_schema.CompanyFile VALUES ($1, $2)";
+    db.query(companyNameQuery, [req.session.username])
+    .then(pgRes => {
+        let companyName = pgRes.rows[0].company_name;
+        return db.query(insertFile, [companyName, filePath]);
+    })
+    .then(pgRes => {
+        res.status(200).end();
+    })
+    .catch(e => {
+        console.error(e.stack);
+        res.status(500).end();
+    });
+                    
+});
+
+
+
+
+
 router.post('/upload/assignment/teacher', function (req, res) { 
-    console.log("In teacher route");
+   
 
     let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     let totalMarks = req.body.totalMarks;
     let deadline = req.body.deadline.replace("T", " ");
-    console.log(deadline);
     var query = "INSERT INTO post_schema.PostAssignment VALUES ($1, $2, $3)";
 
-    console.log("In teacher route");
+    
 
     db.query(query, [filePath, totalMarks, deadline])
     .then(result => {
-        //console.log("Assignment stored in PostAssignment");
         res.status(200).end();
     })
     .catch(e => {
@@ -156,7 +221,7 @@ router.post('/upload/assignment/teacher', function (req, res) {
  * Allows for resubmission
  */
 router.post('/upload/assignment/entrepreneur',  function (req, res) { 
-    console.log("In entrepreneur route");
+    
     let submissionPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     let postedAssignment = JSON.parse(req.body.postedAssignment);
     let assignmentPath = postedAssignment.file_path;
@@ -167,11 +232,6 @@ router.post('/upload/assignment/entrepreneur',  function (req, res) {
             + currentdate.getHours() + ":"  
             + currentdate.getMinutes() + ":" 
             + currentdate.getSeconds();
-
-    //console.log(submissionPath);
-    //console.log(assignmentPath);
-    //console.log(req.session.username);
-    //console.log("In entrepreneur route");
 
     let getUserPrevSubmission = "SELECT sa.submission_file_path as file_path FROM post_schema.submitassignment sa where sa.submission_user = $1 AND sa.assignment_file_path = $2  ";
     let deleteQuerySubmitAssignment = "DELETE FROM post_schema.submitassignment sa WHERE sa.submission_user = $1 AND sa.assignment_file_path = $2";
@@ -187,16 +247,13 @@ router.post('/upload/assignment/entrepreneur',  function (req, res) {
         } else {
             prevSubmissionFilePath = "";
         }
-        //console.log("In P1");
-        //console.log(prevSubmissionFilePath);
+    
         return db.query(deleteQueryPostFile, [prevSubmissionFilePath])
     })
     .then(result => {
-        console.log("Deleted submission stored in postfile");
         return db.query(insertQuery, [submissionPath, req.session.username, assignmentPath, datetime]);
     })
     .then(result => {
-        console.log("Submitted assignment inserted in submitassignment");
         res.status(200).end();
     })
     .catch(e => {
