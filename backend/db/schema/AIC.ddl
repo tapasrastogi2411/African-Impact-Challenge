@@ -27,18 +27,24 @@ CREATE TABLE aic_user (
     on delete cascade
 );
 
+CREATE TABLE invite_status (
+  status_id INT NOT NULL,
+  status_description TEXT NOT NULL
+);
 
 CREATE TABLE invite (
   sender TEXT NOT NULL,
   receiver TEXT NOT NULL,
   time timestamp NOT NULL,
+  status INT NOT NULL,
   FOREIGN KEY(sender) REFERENCES aic_user
     on delete cascade, 
   FOREIGN KEY(receiver) REFERENCES aic_user
-    on delete cascade
+    on delete cascade, 
+  FOREIGN KEY(status) REFERENCES invite_status
+    on delete cascade, 
 );
--- avoid enumerated types
--- consider whether domain is final or not
+
 CREATE TABLE company(
   company_name TEXT PRIMARY KEY, -- each company must have a unique name
   address TEXT,
@@ -72,6 +78,12 @@ INSERT INTO aic_role VALUES
 (1, 'Teacher'), 
 (2, 'Entrepreneur'), 
 (3, 'Partner');
+
+-- Insert into invite_status
+INSERT INTO invite_status VALUES 
+(1, 'Accepted'), 
+(2, 'Declined'), 
+(3, 'Pending');
 
 
 -- Post Schema
