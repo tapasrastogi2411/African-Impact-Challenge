@@ -28,11 +28,10 @@ CREATE TABLE aic_user (
 );
 
 
-CREATE TABLE message (
+CREATE TABLE invite (
   sender TEXT NOT NULL,
   receiver TEXT NOT NULL,
   time timestamp NOT NULL,
-  content TEXT NOT NULL,
   FOREIGN KEY(sender) REFERENCES aic_user
     on delete cascade, 
   FOREIGN KEY(receiver) REFERENCES aic_user
