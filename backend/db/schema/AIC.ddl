@@ -28,7 +28,7 @@ CREATE TABLE aic_user (
 );
 
 CREATE TABLE invite_status (
-  status_id INT NOT NULL,
+  status_id INT PRIMARY KEY,
   status_description TEXT NOT NULL
 );
 
