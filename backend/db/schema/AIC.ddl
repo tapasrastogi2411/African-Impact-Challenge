@@ -42,7 +42,7 @@ CREATE TABLE invite (
   FOREIGN KEY(receiver) REFERENCES aic_user
     on delete cascade, 
   FOREIGN KEY(status) REFERENCES invite_status
-    on delete cascade, 
+    on delete cascade
 );
 
 CREATE TABLE company(
