@@ -18,7 +18,7 @@
   "scripts": {
     "start": "node backend/app.js",
     "startdev": "export NODE_ENV=development && nodemon backend/app.js",
-    "build": "cd frontend npm run build",
+    "build": "npm run build",
     "install-client": "cd frontend && npm install",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=FALSE cd frontend npm run install-client && npm run build",
     "startprod": "export NODE_ENV=production && nodemon app.js",
