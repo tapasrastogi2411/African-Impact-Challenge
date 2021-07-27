@@ -6,7 +6,6 @@ var cors = require('cors');
 const favicon = require('express-favicon');
 const root = require("path").join(__dirname, "../frontend/build");
 
-app.use(express.static('uploads'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(express.json());
