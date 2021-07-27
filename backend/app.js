@@ -2,14 +2,16 @@ var express = require('express');
 var app = express();
 var profile = require('./Routes/ProfileRoutes');
 var course = require('./Routes/CoursesRoutes');
-app.use('/uploads', express.static('uploads'));
 var cors = require('cors');
+const favicon = require('express-favicon');
 const root = require("path").join(__dirname, "../frontend/build");
+
+app.use(express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin:"http://localhost:3000", credentials:true }) );
-const favicon = require('express-favicon');
-
 app.use(favicon(__dirname + '/favicon.png'));
 
 //Enabling sessions
