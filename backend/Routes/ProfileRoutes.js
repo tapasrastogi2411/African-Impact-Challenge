@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('../Middleware/auth');
+var sendEmail = require('../NodeMailer/NodeMailer');
 const db = require('../db');
 const bcrypt = require("bcrypt"); 
 const session = require('express-session');
@@ -364,5 +365,41 @@ router.get('/getStartups', auth, async(req, res) => {
         res.status(500).end('Server Error...')
     }
 })
+
+router.put('/forgotpassword', function(req, res) {
+    var query = "SELECT first_name, last_name, email FROM profile_schema.aic_user WHERE username = $1";
+
+    db
+        .query(query, [req.body.username])
+        .then(result => {
+            if (!result.rows.length) {
+                res.status(400).json({err: "Username does not exist"});
+            } 
+            
+            console.log(result.rows[0].email);
+            var mailOptions = {
+                // from: 'AfricanImpactChallengeTesting@gmail.com',
+                to: `${result.rows[0].email}`,
+                subject: 'African Impact Challenge Account Recovery Code',
+                html: `
+                    <div style="width:50%">
+                        <h2>The African Impact Challenge</h2>
+                        <hr>
+                    </div>
+                    <p>Hi, ${result.rows[0].first_name} ${result.rows[0].last_name}</p>
+                    <p>We received a request to reset your African Impact Challenge account password.
+                    Enter the following password reset code:</p>
+                `
+            };
+            
+            sendEmail(mailOptions);
+            res.status(200).end();       
+        })
+        .catch(e => {
+            console.error(e.stack);
+            res.status(500).json({err: "Server error"});
+        })
+});
+
 
 module.exports = router;
