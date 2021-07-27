@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import * as Constants from '../../utils';
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -136,7 +137,7 @@ function VideoPage(prop: any) {
     formData.append("videos", file);
     formData.append("title", title);
 
-    const response = await fetch("http://localhost:8080/api/course/upload", {
+    const response = await fetch(Constants.server + "/api/course/upload", {
       method: "POST",
       body: formData,
       credentials: "include",
@@ -187,7 +188,7 @@ function VideoPage(prop: any) {
   }
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getVideos",
+      Constants.server + "/api/course/getVideos",
       {
         method: "GET",
         credentials: "include",
