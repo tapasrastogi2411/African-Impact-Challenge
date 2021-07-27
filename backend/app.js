@@ -27,17 +27,20 @@ app.use('/api/course/', course);
 
 console.log(process.env.NODE_ENV);
 console.log(__dirname + '/favicon.png');
-//if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.use(express.static(root));
     app.get('*', (req, res) => {
         res.sendFile("index.html", { root });
     });
-//} 
+} 
+
+console.log(process.env.NODE_ENV);
+console.log(process.env.DATABASE_URL);
     
 
 
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, function () {
-    console.log('HTTP on port '+PORT);
+    console.log('HTTP on port '+ PORT);
 }); 

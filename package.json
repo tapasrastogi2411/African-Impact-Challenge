@@ -18,10 +18,10 @@
   "scripts": {
     "start": "node backend/app.js",
     "startdev": "export NODE_ENV=development && nodemon backend/app.js",
+    "startprod": "export NODE_ENV=production && nodemon app.js",
     "build": "cd frontend npm run build",
     "install-client": "cd frontend && npm install",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=FALSE npm install --prefix frontend && npm run build --prefix frontend",
-    "startprod": "export NODE_ENV=production && nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
