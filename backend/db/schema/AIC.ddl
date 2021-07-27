@@ -38,6 +38,7 @@ CREATE TABLE message (
   FOREIGN KEY(receiver) REFERENCES aic_user
     on delete cascade
 );
+
 -- avoid enumerated types
 -- consider whether domain is final or not
 CREATE TABLE company(
