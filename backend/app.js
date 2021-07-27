@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin:"http://localhost:3000", credentials:true }) );
 const favicon = require('express-favicon');
 
-app.use(favicon(__dirname + '../frontend/img/favicon.png'));
+app.use(favicon(__dirname + '/favicon.png'));
 
 //Enabling sessions
 var session = require('express-session');
@@ -26,12 +26,12 @@ app.use('/api/profile/', profile);
 app.use('/api/course/', course);
 
 console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV === 'production') {
+//if (process.env.NODE_ENV === 'production') {
     app.use(express.static(root));
     app.get('*', (req, res) => {
         res.sendFile("index.html", { root });
     });
-}
+//} 
     
 
 
