@@ -5,6 +5,8 @@ const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         var destinationPath = path.resolve(__dirname, '..') + '/uploads/';
         var fieldName = file.fieldname;
+        console.log("IN UPLOADS");
+        console.log(destinationPath);
         
 
         if (fieldName === 'videos') { //videos should be label of input attribute
