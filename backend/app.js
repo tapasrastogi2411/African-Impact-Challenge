@@ -7,7 +7,7 @@ var cors = require('cors');
 const root = require("path").join(__dirname, "../frontend/build");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(cors({origin:"http://localhost:3000", credentials:true }) );
+app.use(cors({origin:"http://localhost:3000", credentials:true }) );
 const favicon = require('express-favicon');
 
 app.use(favicon(__dirname + '/favicon.png'));
@@ -26,6 +26,7 @@ app.use('/api/profile/', profile);
 app.use('/api/course/', course);
 
 console.log(process.env.NODE_ENV);
+console.log(__dirname + '/favicon.png');
 //if (process.env.NODE_ENV === 'production') {
     app.use(express.static(root));
     app.get('*', (req, res) => {
@@ -35,7 +36,7 @@ console.log(process.env.NODE_ENV);
     
 
 
-const PORT = process.env.port || 8080;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, function () {
     console.log('HTTP on port '+PORT);
