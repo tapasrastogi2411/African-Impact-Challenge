@@ -144,8 +144,9 @@ export default function SignUp(props: any) {
                 formdata.forEach(function(value: any, key: any){
                     object[key] = value;
                 });
-        
-                const response = await fetch('http://localhost:8080/api/profile/register/', {
+                const url = 'http://localhost:8080/api/profile/register/'; // for development
+
+                const response = await fetch('http://cscc01-aic.herokuapp.com/api/profile/register/', {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',

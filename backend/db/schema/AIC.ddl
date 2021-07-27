@@ -160,9 +160,6 @@ CREATE TABLE GradeAssignment (
 
 
 
-
-
-
 INSERT INTO PostCategory VALUES 
 (1, 'Reading'), 
 (2, 'Video'), 
