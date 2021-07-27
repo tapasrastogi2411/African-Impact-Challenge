@@ -14,6 +14,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import BusinessIcon from "@material-ui/icons/Business";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import * as Constants from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -130,7 +131,7 @@ function ViewProfilepage(props: any) {
   }
 
   const checkUserInCompany = () => {
-    fetch("http://localhost:8080/api/profile/inCompany/", {
+    fetch(Constants.server + "/api/profile/inCompany/", {
       method: "GET",
       credentials: "include",
       mode: "cors",

@@ -9,6 +9,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import * as Constants from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   root: { 
@@ -92,7 +93,7 @@ function GuestReadingPage(prop: any) {
     formData.append("title", title);
     formData.append("description", description);
 
-    const response = await fetch("http://localhost:8080/api/course/upload", {
+    const response = await fetch(Constants.server + "/api/course/upload", {
       method: "POST",
       body: formData,
       credentials: 'include',
@@ -115,9 +116,8 @@ function GuestReadingPage(prop: any) {
   };
 
   const handleGet = async () => {
-    console.log("HHERE");
     const response = await fetch(
-      "http://localhost:8080/api/course/getReadings",
+      Constants.server + "/api/course/getReadings",
       {
         method: "GET",
         credentials: 'include',

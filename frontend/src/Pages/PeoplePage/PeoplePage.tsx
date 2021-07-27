@@ -23,6 +23,7 @@ import { textSpanIsEmpty } from "typescript";
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
+import * as Constants from '../../utils';
 
 const useStyles: (props?: any) => any = makeStyles((theme: Theme) => ({
   root: {
@@ -71,7 +72,7 @@ export default function PeoplePage(props: any) {
 
   const fetchInstructors = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/profile/getInstructors",
+      Constants.server + "/api/profile/getInstructors",
       {
         method: "GET",
         credentials: "include",
@@ -86,7 +87,7 @@ export default function PeoplePage(props: any) {
 
   const fetchEntrepreneurs = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/profile/getEntrepreneurs",
+      Constants.server + "/api/profile/getEntrepreneurs",
       {
         method: "GET",
         credentials: "include",
@@ -100,7 +101,7 @@ export default function PeoplePage(props: any) {
 
   const fetchPartners = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/profile/getPartners",
+      Constants.server + "/api/profile/getPartners",
       {
         method: "GET",
         credentials: "include",
@@ -114,7 +115,7 @@ export default function PeoplePage(props: any) {
 
   const fetchStartups = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/profile/getStartups",
+      Constants.server + "/api/profile/getStartups",
       {
         method: "GET",
         credentials: "include",

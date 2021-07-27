@@ -13,6 +13,7 @@ import Container from "@material-ui/core/Container";
 import { Controller, useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import CountrySelect from  './countries';
+import * as Constants from '../../utils';
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     root: {
         marginTop: 240,
@@ -144,9 +145,10 @@ export default function SignUp(props: any) {
                 formdata.forEach(function(value: any, key: any){
                     object[key] = value;
                 });
-                const url = 'http://localhost:8080/api/profile/register/'; // for development
+                const url = Constants.server + '/api/profile/register/'; 
+                console.log(url);
 
-                const response = await fetch('http://cscc01-aic.herokuapp.com/api/profile/register/', {
+                const response = await fetch(url, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',

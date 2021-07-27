@@ -19,6 +19,7 @@ import { borders } from '@material-ui/system';
 import { useForm, Controller } from "react-hook-form";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { SignInAjax } from '../UserProfile/LogIn';
+import * as Constants from '../../utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -137,7 +138,7 @@ export default function CreateCompany(props: any) {
             object[key] = value;
         });
     
-        fetch('http://localhost:8080/api/profile/createCompany/', {
+        fetch(Constants.server + '/api/profile/createCompany/', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

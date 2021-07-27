@@ -20,6 +20,7 @@ import member from "./member.jpg";
 import founder from "./founder.jpg";
 import AddIcon from '@material-ui/icons/Add';
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import * as Constants from '../../utils';
 
 // Adding these imports for making the rendered files look cleaner through Accordion
 
@@ -260,7 +261,7 @@ function CompanyPage(props: any) {
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getCompanyFiles",
+      Constants.server + "/api/course/getCompanyFiles",
       {
         method: "GET",
         credentials: 'include',
@@ -282,7 +283,7 @@ function CompanyPage(props: any) {
     formData.append("title", title);
     formData.append("description", description);
 
-    const response = await fetch("http://localhost:8080/api/course/upload", {
+    const response = await fetch(Constants.server + "/api/course/upload", {
       method: "POST",
       body: formData,
       credentials: 'include',
@@ -305,7 +306,7 @@ function CompanyPage(props: any) {
     formData.append("title", title);
     formData.append("description", description);
 
-    const response = await fetch("http://localhost:8080/api/course/upload/companyFile", {
+    const response = await fetch(Constants.server + "/api/course/upload/companyFile", {
       method: "POST",
       body: formData,
       credentials: 'include',
@@ -325,7 +326,7 @@ function CompanyPage(props: any) {
 
 
   const getCompanyData = () => {
-    fetch('http://localhost:8080/api/profile/getCompany/', {
+    fetch(Constants.server + '/api/profile/getCompany/', {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -477,7 +478,7 @@ const renderResubmit = (assignmentItem: any) => {
                     </Grid>
 
                     <Grid item>
-                        <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+                        <a href={Constants.server + "" + item.file_path }  target='_blank' download>
                             <Typography variant="body2" >
                                 {parseItem(item)}
                             </Typography>

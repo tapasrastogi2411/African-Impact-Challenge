@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import VideoCard from "./VideoCard";
+import * as Constants from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   root: { 
@@ -41,7 +42,7 @@ function GuestVideoPage(prop: any) {
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getVideos",
+      Constants.server + "/api/course/getVideos",
       {
         method: "GET",
         credentials: "include",
