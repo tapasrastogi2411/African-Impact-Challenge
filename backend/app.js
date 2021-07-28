@@ -16,6 +16,7 @@ app.use(favicon(__dirname + '/favicon.png'));
 
 
 console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_BUCKET_NAME);
 
 
 
@@ -42,7 +43,7 @@ if (process.env.NODE_ENV === 'production') {
     });
 } 
 
-// get set in Heroku
+// gets set in Heroku
 console.log(process.env.NODE_ENV);
 console.log(process.env.DATABASE_URL);
     
