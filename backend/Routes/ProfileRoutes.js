@@ -178,6 +178,57 @@ router.post('/createCompany/', auth, function (req, res, next) {
     })
 });
 
+router.post('/createInvite/', auth, function (req, res, next) {
+
+    // The rows in our `invite` table
+    var orderedFields = ["sender", "receiver", "time", "status"];
+    
+    var orderedValues = []; 
+    for (var key of orderedFields) {
+        var value = req.body[key];
+        if (value == "") {
+            orderedValues.push("null");
+        } else {
+            orderedValues.push(value);
+        }
+    }
+    
+    // Ask about this and what it does and if its needed for an invite request
+    if (!req.session.username) {
+        return res.status(500).json("Username is null");
+    } 
+    orderedValues.push(req.session.username);
+    
+    // Inserting into the Postgres DB
+    var inviteExists = "SELECT * FROM profile_schema.invite WHERE sender=$1";
+    db.query(inviteExists, [req.body['sender']])
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) {
+            throw new Error("Invite request already sent");
+        }
+        var insertInvite = "INSERT INTO profile_schema.company VALUES ($1,$2,$3,$4)";
+        return db.query(insertInvite, orderedValues);
+    })
+    .then(pgRes => {
+        res.status(201).json("Invite added");
+
+    // Error checking messages    
+    })
+    .catch(err => {
+        console.log(err.message);
+        switch(err.message) {
+            case "Invite request already sent":
+                res.status(409).json("Invite request already sent");
+                break;
+
+            default:
+                res.status(500).json({ error: err.message});
+                break;
+        }
+    })
+});
+// Version 1 Try 1 - 147PM
+
 router.get('/getUser/', auth, function (req, res) {
     var userQuery = "SELECT * FROM profile_schema.aic_user WHERE username=$1";
     db.query(userQuery, [req.session.username])
