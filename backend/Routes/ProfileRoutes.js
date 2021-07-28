@@ -6,6 +6,8 @@ const db = require('../db');
 const bcrypt = require("bcrypt"); 
 const session = require('express-session');
 const path = require('path');
+const crypto = require('crypto');
+var dateHelper = require('../Helper/timestamp');
 
 /*
 * HTTP Status codes used:
@@ -367,18 +369,23 @@ router.get('/getStartups', auth, async(req, res) => {
 })
 
 router.put('/forgotpassword', function(req, res) {
-    var query = "SELECT first_name, last_name, email FROM profile_schema.aic_user WHERE username = $1";
-
+    var selectQuery = "SELECT first_name, last_name, email FROM profile_schema.aic_user WHERE username = $1";
+    var username = req.body.username
     db
-        .query(query, [req.body.username])
+        .query(selectQuery, [username])
         .then(result => {
+            console.log(result.rows.length);
             if (!result.rows.length) {
-                res.status(400).json({err: "Username does not exist"});
+                console.log("HERE");
+                return res.status(400).json({err: "Username does not exist"});
             } 
+
+            console.log("NOOO");
             
-            console.log(result.rows[0].email);
+            var resetCode = crypto.randomBytes(4).toString('hex');
+
             var mailOptions = {
-                // from: 'AfricanImpactChallengeTesting@gmail.com',
+                from: 'AfricanImpactChallengeTesting@gmail.com',
                 to: `${result.rows[0].email}`,
                 subject: 'African Impact Challenge Account Recovery Code',
                 html: `
@@ -386,14 +393,32 @@ router.put('/forgotpassword', function(req, res) {
                         <h2>The African Impact Challenge</h2>
                         <hr>
                     </div>
+                    
                     <p>Hi, ${result.rows[0].first_name} ${result.rows[0].last_name}</p>
                     <p>We received a request to reset your African Impact Challenge account password.
                     Enter the following password reset code:</p>
+                    
+                    <table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;width:max-content;margin-top:20px;margin-bottom:20px">
+                        <tbody>
+                            <tr>
+                                <td style="font-size:11px;font-family:LucidaGrande,tahoma,verdana,arial,sans-serif;padding:14px 32px 14px 32px;background-color:#f2f2f2;border-left:1px solid #ccc;border-right:1px solid #ccc;border-top:1px solid #ccc;border-bottom:1px solid #ccc;text-align:center;border-radius:7px;display:block;border:1px solid #c48133;background:#ffa843">
+                                    <span style="font-family:Helvetica Neue,Helvetica,Lucida Grande,tahoma,verdana,arial,sans-serif;font-size:16px;line-height:21px;color:#141823">
+                                        <span style="color:white;font-size:17px;font-family:Roboto;font-weight:700;margin-left:0px;margin-right:0px">${resetCode}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 `
             };
             
             sendEmail(mailOptions);
-            res.status(200).end();       
+            
+            var password_reset_schema = "(username,recovery_code,expiry_date)";
+            var preparedValues = "($1,$2,$3)";
+            var insertQuery = "INSERT INTO profile_schema.password_reset" + password_reset_schema + " VALUES" + preparedValues;
+            var userData = [username, resetCode, dateHelper.getExpiryDate(10)]
+            return db.query(insertQuery, userData).then(result => {res.status(200).json({status: "Reset Code Sent"});}).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});})   
         })
         .catch(e => {
             console.error(e.stack);
@@ -403,3 +428,6 @@ router.put('/forgotpassword', function(req, res) {
 
 
 module.exports = router;
+
+
+
