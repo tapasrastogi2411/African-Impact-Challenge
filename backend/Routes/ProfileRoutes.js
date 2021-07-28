@@ -448,7 +448,12 @@ router.put('/resetpassword', function(req, res) {
                 })
                 .then(hash => {
                     var newPW = hash;
-                    db.query(updatePasswordQuery, [newPW, req.body.username]).then(result => {res.status(200).json({status: "Password Successfuly Updated"});}).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});})
+                    db.query(updatePasswordQuery, [newPW, req.body.username])
+                        .then(result => {
+                            var deleteQuery = "DELETE FROM profile_schema.password_reset WHERE username = $1";
+                            db.query(deleteQuery, [req.body.username]).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});});
+                            res.status(200).json({status: "Password Successfuly Updated"});})
+                        .catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});})
                 })
 
         })
