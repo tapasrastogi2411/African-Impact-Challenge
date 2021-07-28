@@ -354,12 +354,64 @@ router.get('/getPartners', auth, async(req, res) => {
 - 500 status code if an error occured */
 router.get('/getStartups', auth, async(req, res) => {
     try{
-        let query = 'SELECT name FROM profile_schema.company'
+        let query = 'SELECT company_name FROM profile_schema.company'
         const result = await db.query(query)
         res.status(200).json(result.rows)
     }
     catch(err){
         // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
+
+/* Returns:
+- A list of invite objects sent by a currently logged in user.
+    An invite object is of the form:
+
+    {
+        sender: sender_username
+        receiver: receiver_username
+        time: date_and_time
+        status: 1/2/3, where 1 = Accepted, 2 = Declined, 3 = Pending
+    }
+*/
+router.get('/fetchOutgoingInvites', auth, async(req, res) => {
+    // get the sender's username (i.e the user currently logged in)
+    let sender = req.session.username
+    try{
+        let query = `SELECT * FROM profile_schema.invite WHERE sender=${sender}`
+        const result = await db.query(query)
+        res.status(200).json(result)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
+
+/* Returns:
+- A list of invite objects sent to the currently logged in user.
+    An invite object is of the form:
+
+    {
+        sender: sender_username
+        receiver: receiver_username
+        time: date_and_time
+        status: 1/2/3, where 1 = Accepted, 2 = Declined, 3 = Pending
+    }
+*/
+router.get('fetchIncomingInvites', auth, async(req, res) => {
+    // get the receiver's username (i.e the user current logged in)
+    let receiver = req.session.username
+    try{
+        // query for all pending invites only
+        let query = `SELECT * FROM profile_schema.invite WHERE receiver=${receiver} AND status=3`
+        const result = await db.query(query)
+        res.status(200).json(result)
+    }
+    catch(err){
         console.log(err)
         res.status(500).end('Server Error...')
     }
