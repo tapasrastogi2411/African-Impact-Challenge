@@ -17,8 +17,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import { Container, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Container, Grid, withStyles } from "@material-ui/core";
+import { Link, useLocation } from "react-router-dom";
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
@@ -41,14 +41,29 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     height: 50,
     paddingLeft: 40,
+    "&:hover": {
+      background: "#e8e8e8",
+    },
+
   },
   txt: {
     fontSize: 18,
   },
 }));
 
-export default function PersistentDrawerLeft() {
+const StyledListItem = withStyles((theme) => ({
+  root: {
+    '&:focus': {
+      backgroundColor: "red",
+
+    },
+  },
+}))(ListItem);
+
+export default function PersistentDrawerLeft(props: any) {
   const classes = useStyles();
+  const location = useLocation();
+
   const [state, setState] = React.useState(false);
 
   const navOpen = () => {
@@ -84,21 +99,35 @@ export default function PersistentDrawerLeft() {
           <ChevronLeftIcon className={classes.leftArrow} />
         </IconButton> */}
 
-        <List className={classes.list}>
-          <ListItem button className={classes.btn} component={RouterLink} to="/profile">
+        <List className={classes.list} >
+
+
+          <ListItem
+            button
+            className={classes.btn}
+            component={RouterLink}
+            to="/profile"
+            selected={'/profile' === location.pathname}>
             <Typography className={classes.txt}>Profile</Typography>
           </ListItem>
           <ListItem
             button
             className={classes.btn}
             component={Link}
-            to="/dashboard">
+            to="/dashboard"
+            selected={'/dashboard' === location.pathname}
+          >
             <Typography className={classes.txt}>Dashboard</Typography>
           </ListItem>
           <ListItem button className={classes.btn}>
             <Typography className={classes.txt}>Discussions</Typography>
           </ListItem>
-          <ListItem button className={classes.btn}>
+          <ListItem button
+            className={classes.btn}
+            component={RouterLink}
+            to="/calendar"
+            selected={'/calendar' === location.pathname}
+          >
             <Typography className={classes.txt}>Calendar</Typography>
           </ListItem>
           <ListItem
@@ -106,6 +135,8 @@ export default function PersistentDrawerLeft() {
             className={classes.btn}
             component={RouterLink}
             to="/videos"
+            selected={'/videos' === location.pathname}
+
           >
             <Typography className={classes.txt}>Videos</Typography>
           </ListItem>
@@ -114,6 +145,8 @@ export default function PersistentDrawerLeft() {
             className={classes.btn}
             component={RouterLink}
             to="/readings"
+            selected={'/readings' === location.pathname}
+
           >
             <Typography className={classes.txt}>Readings</Typography>
           </ListItem>
@@ -122,6 +155,8 @@ export default function PersistentDrawerLeft() {
             className={classes.btn}
             component={RouterLink}
             to="/assignments"
+            selected={location.pathname.includes('/assignments')}
+
           >
             <Typography className={classes.txt}>Assignments</Typography>
           </ListItem>
@@ -132,7 +167,9 @@ export default function PersistentDrawerLeft() {
             button
             className={classes.btn}
             component={Link}
-            to="/people">
+            to="/people"
+            selected={'/people' === location.pathname}
+            >
             <Typography className={classes.txt}>People</Typography>
           </ListItem>
           <ListItem button className={classes.btn}>
