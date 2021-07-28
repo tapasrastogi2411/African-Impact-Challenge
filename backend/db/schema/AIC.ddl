@@ -27,6 +27,13 @@ CREATE TABLE aic_user (
     on delete cascade
 );
 
+CREATE TABLE password_reset (
+  username TEXT NOT NULL, 
+  recovery_code CHAR(8) NOT NULL,
+  expiry_date timestamp NOT NULL,
+  FOREIGN KEY (username) REFERENCES aic_user(username)
+);
+
 CREATE TABLE invite_status (
   status_id INT PRIMARY KEY,
   status_description TEXT NOT NULL
