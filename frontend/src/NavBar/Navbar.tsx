@@ -1,29 +1,15 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import { Container, Grid, withStyles } from "@material-ui/core";
 import { Link, useLocation } from "react-router-dom";
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from "react-router-dom";
-import Profilepage from "../Pages/ProfilePage/Profilepage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -174,6 +160,15 @@ export default function PersistentDrawerLeft(props: any) {
           </ListItem>
           <ListItem button className={classes.btn}>
             <Typography className={classes.txt}>Messages</Typography>
+          </ListItem>
+          <ListItem
+            button
+            className={classes.btn}
+            component={Link}
+            to="/invites"
+            selected={'/invites' === location.pathname}
+            >
+            <Typography className={classes.txt}>Invites</Typography>
           </ListItem>
         </List>
       </Drawer>
