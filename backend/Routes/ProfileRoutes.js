@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const session = require('express-session');
 const path = require('path');
 const crypto = require('crypto');
-var dateHelper = require('../Helper/timestamp');
+var dateHelper = require('../Helper/dateHelper');
 
 /*
 * HTTP Status codes used:
@@ -425,7 +425,27 @@ router.put('/forgotpassword', function(req, res) {
         })
 });
 
+router.put('/verify-resetcode', function(req, res) {
+    if(!req.body.resetCode) {
+        return res.status(400).json({err: "Reset Code Not Provided"});
+    }
 
+    var selectQuery = "SELECT * FROM profile_schema.password_reset WHERE username = $1 and recovery_code = $2 and expiry_date > $3";
+
+    db
+        .query(selectQuery, [req.body.username, req.body.resetCode, dateHelper.getCurrentDate()])
+        .then(result => {
+            if (!result.rows.length) {
+                return res.status(400).json({err: "Invalid Reset Code"});
+            } 
+            return res.status(200).json({status: "Proceed to reset password"});
+
+        })
+        .catch(e => {
+            console.error(e.stack);
+            res.status(500).json({err: "Server error"});
+        })
+});
 
 
 module.exports = router;
