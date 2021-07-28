@@ -4,6 +4,8 @@ const multerS3 = require('multer-s3');
 const path = require('path');
 
 console.log("IN AWS MIDDLEWARE");
+console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_SECRET_KEY);
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_KEY,
@@ -46,6 +48,7 @@ let upload = multer({
         acl: 'public-read',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, cb) {
+            console.log("IN MULTER CB");
             var filePath = 'uploads/';
             var fieldName = file.fieldname;
             var fileName = Date.now() + "_" + file.originalname;

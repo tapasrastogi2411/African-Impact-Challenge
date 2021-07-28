@@ -4,7 +4,7 @@ var auth = require('../Middleware/auth');
 const db = require('../db');
 const path = require('path');
 var upload = require('../Middleware/upload');
-//var upload = require('../Middleware/upload-aws');
+var upload = require('../Middleware/upload-aws');
 if (process.env.NODE_ENV === "production") {
     upload = require('../Middleware/upload-aws');
 }
