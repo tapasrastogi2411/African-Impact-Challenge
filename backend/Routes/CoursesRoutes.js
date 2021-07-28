@@ -148,9 +148,11 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
         category = 4;
     } 
 
-    var storePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    var storePath = null;
     if (process.env.NODE_ENV === "production") {
         var storePath = req.files[0].key;
+    } else {
+        storePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     }
 
     var postfileSchema = "(file_path, category, upload_date, upload_user, title, description)";
