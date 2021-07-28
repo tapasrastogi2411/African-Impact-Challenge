@@ -365,4 +365,35 @@ router.get('/getStartups', auth, async(req, res) => {
     }
 })
 
+router.patch('/updateInviteStatus', auth, function (req, res) {
+
+    let preparedStatement = `UPDATE profile_schema.invite
+                             SET status = $1
+                             WHERE sender = $2 and receiver = $3`;
+
+    let inviteExist = "SELECT * FROM profile_schema.invite WHERE sender = $1 and receiver = $2";
+
+    db.query(inviteExist, [req.body['sender'], req.body['receiver']])
+    .then(pgRes => {
+        if (pgRes.rowCount == 0) {
+            throw new Error("The invite does not exist");
+        }
+        return db.query(preparedStatement, [req.body['newStatus'], req.body['sender'], req.body['receiver']]);
+    }) 
+    .then(pgRes => {
+        res.status(200).json("Invite Status Updated");
+
+    })
+    .catch(err => {
+        console.log(err.message);
+        if (err.message.equalsIgnoreCase("The invite does not exist")) {
+            res.status(404).json("The invite does not exist");
+        } else {
+            res.status(500).json("Internal Server Error");
+        }
+    });
+});
+
+
+
 module.exports = router;
