@@ -32,7 +32,6 @@ CREATE TABLE password_reset (
   recovery_code CHAR(8) NOT NULL,
   expiry_date timestamp NOT NULL,
   FOREIGN KEY (username) REFERENCES aic_user(username)
-    on delete cascade
 );
 
 CREATE TABLE invite_status (
