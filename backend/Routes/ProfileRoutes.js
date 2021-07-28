@@ -425,7 +425,7 @@ router.put('/forgotpassword', function(req, res) {
         })
 });
 
-router.put('/verify-resetcode', function(req, res) {
+router.put('/resetpassword', function(req, res) {
     if(!req.body.resetCode) {
         return res.status(400).json({err: "Reset Code Not Provided"});
     }
@@ -438,7 +438,18 @@ router.put('/verify-resetcode', function(req, res) {
             if (!result.rows.length) {
                 return res.status(400).json({err: "Invalid Reset Code"});
             } 
-            return res.status(200).json({status: "Proceed to reset password"});
+
+            var updatePasswordQuery = "UPDATE profile_schema.aic_user SET password = $1 WHERE username = $2"
+            
+            bcrypt
+                .genSalt(5)
+                .then(salt => {
+                    return bcrypt.hash(req.body.password, salt);
+                })
+                .then(hash => {
+                    var newPW = hash;
+                    db.query(updatePasswordQuery, [newPW, req.body.username]).then(result => {res.status(200).json({status: "Password Successfuly Updated"});}).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});})
+                })
 
         })
         .catch(e => {
