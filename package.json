@@ -18,12 +18,13 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "export AWS_ACCESS_KEY_ID=AKIATSCQ6FWVUYWGJSPS && AWS_SECRET_KEY=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 && AWS_BUCKET_NAME=aic-assets && node backend/app.js",
+    "start": "export AWS_ACCESS_KEY_ID=aic && AWS_SECRET_KEY=7lZ5MFW68n4E && AWS_BUCKET_NAME=aic-assets && node backend/app.js",
+    "start2": "export AWS_ACCESS_KEY_ID=AKIATSCQ6FWVUYWGJSPS && AWS_SECRET_KEY=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 && AWS_BUCKET_NAME=aic-assets && node backend/app.js",
     "startdev": "export NODE_ENV=development && nodemon backend/app.js",
     "startprod": "export NODE_ENV=production && nodemon app.js",
     "build": "cd frontend npm run build",
     "install-client": "cd frontend && npm install",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=FALSE npm install --prefix frontend && npm run build --prefix frontend",
+    "heroku-postbuild2": "NPM_CONFIG_PRODUCTION=FALSE npm install --prefix frontend && npm run build --prefix frontend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
