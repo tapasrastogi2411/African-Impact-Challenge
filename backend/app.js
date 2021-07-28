@@ -15,8 +15,8 @@ app.use(favicon(__dirname + '/favicon.png'));
 
 
 
-console.log(process.env.AWS_ACCESS_KEY_ID);
-console.log(process.env.AWS_BUCKET_NAME);
+//console.log(process.env.AWS_ACCESS_KEY_ID);
+//console.log(process.env.AWS_BUCKET_NAME);
 
 
 
