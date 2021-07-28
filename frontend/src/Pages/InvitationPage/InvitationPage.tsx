@@ -119,7 +119,7 @@ function InvitationPage(prop: any) {
     return filePath.substring(filePath.indexOf('_') + 1, filePath.length)
   };
 
-  const renderReadings = (item: any) => {
+  const renderInvites = (item: any) => {
     return (
       <Accordion>
         <AccordionSummary
