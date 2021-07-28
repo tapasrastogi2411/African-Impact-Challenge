@@ -6,5 +6,5 @@ if (process.env.NODE_ENV === "production") {
 
 // console.log(process.env.NODE_ENV);
 
-//export const serverConst = server;
-export const server = "http://cscc01-aic.herokuapp.com";
+export const server = findServer;
+//export const server = "http://cscc01-aic.herokuapp.com";

@@ -6,12 +6,19 @@ var cors = require('cors');
 const favicon = require('express-favicon');
 const root = require("path").join(__dirname, "../frontend/build");
 
-app.use('/uploads', express.static('uploads'));
 
+app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin:"http://localhost:3000", credentials:true }) );
 app.use(favicon(__dirname + '/favicon.png'));
+
+
+
+console.log(process.env.AWS_ACCESS_KEY_ID);
+
+
+
 
 //Enabling sessions
 var session = require('express-session');
@@ -35,6 +42,7 @@ if (process.env.NODE_ENV === 'production') {
     });
 } 
 
+// get set in Heroku
 console.log(process.env.NODE_ENV);
 console.log(process.env.DATABASE_URL);
     

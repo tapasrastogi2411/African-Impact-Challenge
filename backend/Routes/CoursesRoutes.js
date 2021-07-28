@@ -4,6 +4,10 @@ var auth = require('../Middleware/auth');
 const db = require('../db');
 const path = require('path');
 var upload = require('../Middleware/upload');
+//var upload = require('../Middleware/upload-aws');
+if (process.env.NODE_ENV === "production") {
+    upload = require('../Middleware/upload-aws');
+}
 
 router.get('/getReadings', async (req, res) => {
     try{
@@ -113,7 +117,9 @@ router.get('/getCompanyFiles', function (req, res) {
 
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    //req.session.username = "Aaron"; //uncomment this for testing
+    req.session.username = "Aaron"; //uncomment this for testing
+    console.log("in upload route");
+    console.log(req.files);
    
 
     if(req.files.length === 0) {
@@ -142,10 +148,15 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
         category = 4;
     } 
 
+    var storePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    if (process.env.NODE_ENV === "production") {
+        var storePath = req.files[0].key;
+    }
+
     var postfileSchema = "(file_path, category, upload_date, upload_user, title, description)";
     var preparedValues = "($1,$2,$3,$4,$5,$6)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, title, req.body.description]   
+    var values = [storePath, category, datetime, req.session.username, title, req.body.description]   
 
     db
         .query(query, values)
@@ -162,7 +173,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
 });
 
 
-// /upload is already authenticated so no need to reauthenticate
+// upload is already authenticated so no need to reauthenticate
 /**
  */
 router.post('/upload/companyFile/', function (req, res) { 
