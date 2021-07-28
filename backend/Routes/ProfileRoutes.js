@@ -374,13 +374,12 @@ router.put('/forgotpassword', function(req, res) {
     db
         .query(selectQuery, [username])
         .then(result => {
-            console.log(result.rows.length);
             if (!result.rows.length) {
-                console.log("HERE");
                 return res.status(400).json({err: "Username does not exist"});
             } 
-
-            console.log("NOOO");
+            
+            var deleteQuery = "DELETE FROM profile_schema.password_reset WHERE username = $1";
+            db.query(deleteQuery, [username]).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});});
             
             var resetCode = crypto.randomBytes(4).toString('hex');
 
@@ -425,6 +424,8 @@ router.put('/forgotpassword', function(req, res) {
             res.status(500).json({err: "Server error"});
         })
 });
+
+
 
 
 module.exports = router;
