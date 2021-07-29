@@ -383,7 +383,7 @@ router.get('/fetchOutgoingInvites', auth, async(req, res) => {
     // get the sender's username (i.e the user currently logged in)
     let sender = req.session.username
     try{
-        let query = `SELECT * FROM profile_schema.invite WHERE sender=${sender}`
+        let query = `SELECT * FROM profile_schema.invite WHERE sender='${sender}'`
         const result = await db.query(query)
         res.status(200).json(result)
     }
@@ -410,9 +410,33 @@ router.get('fetchIncomingInvites', auth, async(req, res) => {
     let receiver = req.session.username
     try{
         // query for all pending invites only
-        let query = `SELECT * FROM profile_schema.invite WHERE receiver=${receiver} AND status=3`
+        let query = `SELECT * FROM profile_schema.invite WHERE receiver='${receiver}' AND status=3`
         const result = await db.query(query)
         res.status(200).json(result)
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
+
+/* Returns: 
+- A json object of the form:
+{
+    result: boolean
+}
+Where boolean = true, if the given username is associated with a company and false otherwise.
+*/
+router.get('/checkCompany', auth, async(req, res) => {
+    // 
+    try{
+        let user = req.body.username
+        let query = `SELECT * FROM profile_schema.works_for WHERE username='${user}'`
+        const result = await db.query(query)
+        if(result.rows.length === 0){
+            res.status(200).json({"result": false})
+        }
+        res.status(200).json({"result": true})
     }
     catch(err){
         console.log(err)
