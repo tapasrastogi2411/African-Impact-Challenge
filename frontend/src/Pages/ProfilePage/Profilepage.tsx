@@ -190,8 +190,8 @@ function Profilepage(props: any) {
   React.useEffect(() => {
     getUserData();
     checkUserInCompany();
-  }, [companyButton, openSnackbar]);
-
+  }, [openSnackbar]);
+// [companyButton, openSnackbar]
   props.regHandler("false");
 
   return (
