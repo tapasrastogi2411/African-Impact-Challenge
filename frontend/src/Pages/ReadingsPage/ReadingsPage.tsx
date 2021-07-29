@@ -207,7 +207,7 @@ function ReadingPage(prop: any) {
                 </Grid>
 
                 <Grid item>
-                  <a href={Constants.server + item.file_path} target='_blank' download>
+                  <a href={Constants.awsServer + item.file_path} target='_blank' download>
                     <Typography variant="body2" >
                       {parseItem(item)}
                     </Typography>

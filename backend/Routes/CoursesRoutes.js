@@ -184,7 +184,7 @@ router.post('/upload/companyFile/', function (req, res) {
     var filePath = null;
     if (process.env.NODE_ENV === "production") {
         filePath = req.files[0].key;
-        filePath = "/" + storePath; // prepend a slash since aws key does not include slash
+        filePath = "/" + filePath; // prepend a slash since aws key does not include slash
     } else {
         filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     }
@@ -218,7 +218,7 @@ router.post('/upload/assignment/teacher', function (req, res) {
     var filePath = null;
     if (process.env.NODE_ENV === "production") {
         filePath = req.files[0].key;
-        filePath = "/" + storePath; // prepend a slash since aws key does not include slash
+        filePath = "/" + filePath; // prepend a slash since aws key does not include slash
     } else {
         filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     }
@@ -251,7 +251,7 @@ router.post('/upload/assignment/entrepreneur',  function (req, res) {
     var submissionPath = null;
     if (process.env.NODE_ENV === "production") {
         submissionPath = req.files[0].key;
-        submissionPath = "/" + storePath; // prepend a slash since aws key does not include slash
+        submissionPath = "/" + submissionPath; // prepend a slash since aws key does not include slash
     } else {
         submissionPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     }
