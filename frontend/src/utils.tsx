@@ -7,7 +7,8 @@ if (process.env.NODE_ENV === "production") {
     awsServer = "https://aic-assets.s3.ca-central-1.amazonaws.com";
 } 
 
-
+console.log(server);
+console.log(awsServer);
 
 // console.log(process.env.NODE_ENV);
 

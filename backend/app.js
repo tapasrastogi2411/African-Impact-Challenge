@@ -1,5 +1,9 @@
 var express = require('express');
 var app = express();
+
+app.use('/uploads', express.static('backend/uploads'));
+
+
 var profile = require('./Routes/ProfileRoutes');
 var course = require('./Routes/CoursesRoutes');
 var cors = require('cors');
@@ -7,7 +11,7 @@ const favicon = require('express-favicon');
 const root = require("path").join(__dirname, "../frontend/build");
 
 
-app.use('/uploads', express.static('uploads'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin:"http://localhost:3000", credentials:true }) );

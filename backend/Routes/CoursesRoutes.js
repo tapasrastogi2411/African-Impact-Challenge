@@ -4,7 +4,7 @@ var auth = require('../Middleware/auth');
 const db = require('../db');
 const path = require('path');
 var upload = require('../Middleware/upload');
-var upload = require('../Middleware/upload-aws');
+//var upload = require('../Middleware/upload-aws');
 if (process.env.NODE_ENV === "production") {
     upload = require('../Middleware/upload-aws');
 }
@@ -117,7 +117,7 @@ router.get('/getCompanyFiles', function (req, res) {
 
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    // req.session.username = "Aaron"; //uncomment this for testing
+    req.session.username = "Aaron"; //uncomment this for testing
     console.log("in upload route");
     console.log(req.files);
    

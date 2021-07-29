@@ -122,11 +122,13 @@ function ViewSubmission(props: any) {
                     <Grid container direction="row" >
                         <Grid item className={classes.embed}>
 
-                            <embed type="application/txt"
-                            src={Constants.awsServer + assignment.submission_file_path}
+                            <embed type="application/pdf"
+                            //src={Constants.awsServer + assignment.submission_file_path}
+                            src="https://aic-assets.s3.ca-central-1.amazonaws.com/uploads/readings/1627516244094_notes.txt"
                             width="1000"
                             height="800" 
                             />
+                           
                 
                         </Grid>
                         <Grid item>
@@ -134,7 +136,7 @@ function ViewSubmission(props: any) {
                                 
                                 <Grid item>
                                     <Typography  className={classes.labels} > Submitted File </Typography>
-                                    <a href={Constants.awsServer + assignment.submission_file_path}  target='_blank'>  
+                                    <a href={Constants.awsServer + assignment.submission_file_path}  target='_blank' download>  
                                         <Typography className={classes.values}> {parseFileName(assignment)} </Typography>
                                     </a>
                                 </Grid>
