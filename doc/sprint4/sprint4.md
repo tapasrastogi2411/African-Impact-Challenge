@@ -15,11 +15,11 @@
     - Efosa Obano
 
 ## Sprint 4 Goals
-- Complete assignment functionality from both entrepreneur and teacher perspectives
-- Allow users to view other user profiles
-- Create a guest user type which can access limited AIC functionality without being logged-in
-- Improve the design of the readings and videos pages
-- Complete company resource upload functionality
+- Allow users to reset their password
+- Deploy website
+- Allow entrepreuners accept/decline invitations 
+- Create a calendar for members to stay updated with upcoming workshops, deadlines, etc
+- Allow Founders to invite entrepreuners to join company
 
 ## Sprint 4 User Stories and Tasks Breakdown
 
