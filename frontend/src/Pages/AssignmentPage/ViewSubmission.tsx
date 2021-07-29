@@ -134,7 +134,7 @@ function ViewSubmission(props: any) {
                                 
                                 <Grid item>
                                     <Typography  className={classes.labels} > Submitted File </Typography>
-                                    <a href={Constants.awsServer + assignment.submission_file_path}  target='_blank' download>  
+                                    <a href={Constants.awsServer + assignment.submission_file_path}  target='_blank'>  
                                         <Typography className={classes.values}> {parseFileName(assignment)} </Typography>
                                     </a>
                                 </Grid>
