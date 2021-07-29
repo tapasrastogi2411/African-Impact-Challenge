@@ -58,7 +58,7 @@ let upload = multer({
             var fileName = Date.now() + "_" + file.originalname;
           
 
-            if (fieldName === 'videos') { //videos should be label of input attribute
+            if (fieldName === 'videos') { 
                 filePath += 'videos/'
             } else if (fieldName === 'readings') {
                 filePath += 'readings/'

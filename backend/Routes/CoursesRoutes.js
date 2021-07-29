@@ -117,7 +117,7 @@ router.get('/getCompanyFiles', function (req, res) {
 
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    req.session.username = "Aaron"; //uncomment this for testing
+    //req.session.username = "Aaron"; //uncomment this for testing
     console.log("in upload route");
     console.log(req.files);
    

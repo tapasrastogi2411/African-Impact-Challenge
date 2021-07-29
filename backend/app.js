@@ -15,7 +15,7 @@ const root = require("path").join(__dirname, "../frontend/build");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin:"http://localhost:3000", credentials:true }) );
-app.use(favicon(__dirname + '/favicon.png'));
+app.use(favicon(__dirname + '/LOGO.png'));
 
 
 
