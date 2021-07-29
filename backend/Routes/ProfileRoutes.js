@@ -387,8 +387,10 @@ router.patch('/acceptInvite', auth, function (req, res) {
         return db.query(preparedStatement, [req.body['company'], receiver]);
     }) 
     .then(pgRes => {
+        return db.query("INSERT INTO profile_schema.works_for VALUES ($1, $2)", [receiver, req.body['company']]);
+    })
+    .then(pgRes => {
         res.status(200).json("Invite Accepted");
-
     })
     .catch(err => {
         console.log(err.message);
@@ -418,7 +420,7 @@ router.patch('/declineInvite', auth, function (req, res) {
         return db.query(preparedStatement, [req.body['company'], receiver]);
     }) 
     .then(pgRes => {
-        res.status(200).json("Invite Accepted");
+        res.status(200).json("Invite Declined");
 
     })
     .catch(err => {
