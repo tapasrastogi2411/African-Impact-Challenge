@@ -49,8 +49,7 @@ let upload = multer({
             cb(null, file.mimetype);
         },
         key: function (req, file, cb) {
-            console.log("IN MULTER CB");
-            console.log(file);
+            
             var filePath = 'uploads/';
             var fieldName = file.fieldname;
             var fileName = Date.now() + "_" + file.originalname;

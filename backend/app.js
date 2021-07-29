@@ -32,8 +32,8 @@ app.use(session({
 app.use('/api/profile/', profile);
 app.use('/api/course/', course);
 
-console.log(process.env.NODE_ENV);
-console.log(__dirname + '/favicon.png');
+
+
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(root));
     app.get('*', (req, res) => {

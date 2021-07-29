@@ -304,8 +304,17 @@ note: an instructor object is of the form
 router.get('/getEntrepreneurs', auth, async (req, res) => {
     try{
         let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=2'
-        const result = await db.query(query)
-        res.status(200).json(result.rows)
+        const result = await db.query(query);
+        var userData = result.rows; 
+        for (const obj of userData) {
+            for (const key in obj) {
+                if (obj[key] == 'null') {
+                    obj[key] = "Not Provided"
+                }
+            }
+        } 
+      
+        res.status(200).json(userData)
     }
     catch(err){
         // print the error and return a 500
@@ -322,7 +331,16 @@ router.get('/getInstructors', auth, async(req,res) => {
     try{
         let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=1'
         const result = await db.query(query)
-        res.status(200).json(result.rows)
+        var userData = result.rows; 
+        for (const obj of userData) {
+            for (const key in obj) {
+                if (obj[key] == 'null') {
+                    obj[key] = "Not Provided"
+                }
+            }
+        } 
+      
+        res.status(200).json(userData)
     }
     catch(err){
         // print the error and return a 500
@@ -339,7 +357,15 @@ router.get('/getPartners', auth, async(req, res) => {
     try{
         let query = 'SELECT * FROM profile_schema.aic_user JOIN profile_schema.aic_role on user_role = role_id WHERE user_role=3'
         const result = await db.query(query)
-        res.status(200).json(result.rows)
+        var userData = result.rows; 
+        for (const obj of userData) {
+            for (const key in obj) {
+                if (obj[key] == 'null') {
+                    obj[key] = "Not Provided"
+                }
+            }
+        } 
+        res.status(200).json(userData)
     }
     catch(err){
         // print the error and return a 500
@@ -354,9 +380,18 @@ router.get('/getPartners', auth, async(req, res) => {
 - 500 status code if an error occured */
 router.get('/getStartups', auth, async(req, res) => {
     try{
-        let query = 'SELECT name FROM profile_schema.company'
+        let query = 'SELECT * FROM profile_schema.company'
         const result = await db.query(query)
-        res.status(200).json(result.rows)
+        var userData = result.rows; 
+        for (const obj of userData) {
+            for (const key in obj) {
+                if (obj[key] == 'null') {
+                    obj[key] = "Not Provided"
+                }
+            }
+        } 
+        
+        res.status(200).json(userData)
     }
     catch(err){
         // print the error and return a 500

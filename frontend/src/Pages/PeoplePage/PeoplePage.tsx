@@ -217,6 +217,7 @@ export default function PeoplePage(props: any) {
               >
                 <Typography>Entrepreneurs</Typography>
               </AccordionSummary>
+              {console.log("ENTREPRENEUR")}
               <List>
                 {entrepreneurs.length > 0 ? (
                   entrepreneurs.map((item) => (
@@ -226,6 +227,7 @@ export default function PeoplePage(props: any) {
                       peopleProps={props}
                     >
                       {" "}
+                      {console.log(item)}
                     </UserItem>
                   ))
                 ) : (
