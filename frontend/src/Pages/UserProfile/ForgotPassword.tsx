@@ -131,7 +131,7 @@ export const SignInAjax =  async (
                throw responseData;
            }
            console.log(response);
-           onSuccess(responseData);
+           onSuccess(responseData, data.username);
            window.location.reload()
            
         }
@@ -148,11 +148,9 @@ export const SignInAjax =  async (
 export default function ForgotPassword(props: any) {
     const history = useHistory();
     // get user data from server and pass it to the handler
-    const onSuccess = (responseData: any) => {  
-        history.push('/resetpassword');   //change t0 reset password  
-        console.log(responseData);
-        props.updateUserDataHandler(responseData); 
-        
+    const onSuccess = (responseData: any, username: string) => {  
+        history.push({pathname: '/resetpassword', state: {detail: username}});   //change t0 reset password  
+        console.log(responseData);        
     }
  
     const classes = useStyles();
@@ -168,18 +166,6 @@ export default function ForgotPassword(props: any) {
             return <Alert variant="filled" severity="error" className={classes.error}>
                         Invalid username
                     </Alert>
-        }
-    }
-    
-    // If user successfully registered and is taken to login page, regVal prop is set to true
-    // -> render the alert 
-    const renderRegAlert = () => {
-        if (props.regVal == "true") {
-            return <Alert variant="standard" severity="success" className={classes.registration}>
-                        User successfully registered! 
-                    </Alert>
-        } else {
-            return "";
         }
     }
 
@@ -220,8 +206,6 @@ export default function ForgotPassword(props: any) {
             <Button fullWidth variant="contained" size="large" className={classes.loginpagebtn} component={RouterLink} to="/login">
                     Back To Login
             </Button>
-            {renderRegAlert()}
-
         </Container>
     );
 }

@@ -9,6 +9,7 @@ import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 're
 import Alert from '@material-ui/lab/Alert';
 import { Divider } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
+import { useLocation } from "react-router-dom";
 
 const axios = require('axios');
 
@@ -88,7 +89,7 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
-const defaultErr = {userErr: "", passErr: "", backendErr: "false"};
+const defaultErr = {resetCodeErr: "", passErr: "", backendErr: "false"};
 
 export const SignInAjax =  async (
     data: any,
@@ -98,15 +99,21 @@ export const SignInAjax =  async (
     try {
         var newErr = {... defaultErr};
         var errFlag = false;
-        if (data.username == "") {
+        if (data.resetCode == "") {
             errFlag = true;
-            newErr.userErr = "Username is required";
+            newErr.resetCodeErr = "Reset Code is required";
         }
+        if (data.password == "") {
+            errFlag = true;
+            newErr.passErr = "Password is required";
+        }
+
 
         setError(newErr);
 
         if (errFlag == false){
             var formdata = new FormData();
+            formdata.append("username", data.uname);
             formdata.append("resetCode", data.resetCode);
             formdata.append("password", data.password);
 
@@ -146,7 +153,13 @@ export const SignInAjax =  async (
     } 
 };
 
+interface IState {
+    detail?: string;
+  }
+
 export default function ResetPassword(props: any) {
+    const location = useLocation();
+    const uname = (location.state as IState).detail;
     const history = useHistory();
     // get user data from server and pass it to the handler
     const onSuccess = (responseData: any) => {  
@@ -158,8 +171,8 @@ export default function ResetPassword(props: any) {
     const { register, handleSubmit } = useForm();
     const [error, setError] = React.useState(defaultErr); 
 
-    const onSubmit = ({ username }: any) => {
-        SignInAjax({ username }, onSuccess, setError);
+    const onSubmit = ({ resetCode, password }: any) => {
+        SignInAjax({ uname,resetCode, password }, onSuccess, setError);
     };
 
     const renderError = () => {
@@ -169,23 +182,11 @@ export default function ResetPassword(props: any) {
                     </Alert>
         }
     }
-    
-    // If user successfully registered and is taken to login page, regVal prop is set to true
-    // -> render the alert 
-    const renderRegAlert = () => {
-        if (props.regVal == "true") {
-            return <Alert variant="standard" severity="success" className={classes.registration}>
-                        User successfully registered! 
-                    </Alert>
-        } else {
-            return "";
-        }
-    }
 
     return (
         <Container component="main" maxWidth="xs" className={classes.root}>
             <Typography variant="h5" className={classes.title} align="center">
-                Enter Reset Code
+                Enter Reset Code 
             </Typography>
             <Typography className={classes.paragraph} align="center">
                 Please check your email for a message with your code. Your code is 8 characters long.
@@ -193,8 +194,8 @@ export default function ResetPassword(props: any) {
             
             <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
                 <CssTextField
-                    error={error.userErr == "" ? false: true}
-                    helperText={error.userErr}
+                    error={error.resetCodeErr == "" ? false: true}
+                    helperText={error.resetCodeErr}
                     variant="outlined"
                     margin="normal"
                     required
@@ -205,7 +206,7 @@ export default function ResetPassword(props: any) {
                     autoComplete="resetCode"
                     className={classes.input}
                     inputRef={register}
-                    onInput={() => setError( prevState => {return { ...prevState, userErr:"", backendErr: "false" } } )}
+                    onInput={() => setError( prevState => {return { ...prevState, resetCodeErr:"", backendErr: "false" } } )}
                 />
 
                 <CssTextField
