@@ -145,6 +145,7 @@ function ViewProfilepage(props: any) {
   const classes = useStyles();
   const [hasCompany, setHasCompany] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [viewUserCompany, setViewUserCompany] = React.useState(false);
   const [userData, setUserData] = React.useState(viewUserData);
   const [mainUser, setMainUser] = React.useState(defaultUserData);
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
@@ -221,8 +222,27 @@ function ViewProfilepage(props: any) {
       setCompanyData(await response.json());
       setHasCompany(true);
     }
+    var formdata = new FormData();
+    formdata.append("receiver", userData.username);
+    formdata.append("company_name", companyData.company_name);
 
+    var object:any = {};
+      formdata.forEach(function(value: any, key: any){
+      object[key] = value;
+      });
     
+    const response2 = await fetch('http://localhost:8080/api/profile//checkCompany/', {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      mode: 'cors',
+      body: JSON.stringify(object)
+    });
+    const responseData = await response.json();
+    setViewUserCompany(responseData.get("result"));
+
   }
   
   React.useEffect( () => {
@@ -268,7 +288,7 @@ function ViewProfilepage(props: any) {
         
         <Grid container xs={2}>
 
-        <Grid item xs={12}> {hasCompany && userData.user_role == "2" && invite ? (
+        <Grid item xs={12}> {hasCompany && userData.user_role == "2" && invite && (!viewUserCompany) ? (
                   <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>
