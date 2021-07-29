@@ -13,7 +13,9 @@ import EditIcon from "@material-ui/icons/Edit";
 import BusinessIcon from "@material-ui/icons/Business";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import { wait } from "@testing-library/react";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import CloseIcon from '@material-ui/icons/Close';
+import Collapse from "@material-ui/core/Collapse";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,9 +90,17 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 40,
   },
   invitebtn: {
-    width: "250px",
-    backgroundColor: "#fcb040",
-    marginLeft: 1000,
+      backgroundColor: "#fcb040",
+      color: "#ffffff",
+      width: 250,
+      '&:hover': { background: "#e69113" },
+      borderRadius: 20,
+    marginLeft: 1150,
+    top: 35,
+  },
+  alt: {
+    marginLeft: 300,
+    marginTop:100,
   }
 }));
 
@@ -140,7 +150,7 @@ function ViewProfilepage(props: any) {
   const [mainUser, setMainUser] = React.useState(defaultUserData);
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
   const [alertMessage, setAlertMessage] = React.useState("");
-
+  const [open, setOpen] = React.useState(false);
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent,
     reason?: string
@@ -166,8 +176,8 @@ function ViewProfilepage(props: any) {
 
   const handleInvite = async () => {
     var formdata = new FormData();
-    formdata.append("receiver", viewUserData.username);
-    formdata.append("company_name", defaultCompanyData.company_name);
+    formdata.append("receiver", userData.username);
+    formdata.append("company_name", companyData.company_name);
 
     var object:any = {};
       formdata.forEach(function(value: any, key: any){
@@ -187,10 +197,10 @@ function ViewProfilepage(props: any) {
     console.log(response.status);
     if (response.status > 300 || response.status < 200) {
       handleAlert("Invite Failed to send");
+      setOpen(true);
     }
     handleAlert("Invite Successfully Sent");
-    afterFiveSeconds();
-    handleAlert("");
+    setOpen(true);
   }
 
   const updateHasCompany = () => {
@@ -254,7 +264,23 @@ function ViewProfilepage(props: any) {
   return (
     <div>
       <Navbar></Navbar>
-      
+      <Collapse in={open}>
+            {alertMessage.length > 0 && open ? (
+            <Alert variant="outlined" color="info" icon={false} action={
+                      <IconButton
+                        aria-label="close"
+                color="inherit"
+                
+                        size="small"
+                        onClick={() => {
+                          setOpen(false);
+                        }}
+                      >
+                        <CloseIcon fontSize="inherit" />
+                      </IconButton>
+                    } className={classes.alt}>{alertMessage}</Alert>
+            ) : null}
+            </Collapse>
       <Grid container className={classes.root}>
         <Grid>
           <Snackbar
@@ -267,22 +293,24 @@ function ViewProfilepage(props: any) {
             </Alert>
           </Snackbar>
         </Grid>
+        
+        
+        <Grid container xs={2}>
 
-        <Grid item xs={12}>
-          <Typography variant="h4">{userData.username}</Typography>
-        </Grid>
-
-        {hasCompany && userData.user_role == "Entrepreneurs" ? (
+        <Grid item xs={12}> {true ? (
                   <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>
         ): null
-        }
+          }
+            </Grid>
 
+        <Grid item xs={12}>
+          <Typography variant="h4">hi{userData.username}</Typography>
+          </Grid>
+        </Grid>
+        
 
-        {alertMessage.length > 0 ? (
-                     <Alert severity="error">{alertMessage}</Alert>
-                  ) : null}
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <Typography className={classes.role} variant="caption" align="center">
