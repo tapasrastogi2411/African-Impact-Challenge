@@ -179,12 +179,12 @@ router.post('/createCompany/', auth, function (req, res, next) {
     })
 });
 
-router.post('/createInvite/', function (req, res, next) { // add auth after /createInvite for the final version
+router.post('/createInvite/', auth, function (req, res, next) { // add auth after /createInvite for the final version
     
     var orderedValues = []; 
 
     // Sender information
-    let sender = "tapasrastogi" // This changes to req.body.username for the final version
+    let sender = req.session.username // This changes to req.body.username for the final version
     
     // Setting the status variable 
     let status = 3;
@@ -241,7 +241,7 @@ router.post('/createInvite/', function (req, res, next) { // add auth after /cre
         }
     })
 });
-// Version 2 Try 2 - 840PM
+// Version 3 Try 3 - 636PM
 
 router.get('/getUser/', auth, function (req, res) {
     var userQuery = "SELECT * FROM profile_schema.aic_user WHERE username=$1";
