@@ -150,7 +150,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
 
     var storePath = null;
     if (process.env.NODE_ENV === "production") {
-        var storePath = req.files[0].key;
+        storePath = req.files[0].key;
         storePath = "/" + storePath; // prepend a slash since aws key does not include slash
     } else {
         storePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
@@ -180,9 +180,15 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
 /**
  */
 router.post('/upload/companyFile/', function (req, res) { 
-    
 
-    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    var filePath = null;
+    if (process.env.NODE_ENV === "production") {
+        filePath = req.files[0].key;
+        filePath = "/" + storePath; // prepend a slash since aws key does not include slash
+    } else {
+        filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    }
+    
     let companyNameQuery =  "select company_name " +
                             "from profile_schema.works_for " +
                             "where username=$1 ";
@@ -208,9 +214,15 @@ router.post('/upload/companyFile/', function (req, res) {
 
 
 router.post('/upload/assignment/teacher', function (req, res) { 
-   
 
-    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    var filePath = null;
+    if (process.env.NODE_ENV === "production") {
+        filePath = req.files[0].key;
+        filePath = "/" + storePath; // prepend a slash since aws key does not include slash
+    } else {
+        filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    }
+   
     let totalMarks = req.body.totalMarks;
     let deadline = req.body.deadline.replace("T", " ");
     var query = "INSERT INTO post_schema.PostAssignment VALUES ($1, $2, $3)";
@@ -235,8 +247,15 @@ router.post('/upload/assignment/teacher', function (req, res) {
  * Allows for resubmission
  */
 router.post('/upload/assignment/entrepreneur',  function (req, res) { 
+
+    var submissionPath = null;
+    if (process.env.NODE_ENV === "production") {
+        submissionPath = req.files[0].key;
+        submissionPath = "/" + storePath; // prepend a slash since aws key does not include slash
+    } else {
+        submissionPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    }
     
-    let submissionPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     let postedAssignment = JSON.parse(req.body.postedAssignment);
     let assignmentPath = postedAssignment.file_path;
     let currentdate = new Date(); 
