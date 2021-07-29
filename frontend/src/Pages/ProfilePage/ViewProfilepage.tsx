@@ -146,7 +146,6 @@ function ViewProfilepage(props: any) {
   const [hasCompany, setHasCompany] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [userData, setUserData] = React.useState(viewUserData);
-  const [showCreateCompanyBtn, setShowCreateCompanyBtn] = React.useState(false);
   const [mainUser, setMainUser] = React.useState(defaultUserData);
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
   const [alertMessage, setAlertMessage] = React.useState("");
@@ -205,62 +204,31 @@ function ViewProfilepage(props: any) {
     setOpen(true);
   }
 
-  const updateHasCompany = () => {
+  const updateHasCompany = async () => {
     // makes request to backend to check if logged in user has a company and updates Hascompany.
-    fetch('http://localhost:8080/api/profile/getCompany/', {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                },
-            credentials: 'include',
-            mode: 'cors',
-        })
-        .then(response => { // company data successfully retrieved
-            return response.json();
-        })
-      .then(responseJson => {
-          setHasCompany(true);
-          setCompanyData(responseJson);
-        })
-      .catch(err => { // company data cannot be retrieved 
-          setHasCompany(false);
-          console.log("error"); 
-        })
-
-
-  }
-  const checkUserInCompany = () => {
-    fetch("http://localhost:8080/api/profile/inCompany/", {
+    const response = await fetch('http://localhost:8080/api/profile/getCompany/', {
       method: "GET",
-      credentials: "include",
-      mode: "cors",
-    })
-      .then((response) => {
-        // if company exists then show view company button/hide create company button
-        if (response.status == 200) {
-          setShowCreateCompanyBtn(false); // hide
-        } else {
-          setShowCreateCompanyBtn(true); // show
-        }
-      })
-      .catch((err) => {
-        console.log("error");
-        setShowCreateCompanyBtn(false); // hide
-      });
-  };
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      mode: 'cors',
+    });
+    if (response.status > 300 || response.status < 200) {
+      setHasCompany(false);
+    }
+    else {
+      setCompanyData(await response.json());
+      setHasCompany(true);
+    }
 
-  
-  const afterFiveSeconds = () => {
-    setTimeout(function () {
-      // ...
-  }, 5000);
+    
   }
-
-
+  
   React.useEffect( () => {
     getUserData();
     updateHasCompany();
-
+    setAlertMessage("");
   }, []);
 
   return (
