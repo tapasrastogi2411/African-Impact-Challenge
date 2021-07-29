@@ -214,6 +214,9 @@ router.post('/createInvite/', function (req, res, next) { // add auth after /cre
     .then(pgRes => {
         if (pgRes.rowCount > 0) {
             res.status(400).json({err: "Invite request already sent"});
+
+            // Adding this error to break the request since it becomes a duplicate otherwise
+            throw new Error("Invite Request ALREADY exists!");
         }
 
         // Invite is not duplicate, insert it into the database
@@ -221,7 +224,7 @@ router.post('/createInvite/', function (req, res, next) { // add auth after /cre
         return db.query(insertInvite, orderedValues);
     })
     .then(pgRes => {
-        res.status(201).json("Invite added");
+        res.status(201).json({status: "Invite sent"});
 
     // Error checking messages    
     })
