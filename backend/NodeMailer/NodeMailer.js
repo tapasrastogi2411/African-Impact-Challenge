@@ -7,18 +7,6 @@ var transporter = nodemailer.createTransport({
       pass: 'backend/db/schema/AIC.ddl'
     }
 });
-  
-// var mailOptions = {
-//     from: 'AfricanImpactChallengeTesting@gmail.com',
-//     to: 'aaronjacob.tan@mail.utoronto.ca',
-//     subject: 'African Impact Challenge Account Recovery Code',
-//     html: `
-//         <p>Hi, </p>
-//         <p>We received a request to reset your African Impact Challenge account password.
-//         Enter the following password reset code:</p>
-//     `
-// };
-
 
 let sendEmail = function(mailOptions) {
     transporter.sendMail(mailOptions, function(error, info){
