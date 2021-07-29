@@ -5,6 +5,7 @@ const db = require('../db');
 const bcrypt = require("bcrypt"); 
 const session = require('express-session');
 const path = require('path');
+const { send } = require('process');
 
 /*
 * HTTP Status codes used:
@@ -178,35 +179,45 @@ router.post('/createCompany/', auth, function (req, res, next) {
     })
 });
 
-router.post('/createInvite/', auth, function (req, res, next) {
-
-    // The rows in our `invite` table
-    var orderedFields = ["sender", "receiver", "time", "status"];
+router.post('/createInvite/', function (req, res, next) { // add auth after /createInvite for the final version
     
     var orderedValues = []; 
-    for (var key of orderedFields) {
-        var value = req.body[key];
-        if (value == "") {
-            orderedValues.push("null");
-        } else {
-            orderedValues.push(value);
-        }
-    }
+
+    // Sender information
+    let sender = "tapasrastogi" // This changes to req.body.username for the final version
     
-    // Ask about this and what it does and if its needed for an invite request
-    if (!req.session.username) {
-        return res.status(500).json("Username is null");
-    } 
-    orderedValues.push(req.session.username);
+    // Setting the status variable 
+    let status = 3;
     
+    // Setting a time variable
+    var currentdate = new Date(); 
+    var datetime = currentdate.getFullYear() + "-" 
+            + (currentdate.getMonth()+1) + "-"
+            + currentdate.getDate() + " "
+            + currentdate.getHours() + ":"  
+            + currentdate.getMinutes() + ":" 
+            + currentdate.getSeconds();
+            
+    // Putting everything in the orderedValues list
+    orderedValues.push(sender); 
+    orderedValues.push(req.body.receiver); // Pushing in the receiver from the front-end
+    orderedValues.push(req.body.company_name); // Pushing in the company name from the front-end
+    orderedValues.push(datetime);
+    orderedValues.push(status);
+
     // Inserting into the Postgres DB
-    var inviteExists = "SELECT * FROM profile_schema.invite WHERE sender=$1";
-    db.query(inviteExists, [req.body['sender']])
+    var inviteExists = "SELECT * FROM profile_schema.invite WHERE sender=$1 AND receiver=$2";
+    // db.query(inviteExists, [req.body['sender']], [req.body['receiver']])
+    db.query(inviteExists, [sender, req.body.receiver])
+
+    // Error and status 400 since invite already exists
     .then(pgRes => {
         if (pgRes.rowCount > 0) {
-            throw new Error("Invite request already sent");
+            res.status(400).json({err: "Invite request already sent"});
         }
-        var insertInvite = "INSERT INTO profile_schema.company VALUES ($1,$2,$3,$4)";
+
+        // Invite is not duplicate, insert it into the database
+        var insertInvite = "INSERT INTO profile_schema.invite(sender, receiver, company, time, status) VALUES ($1,$2,$3,$4, $5)";
         return db.query(insertInvite, orderedValues);
     })
     .then(pgRes => {
@@ -227,7 +238,7 @@ router.post('/createInvite/', auth, function (req, res, next) {
         }
     })
 });
-// Version 1 Try 1 - 147PM
+// Version 2 Try 2 - 840PM
 
 router.get('/getUser/', auth, function (req, res) {
     var userQuery = "SELECT * FROM profile_schema.aic_user WHERE username=$1";
