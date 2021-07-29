@@ -48,7 +48,7 @@ let upload = multer({
         acl: 'public-read',
         //contentType: multerS3.AUTO_CONTENT_TYPE,
         contentType: function (req, file, cb) {
-            cb(null, 'text/plain');
+            cb(null, file.mimetype);
         },
         key: function (req, file, cb) {
             console.log("IN MULTER CB");
