@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('../Middleware/auth');
+var sendEmail = require('../NodeMailer/NodeMailer');
 const db = require('../db');
 const bcrypt = require("bcrypt"); 
 const session = require('express-session');
 const path = require('path');
+const crypto = require('crypto');
+var dateHelper = require('../Helper/dateHelper');
 
 /*
 * HTTP Status codes used:
@@ -354,7 +357,7 @@ router.get('/getPartners', auth, async(req, res) => {
 - 500 status code if an error occured */
 router.get('/getStartups', auth, async(req, res) => {
     try{
-        let query = 'SELECT name FROM profile_schema.company'
+        let query = 'SELECT company_name FROM profile_schema.company'
         const result = await db.query(query)
         res.status(200).json(result.rows)
     }
@@ -365,4 +368,178 @@ router.get('/getStartups', auth, async(req, res) => {
     }
 })
 
+/* Returns:
+- A list of invite objects sent by a currently logged in user.
+    An invite object is of the form:
+
+    {
+        sender: sender_username
+        receiver: receiver_username
+        time: date_and_time
+        status: 1/2/3, where 1 = Accepted, 2 = Declined, 3 = Pending
+    }
+*/
+router.get('/fetchOutgoingInvites', auth, async(req, res) => {
+    // get the sender's username (i.e the user currently logged in)
+    let sender = req.session.username
+    try{
+        let query = `SELECT * FROM profile_schema.invite WHERE sender='${sender}'`
+        const result = await db.query(query)
+        res.status(200).json(result)
+    }
+    catch(err){
+        // print the error and return a 500
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
+
+/* Returns:
+- A list of invite objects sent to the currently logged in user.
+    An invite object is of the form:
+
+    {
+        sender: sender_username
+        receiver: receiver_username
+        time: date_and_time
+        status: 1/2/3, where 1 = Accepted, 2 = Declined, 3 = Pending
+    }
+*/
+router.get('fetchIncomingInvites', auth, async(req, res) => {
+    // get the receiver's username (i.e the user current logged in)
+    let receiver = req.session.username
+    try{
+        // query for all pending invites only
+        let query = `SELECT * FROM profile_schema.invite WHERE receiver='${receiver}' AND status=3`
+        const result = await db.query(query)
+        res.status(200).json(result)
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
+
+/* Returns: 
+- A json object of the form:
+{
+    result: boolean
+}
+Where boolean = true, if the given username is associated with a company and false otherwise.
+*/
+router.get('/checkCompany', auth, async(req, res) => {
+    // 
+    try{
+        let user = req.body.username
+        let query = `SELECT * FROM profile_schema.works_for WHERE username='${user}'`
+        const result = await db.query(query)
+        if(result.rows.length === 0){
+            res.status(200).json({"result": false})
+        }
+        res.status(200).json({"result": true})
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).end('Server Error...')
+    }
+})
+
+router.put('/forgotpassword', function(req, res) {
+    var selectQuery = "SELECT first_name, last_name, email FROM profile_schema.aic_user WHERE username = $1";
+    var username = req.body.username
+    db
+        .query(selectQuery, [username])
+        .then(result => {
+            if (!result.rows.length) {
+                return res.status(400).json({err: "Username does not exist"});
+            } 
+            
+            var deleteQuery = "DELETE FROM profile_schema.password_reset WHERE username = $1";
+            db.query(deleteQuery, [username]).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});});
+            
+            var resetCode = crypto.randomBytes(4).toString('hex');
+
+            var mailOptions = {
+                from: 'AfricanImpactChallengeTesting@gmail.com',
+                to: `${result.rows[0].email}`,
+                subject: 'African Impact Challenge Account Recovery Code: Expires in 10 minutes',
+                html: `
+                    <div style="width:50%">
+                        <h2>The African Impact Challenge</h2>
+                        <hr>
+                    </div>
+                    
+                    <p>Hi, ${result.rows[0].first_name} ${result.rows[0].last_name}</p>
+                    <p>We received a request to reset your African Impact Challenge account password.
+                    Enter the following password reset code:</p>
+                    
+                    <table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;width:max-content;margin-top:20px;margin-bottom:20px">
+                        <tbody>
+                            <tr>
+                                <td style="font-size:11px;font-family:LucidaGrande,tahoma,verdana,arial,sans-serif;padding:14px 32px 14px 32px;background-color:#f2f2f2;border-left:1px solid #ccc;border-right:1px solid #ccc;border-top:1px solid #ccc;border-bottom:1px solid #ccc;text-align:center;border-radius:7px;display:block;border:1px solid #c48133;background:#ffa843">
+                                    <span style="font-family:Helvetica Neue,Helvetica,Lucida Grande,tahoma,verdana,arial,sans-serif;font-size:16px;line-height:21px;color:#141823">
+                                        <span style="color:white;font-size:17px;font-family:Roboto;font-weight:700;margin-left:0px;margin-right:0px">${resetCode}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `
+            };
+            
+            sendEmail(mailOptions);
+            
+            var password_reset_schema = "(username,recovery_code,expiry_date)";
+            var preparedValues = "($1,$2,$3)";
+            var insertQuery = "INSERT INTO profile_schema.password_reset" + password_reset_schema + " VALUES" + preparedValues;
+            var userData = [username, resetCode, dateHelper.getExpiryDate(10)]
+            return db.query(insertQuery, userData).then(result => {res.status(200).json({status: "Reset Code Sent"});}).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});})   
+        })
+        .catch(e => {
+            console.error(e.stack);
+            res.status(500).json({err: "Server error"});
+        })
+});
+
+router.put('/resetpassword', function(req, res) {
+    if(!req.body.resetCode) {
+        return res.status(400).json({err: "Reset Code Not Provided"});
+    }
+
+    var selectQuery = "SELECT * FROM profile_schema.password_reset WHERE username = $1 and recovery_code = $2 and expiry_date > $3";
+
+    db
+        .query(selectQuery, [req.body.username, req.body.resetCode, dateHelper.getCurrentDate()])
+        .then(result => {
+            if (!result.rows.length) {
+                return res.status(400).json({err: "Invalid Reset Code"});
+            } 
+
+            var updatePasswordQuery = "UPDATE profile_schema.aic_user SET password = $1 WHERE username = $2"
+            
+            bcrypt
+                .genSalt(5)
+                .then(salt => {
+                    return bcrypt.hash(req.body.password, salt);
+                })
+                .then(hash => {
+                    var newPW = hash;
+                    db.query(updatePasswordQuery, [newPW, req.body.username])
+                        .then(result => {
+                            var deleteQuery = "DELETE FROM profile_schema.password_reset WHERE username = $1";
+                            db.query(deleteQuery, [req.body.username]).catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});});
+                            res.status(200).json({status: "Password Successfuly Updated"});})
+                        .catch(e => {console.error(e.stack);res.status(500).json({err: "Server error"});})
+                })
+
+        })
+        .catch(e => {
+            console.error(e.stack);
+            res.status(500).json({err: "Server error"});
+        })
+});
+
 module.exports = router;
+
+
+
