@@ -59,16 +59,10 @@ const useStyles = makeStyles((theme) => ({
 
 function InvitationPage(prop: any) {
   const classes = useStyles();
-  const [file, setFile] = React.useState("");
   const [inviteItems, setInviteItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
 
 
-
-  const parseItem = (e: any) => {
-    var filePath = e.file_path;
-    return filePath.substring(filePath.indexOf('_') + 1, filePath.length)
-  };
   const handleGet = async () => {
     const response = await fetch(
       "http://localhost:8080/api/profile/fetchIncomingInvites",
@@ -85,7 +79,53 @@ function InvitationPage(prop: any) {
 
     setInviteItems(responseData);
   };
-  
+
+
+
+  const handleAlert = (e: string) => {
+    setAlertMessage(e);
+  };
+
+  const handleAccept = (company: any) => async (e: any) => {
+    const formData = new FormData();
+    formData.append("company", company);
+
+    const response = await fetch("http://localhost:8080/api/profile/acceptInvite", {
+      method: "PATCH",
+      body: formData,
+      credentials: "include",
+      mode: "cors",
+    });
+
+    console.log(response.status);
+
+    if (response.status > 300 || response.status < 200) {
+      handleAlert("Failed to accept");
+    }
+    handleAlert("Successfully Accepted");
+    handleGet();
+  };
+
+  const handleDecline = (company: any) => async (e: any) => {
+    const formData = new FormData();
+    formData.append("company", company);
+
+    const response = await fetch("http://localhost:8080/api/profile/declineInvite", {
+      method: "PATCH",
+      body: formData,
+      credentials: "include",
+      mode: "cors",
+    });
+
+    console.log(response.status);
+
+    if (response.status > 300 || response.status < 200) {
+      handleAlert("Failed to decline");
+    }
+    handleAlert("Successfully Declined");
+    handleGet();
+  };
+
   const renderInvites = (item: any) => {
     return (
       <Paper className={classes.inviteCard} elevation={2}>
@@ -107,37 +147,15 @@ function InvitationPage(prop: any) {
           </Grid>
           <Divider orientation="vertical" flexItem />
           <Grid item >
-            <Button className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
+            <Button onClick={() => handleAccept(item.company)} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
           </Grid>
           <Grid item >
-            <Button className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
+            <Button onClick={() => handleDecline(item.company)} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
           </Grid>
         </Grid>
       </Paper>
     );
   }
-  const handleAlert = (e: string) => {
-    setAlertMessage(e);
-  };
-  const handleAccept = async (e: any) => {
-    const formData = new FormData();
-
-
-    const response = await fetch("http://localhost:8080/api/profile/acceptInvite", {
-      method: "PATCH",
-      body: formData,
-      credentials: "include",
-      mode: "cors",
-    });
-
-    console.log(response.status);
-
-    if (response.status > 300 || response.status < 200) {
-      handleAlert("Failed to accept");
-    }
-    handleAlert("Successfully Accepted");
-    handleGet();
-  };
 
   useEffect(() => {
     handleGet();
@@ -152,9 +170,7 @@ function InvitationPage(prop: any) {
           <Typography variant="h4" >
             Invites
           </Typography>
-
         </Grid>
-
         <Divider className={classes.divider} />
         {inviteItems.length > 0 ? (
           inviteItems.map((item) => (
@@ -191,7 +207,6 @@ function InvitationPage(prop: any) {
             </Grid>
           </Grid>
         </Paper> */}
-
       </Grid>
     </div >
   );
