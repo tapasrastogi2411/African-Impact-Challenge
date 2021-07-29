@@ -123,7 +123,7 @@ const defaultUserData = {
 
 const viewUserData = {
   username: "",
-  role_name: "",
+  user_role: "",
   honorifics: "",
   first_name: "",
   last_name : "",
@@ -223,8 +223,7 @@ function ViewProfilepage(props: any) {
       setHasCompany(true);
     }
     var formdata = new FormData();
-    formdata.append("receiver", userData.username);
-    formdata.append("company_name", companyData.company_name);
+    formdata.append("username", userData.username);
 
     var object:any = {};
       formdata.forEach(function(value: any, key: any){
@@ -305,7 +304,7 @@ function ViewProfilepage(props: any) {
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <Typography className={classes.role} variant="caption" align="center">
-            {userData.role_name}
+            {userData.user_role}
           </Typography>
           <img src={profilepic} className={classes.profilePic} />
           <Button startIcon={<ChatIcon />} className={classes.btn}>
