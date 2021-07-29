@@ -61,14 +61,31 @@ function InvitationPage(prop: any) {
   const classes = useStyles();
   const [file, setFile] = React.useState("");
   const [inviteItems, setInviteItems] = React.useState([]);
- 
+  const [alertMessage, setAlertMessage] = React.useState("");
+
 
 
   const parseItem = (e: any) => {
     var filePath = e.file_path;
     return filePath.substring(filePath.indexOf('_') + 1, filePath.length)
   };
+  const handleGet = async () => {
+    const response = await fetch(
+      "http://localhost:8080/api/profile/fetchIncomingInvites",
+      {
+        method: "GET",
+        credentials: "include",
+        mode: "cors",
+      }
+    );
+    const responseData = await response.json();
+    if (response.status > 300 || response.status < 200) {
+      throw responseData;
+    }
 
+    setInviteItems(responseData);
+  };
+  
   const renderInvites = (item: any) => {
     return (
       <Paper className={classes.inviteCard} elevation={2}>
@@ -79,7 +96,7 @@ function InvitationPage(prop: any) {
           justify="space-evenly">
           <Grid item>
             <Typography>
-              {item.user}
+              {item.sender}
             </Typography>
           </Grid>
           <Divider orientation="vertical" flexItem />
@@ -98,23 +115,28 @@ function InvitationPage(prop: any) {
         </Grid>
       </Paper>
     );
-
   }
-  const handleGet = async () => {
-    const response = await fetch(
-      "http://localhost:8080/api/course/getInvites",
-      {
-        method: "GET",
-        credentials: "include",
-        mode: "cors",
-      }
-    );
-    const responseData = await response.json();
-    if (response.status > 300 || response.status < 200) {
-      throw responseData;
-    }
+  const handleAlert = (e: string) => {
+    setAlertMessage(e);
+  };
+  const handleAccept = async (e: any) => {
+    const formData = new FormData();
 
-    setInviteItems(responseData);
+
+    const response = await fetch("http://localhost:8080/api/profile/acceptInvite", {
+      method: "PATCH",
+      body: formData,
+      credentials: "include",
+      mode: "cors",
+    });
+
+    console.log(response.status);
+
+    if (response.status > 300 || response.status < 200) {
+      handleAlert("Failed to accept");
+    }
+    handleAlert("Successfully Accepted");
+    handleGet();
   };
 
   useEffect(() => {
@@ -134,16 +156,16 @@ function InvitationPage(prop: any) {
         </Grid>
 
         <Divider className={classes.divider} />
-        {/* {inviteItems.length > 0 ? (
+        {inviteItems.length > 0 ? (
           inviteItems.map((item) => (
             renderInvites(item)
           ))
         ) : (
-            <Typography align="center" className={classes.noReadingHeader}>
-              There are currently no readings!
+            <Typography align="center" >
+              No pending invites
             </Typography>
-          )} */}
-        <Paper className={classes.inviteCard} elevation={2}>
+          )}
+        {/* <Paper className={classes.inviteCard} elevation={2}>
           <Grid
             direction="row"
             container
@@ -168,7 +190,8 @@ function InvitationPage(prop: any) {
               <Button className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
             </Grid>
           </Grid>
-        </Paper>
+        </Paper> */}
+
       </Grid>
     </div >
   );
