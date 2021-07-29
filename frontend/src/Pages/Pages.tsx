@@ -60,7 +60,6 @@ export default function Pages(props: any) {
     const [userData, setUserData] = React.useState(defaultUserData);
     const [viewuserData, setViewUserData] = React.useState(viewUserData);
     const [viewcompanyData, setViewCompanyData] = React.useState(ViewCompanyData);
-    const [enteredUsername, setEnteredUsername] = React.useState('aaron3');
 
     const updateReg = (val:string) => {
         setReg(val);
@@ -88,8 +87,8 @@ export default function Pages(props: any) {
             <Route exact path="/guestVideos" component={GuestVideoPage} />    
             <Route exact path="/guestReadings" component={GuestReadingPage} />  
             <Route exact path="/calendar" component={CalendarPage} /> 
-            <Route exact path="/forgotpassword" render={() => <ForgotPassword setEnteredUsername={setEnteredUsername} />}  /> 
-            <Route exact path="/resetpassword" render={() => <ResetPassword enteredUsername={enteredUsername} />}  />
+            <Route exact path="/forgotpassword" render={() => <ForgotPassword />}  /> 
+            <Route exact path="/resetpassword" render={() => <ResetPassword />}  />
         </Switch>
         
     );
