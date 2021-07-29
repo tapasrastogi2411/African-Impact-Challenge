@@ -21,6 +21,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Alert from '@material-ui/lab/Alert';
 
 import { Link } from "react-router-dom";
+import * as Constants from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -122,7 +123,7 @@ function ViewSubmission(props: any) {
                         <Grid item className={classes.embed}>
 
                             <embed type="application/pdf"
-                            src={"http://localhost:8080" + assignment.submission_file_path}
+                            src={Constants.awsServer + assignment.submission_file_path}
                             width="1000"
                             height="800" 
                             />
@@ -133,7 +134,7 @@ function ViewSubmission(props: any) {
                                 
                                 <Grid item>
                                     <Typography  className={classes.labels} > Submitted File </Typography>
-                                    <a href={"http://localhost:8080" + assignment.submission_file_path}  target='_blank' download>  
+                                    <a href={Constants.awsServer + assignment.submission_file_path}  target='_blank' download>  
                                         <Typography className={classes.values}> {parseFileName(assignment)} </Typography>
                                     </a>
                                 </Grid>

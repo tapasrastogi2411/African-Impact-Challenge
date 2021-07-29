@@ -303,7 +303,7 @@ function AssignmentPage(prop: any) {
                     </Grid>
 
                     <Grid item>
-                        <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+                        <a href={Constants.awsServer + item.file_path }  target='_blank' download>
                             <Typography variant="body2" >
                                 {parseItem(item)}
                             </Typography>
