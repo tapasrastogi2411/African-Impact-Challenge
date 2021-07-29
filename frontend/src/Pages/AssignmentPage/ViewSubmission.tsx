@@ -122,7 +122,7 @@ function ViewSubmission(props: any) {
                     <Grid container direction="row" >
                         <Grid item className={classes.embed}>
 
-                            <embed type="application/pdf"
+                            <embed type="application/txt"
                             src={Constants.awsServer + assignment.submission_file_path}
                             width="1000"
                             height="800" 
