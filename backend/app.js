@@ -19,12 +19,6 @@ app.use(favicon(__dirname + '/LOGO.png'));
 
 
 
-//console.log(process.env.AWS_ACCESS_KEY_ID);
-//console.log(process.env.AWS_BUCKET_NAME);
-
-
-
-
 //Enabling sessions
 var session = require('express-session');
 app.use(session({
@@ -47,12 +41,9 @@ if (process.env.NODE_ENV === 'production') {
     });
 } 
 
-// gets set in Heroku
-console.log(process.env.NODE_ENV);
-console.log(process.env.DATABASE_URL);
+
+
     
-
-
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, function () {
