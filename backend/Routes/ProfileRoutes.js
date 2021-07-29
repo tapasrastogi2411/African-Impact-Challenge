@@ -365,4 +365,67 @@ router.get('/getStartups', auth, async(req, res) => {
     }
 })
 
+router.patch('/acceptInvite', auth, function (req, res) {
+    let preparedStatement = `UPDATE profile_schema.invite
+                             SET status = 1
+                             WHERE company = $2 and receiver = $3`;
+
+    let inviteExist = "SELECT * FROM profile_schema.invite WHERE company = $1 and receiver = $2";
+    
+    // Get the receiver's username from session cookies
+    if (!req.session.username) {
+        return res.status(500).json("Username is null");
+    } 
+    let receiver = req.session.username;
+
+    // Check whether the invite exists
+    db.query(inviteExist, [req.body['company'], receiver])
+    .then(pgRes => {
+        if (pgRes.rowCount == 0) {
+            return res.status(404).json("The invite does not exist");
+        }
+        return db.query(preparedStatement, [req.body['company'], receiver]);
+    }) 
+    .then(pgRes => {
+        res.status(200).json("Invite Accepted");
+
+    })
+    .catch(err => {
+        console.log(err.message);
+        res.status(500).json("Internal Server Error")
+    });
+});
+
+router.patch('/declineInvite', auth, function (req, res) {
+    let preparedStatement = `UPDATE profile_schema.invite
+                             SET status = 2
+                             WHERE company = $2 and receiver = $3`;
+
+    let inviteExist = "SELECT * FROM profile_schema.invite WHERE company = $1 and receiver = $2";
+    
+    // Get the receiver's username from session cookies
+    if (!req.session.username) {
+        return res.status(500).json("Username is null");
+    } 
+    let receiver = req.session.username;
+
+    // Check whether the invite exists
+    db.query(inviteExist, [req.body['company'], receiver])
+    .then(pgRes => {
+        if (pgRes.rowCount == 0) {
+            return res.status(404).json("The invite does not exist");
+        }
+        return db.query(preparedStatement, [req.body['company'], receiver]);
+    }) 
+    .then(pgRes => {
+        res.status(200).json("Invite Accepted");
+
+    })
+    .catch(err => {
+        console.log(err.message);
+        res.status(500).json("Internal Server Error");
+    });
+});
+
+
 module.exports = router;
