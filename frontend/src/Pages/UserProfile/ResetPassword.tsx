@@ -107,7 +107,8 @@ export const SignInAjax =  async (
 
         if (errFlag == false){
             var formdata = new FormData();
-            formdata.append("username", data.username);
+            formdata.append("resetCode", data.resetCode);
+            formdata.append("password", data.password);
 
             // convert formData to JSON since that is what the server looks for
             var object:any = {};

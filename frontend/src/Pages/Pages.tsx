@@ -18,8 +18,7 @@ import GuestReadingPage from "./GuestReadingPage/GuestReadingPage";
 import { classicNameResolver } from "typescript";
 import CalendarPage from "./CalendarPage/CalendarPage";
 import ForgotPassword from "./UserProfile/ForgotPassword";
-
-
+import ResetPassword from "./UserProfile/ResetPassword";
 
 const defaultUserData = {
     username: "",
@@ -89,9 +88,9 @@ export default function Pages(props: any) {
             <Route exact path="/guestReadings" component={GuestReadingPage} />  
             <Route exact path="/calendar" component={CalendarPage} /> 
             <Route exact path="/forgotpassword" component={ForgotPassword} /> 
+            <Route exact path="/resetpassword" component={ResetPassword} /> 
         </Switch>
         
-
     );
 
 }
