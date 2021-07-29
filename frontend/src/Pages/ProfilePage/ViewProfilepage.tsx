@@ -276,6 +276,7 @@ function ViewProfilepage(props: any) {
                         size="small"
                         onClick={() => {
                           setOpen(false);
+                          setAlertMessage("");
                         }}
                       >
                         <CloseIcon fontSize="inherit" />
