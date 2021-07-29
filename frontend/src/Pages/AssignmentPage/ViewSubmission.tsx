@@ -123,8 +123,8 @@ function ViewSubmission(props: any) {
                         <Grid item className={classes.embed}>
 
                             <embed type="application/pdf"
-                            //src={Constants.awsServer + assignment.submission_file_path}
-                            src="https://aic-assets.s3.ca-central-1.amazonaws.com/uploads/readings/1627516244094_notes.txt"
+                            src={Constants.awsServer + assignment.submission_file_path}
+                            //src="https://aic-assets.s3.ca-central-1.amazonaws.com/uploads/readings/1627516244094_notes.txt"
                             width="1000"
                             height="800" 
                             />
