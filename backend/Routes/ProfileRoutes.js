@@ -386,7 +386,7 @@ router.put('/forgotpassword', function(req, res) {
             var mailOptions = {
                 from: 'AfricanImpactChallengeTesting@gmail.com',
                 to: `${result.rows[0].email}`,
-                subject: 'African Impact Challenge Account Recovery Code',
+                subject: 'African Impact Challenge Account Recovery Code: Expires in 10 minutes',
                 html: `
                     <div style="width:50%">
                         <h2>The African Impact Challenge</h2>
