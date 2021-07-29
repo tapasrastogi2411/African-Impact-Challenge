@@ -258,12 +258,12 @@ export default function SignIn(props: any) {
                     href="#"
                     variant="body2"
                     color="textSecondary"
+                    component={RouterLink}
+                    to="/forgotpassword"
                 >
                     Forgot password?
                 </Link>
-
                 
-
             </form>
 
             {renderRegAlert()}

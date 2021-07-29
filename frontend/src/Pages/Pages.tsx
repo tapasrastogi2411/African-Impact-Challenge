@@ -17,6 +17,7 @@ import GuestVideoPage from "./GuestVideoPage/GuestVideoPage";
 import GuestReadingPage from "./GuestReadingPage/GuestReadingPage";
 import { classicNameResolver } from "typescript";
 import CalendarPage from "./CalendarPage/CalendarPage";
+import ForgotPassword from "./UserProfile/ForgotPassword";
 
 
 
@@ -86,7 +87,8 @@ export default function Pages(props: any) {
             <Route exact path="/viewCompany" render={() => <ViewCompanyPage viewCompanyDataProp={viewcompanyData} />} />
             <Route exact path="/guestVideos" component={GuestVideoPage} />    
             <Route exact path="/guestReadings" component={GuestReadingPage} />  
-            <Route exact path="/calendar" component={CalendarPage} />   
+            <Route exact path="/calendar" component={CalendarPage} /> 
+            <Route exact path="/forgotpassword" component={ForgotPassword} /> 
         </Switch>
         
 
