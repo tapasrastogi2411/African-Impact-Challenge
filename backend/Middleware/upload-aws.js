@@ -46,10 +46,11 @@ let upload = multer({
         s3: S3,
         bucket: 'aic-assets',
         acl: 'public-read',
-        //contentType: multerS3.AUTO_CONTENT_TYPE,
-        contentType: 'application/pdf',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        //contentType: 'application/pdf',
         key: function (req, file, cb) {
             console.log("IN MULTER CB");
+            console.log(multerS3.AUTO_CONTENT_TYPE);
             var filePath = 'uploads/';
             var fieldName = file.fieldname;
             var fileName = Date.now() + "_" + file.originalname;
