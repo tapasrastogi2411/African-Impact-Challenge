@@ -59,7 +59,7 @@ function GuestVideoPage(prop: any) {
 
   const renderVideoCard = (item: any) => {
     return(
-      <VideoCard video={"http://localhost:8080" + item.file_path} title={item.title} uploader={item.upload_user} upload_date={item.upload_date}></VideoCard>
+      <VideoCard video={Constants.awsServer + item.file_path} title={item.title} uploader={item.upload_user} upload_date={item.upload_date}></VideoCard>
     );
   }
 

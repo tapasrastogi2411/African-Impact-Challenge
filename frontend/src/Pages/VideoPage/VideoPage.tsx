@@ -170,7 +170,7 @@ function VideoPage(prop: any) {
         <AccordionDetails style={{ flexDirection: "column" }} >
           <div style={{ flexBasis: "33.33%", marginRight: 20, marginLeft: 35 }} >
             <video width="533" height="300" controls>
-              <source src={"http://localhost:8080" + item.file_path} type="video/mp4" />
+              <source src={Constants.awsServer + item.file_path} type="video/mp4" />
             </video>
           </div>
           <div style={{ flexBasis: "33.33%" }}>

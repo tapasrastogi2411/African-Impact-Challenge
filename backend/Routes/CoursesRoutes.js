@@ -117,7 +117,7 @@ router.get('/getCompanyFiles', function (req, res) {
 
 
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
-    req.session.username = "Aaron"; //uncomment this for testing
+    // req.session.username = "Aaron"; //uncomment this for testing
     console.log("in upload route");
     console.log(req.files);
    
@@ -151,6 +151,7 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
     var storePath = null;
     if (process.env.NODE_ENV === "production") {
         var storePath = req.files[0].key;
+        storePath = "/" + storePath; // prepend a slash since aws key does not include slash
     } else {
         storePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     }
