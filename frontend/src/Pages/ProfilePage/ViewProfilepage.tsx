@@ -145,12 +145,13 @@ function ViewProfilepage(props: any) {
   const classes = useStyles();
   const [hasCompany, setHasCompany] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [viewUserCompany, setViewUserCompany] = React.useState(false);
   const [userData, setUserData] = React.useState(viewUserData);
-  const [showCreateCompanyBtn, setShowCreateCompanyBtn] = React.useState(false);
   const [mainUser, setMainUser] = React.useState(defaultUserData);
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
   const [alertMessage, setAlertMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [invite, setInvite] = React.useState(true);
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent,
     reason?: string
@@ -200,65 +201,54 @@ function ViewProfilepage(props: any) {
       setOpen(true);
     }
     handleAlert("Invite Successfully Sent");
+    setInvite(false);
     setOpen(true);
   }
 
-  const updateHasCompany = () => {
+  const updateHasCompany = async () => {
     // makes request to backend to check if logged in user has a company and updates Hascompany.
-    fetch('http://localhost:8080/api/profile/getCompany/', {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                },
-            credentials: 'include',
-            mode: 'cors',
-        })
-        .then(response => { // company data successfully retrieved
-            return response.json();
-        })
-      .then(responseJson => {
-          setHasCompany(true);
-          setCompanyData(responseJson);
-        })
-      .catch(err => { // company data cannot be retrieved 
-          setHasCompany(false);
-          console.log("error"); 
-        })
-
-
-  }
-  const checkUserInCompany = () => {
-    fetch("http://localhost:8080/api/profile/inCompany/", {
+    const response = await fetch('http://localhost:8080/api/profile/getCompany/', {
       method: "GET",
-      credentials: "include",
-      mode: "cors",
-    })
-      .then((response) => {
-        // if company exists then show view company button/hide create company button
-        if (response.status == 200) {
-          setShowCreateCompanyBtn(false); // hide
-        } else {
-          setShowCreateCompanyBtn(true); // show
-        }
-      })
-      .catch((err) => {
-        console.log("error");
-        setShowCreateCompanyBtn(false); // hide
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      mode: 'cors',
+    });
+    if (response.status > 300 || response.status < 200) {
+      setHasCompany(false);
+    }
+    else {
+      setCompanyData(await response.json());
+      setHasCompany(true);
+    }
+    var formdata = new FormData();
+    formdata.append("receiver", userData.username);
+    formdata.append("company_name", companyData.company_name);
+
+    var object:any = {};
+      formdata.forEach(function(value: any, key: any){
+      object[key] = value;
       });
-  };
+    
+    const response2 = await fetch('http://localhost:8080/api/profile//checkCompany/', {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      mode: 'cors',
+      body: JSON.stringify(object)
+    });
+    const responseData = await response.json();
+    setViewUserCompany(responseData.get("result"));
 
-  
-  const afterFiveSeconds = () => {
-    setTimeout(function () {
-      // ...
-  }, 5000);
   }
-
-
+  
   React.useEffect( () => {
     getUserData();
     updateHasCompany();
-
+    setAlertMessage("");
   }, []);
 
   return (
@@ -274,6 +264,7 @@ function ViewProfilepage(props: any) {
                         size="small"
                         onClick={() => {
                           setOpen(false);
+                          setAlertMessage("");
                         }}
                       >
                         <CloseIcon fontSize="inherit" />
@@ -297,7 +288,7 @@ function ViewProfilepage(props: any) {
         
         <Grid container xs={2}>
 
-        <Grid item xs={12}> {hasCompany && userData.user_role == "2" ? (
+        <Grid item xs={12}> {hasCompany && userData.user_role == "2" && invite && (!viewUserCompany) ? (
                   <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>
