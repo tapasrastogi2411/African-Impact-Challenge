@@ -151,6 +151,7 @@ function ViewProfilepage(props: any) {
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
   const [alertMessage, setAlertMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [invite, setInvite] = React.useState(true);
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent,
     reason?: string
@@ -200,6 +201,7 @@ function ViewProfilepage(props: any) {
       setOpen(true);
     }
     handleAlert("Invite Successfully Sent");
+    setInvite(false);
     setOpen(true);
   }
 
@@ -297,7 +299,7 @@ function ViewProfilepage(props: any) {
         
         <Grid container xs={2}>
 
-        <Grid item xs={12}> {hasCompany && userData.user_role == "2" ? (
+        <Grid item xs={12}> {hasCompany && userData.user_role == "2" && invite ? (
                   <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>
