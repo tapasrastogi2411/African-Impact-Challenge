@@ -192,6 +192,7 @@ function Profilepage(props: any) {
     checkUserInCompany();
   }, [openSnackbar]);
 // [companyButton, openSnackbar]
+
   props.regHandler("false");
 
   return (
