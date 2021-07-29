@@ -82,7 +82,7 @@ export default function Pages(props: any) {
             <Route exact path="/people" render = {() => <PeoplePage changeViewCompanyData={(object: React.SetStateAction<{ company_name: string; address: string; industry: string; bio: string; creator: string; }>) => setViewCompanyData(object)} changeViewUserData={(object: React.SetStateAction<{ username: string; user_role: string; honorifics: string; first_name: string; last_name: string; email: string; phone_number: string; country: string; address: string; }>) => setViewUserData(object) } />} />
             <Route exact path="/videos" component={VideoPage} />
             <Route exact path="/readings" component={ReadingsPage} />
-            <Route exact path="/viewProfile" render={() => <ViewProfilepage viewUserDataProp={viewuserData} />} />
+            <Route exact path="/viewProfile" render={() => <ViewProfilepage viewUserDataProp={viewuserData} viewLoggedInUserData={userData}/>} />
             <Route exact path="/viewCompany" render={() => <ViewCompanyPage viewCompanyDataProp={viewcompanyData} />} />
             <Route exact path="/guestVideos" component={GuestVideoPage} />    
             <Route exact path="/guestReadings" component={GuestReadingPage} />   

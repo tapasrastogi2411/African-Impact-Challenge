@@ -7,13 +7,13 @@ import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Avatar, Divider, Toolbar } from "@material-ui/core";
-
 import profilepic from "./profilepic.jpeg";
 import ChatIcon from "@material-ui/icons/Chat";
 import EditIcon from "@material-ui/icons/Edit";
 import BusinessIcon from "@material-ui/icons/Business";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import { wait } from "@testing-library/react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,10 +87,28 @@ const useStyles = makeStyles((theme) => ({
   relatedUser: {
     marginRight: 40,
   },
+  invitebtn: {
+    width: "250px",
+    backgroundColor: "#fcb040",
+    marginLeft: 1000,
+  }
 }));
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const defaultUserData = {
+  username: "",
+  user_role: "",
+  honorifics: "",
+  first_name: "",
+  last_name : "",
+  email: "",
+  phone_number: "",
+  country: "",
+  address: "",
+  showCompanyBtn: true, // unused
 }
 
 const viewUserData = {
@@ -105,12 +123,23 @@ const viewUserData = {
   address: "",
 }
 
+const defaultCompanyData = {
+  company_name: "",
+  address: "",
+  industry: "",
+  bio: "",
+  creator: ""
+};
+
 function ViewProfilepage(props: any) {
   const classes = useStyles();
-
+  const [hasCompany, setHasCompany] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [userData, setUserData] = React.useState(viewUserData);
   const [showCreateCompanyBtn, setShowCreateCompanyBtn] = React.useState(false);
+  const [mainUser, setMainUser] = React.useState(defaultUserData);
+  const [companyData, setCompanyData] = React.useState(defaultCompanyData);
+  const [alertMessage, setAlertMessage] = React.useState("");
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent,
@@ -127,8 +156,67 @@ function ViewProfilepage(props: any) {
 
   const getUserData = () => {
     setUserData(props.viewUserDataProp);
+    setMainUser(props.viewLoggedInUserData);
+    updateHasCompany();
   }
 
+  const handleAlert = (e: string) => {
+    setAlertMessage(e);
+  };
+
+  const handleInvite = async () => {
+    var formdata = new FormData();
+    formdata.append("receiver", viewUserData.username);
+    formdata.append("company_name", defaultCompanyData.company_name);
+
+    var object:any = {};
+      formdata.forEach(function(value: any, key: any){
+      object[key] = value;
+    });
+    //fetch req to backend after user presses invite button.
+    const response = await fetch('http://localhost:8080/api/profile/createInvite/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      mode: 'cors',
+      body: JSON.stringify(object),
+    });
+    
+    console.log(response.status);
+    if (response.status > 300 || response.status < 200) {
+      handleAlert("Invite Failed to send");
+    }
+    handleAlert("Invite Successfully Sent");
+    afterFiveSeconds();
+    handleAlert("");
+  }
+
+  const updateHasCompany = () => {
+    // makes request to backend to check if logged in user has a company and updates Hascompany.
+    fetch('http://localhost:8080/api/profile/getCompany/', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            credentials: 'include',
+            mode: 'cors',
+        })
+        .then(response => { // company data successfully retrieved
+            return response.json();
+        })
+      .then(responseJson => {
+          setHasCompany(true);
+          setCompanyData(responseJson);
+        })
+      .catch(err => { // company data cannot be retrieved 
+          setHasCompany(false);
+          console.log("error"); 
+        })
+
+
+  }
   const checkUserInCompany = () => {
     fetch("http://localhost:8080/api/profile/inCompany/", {
       method: "GET",
@@ -149,14 +237,24 @@ function ViewProfilepage(props: any) {
       });
   };
 
-  React.useEffect(() => {
+  
+  const afterFiveSeconds = () => {
+    setTimeout(function () {
+      // ...
+  }, 5000);
+  }
+
+
+  React.useEffect( () => {
     getUserData();
+    updateHasCompany();
+
   }, []);
 
   return (
     <div>
       <Navbar></Navbar>
-
+      
       <Grid container className={classes.root}>
         <Grid>
           <Snackbar
@@ -174,6 +272,17 @@ function ViewProfilepage(props: any) {
           <Typography variant="h4">{userData.username}</Typography>
         </Grid>
 
+        {hasCompany && userData.user_role == "Entrepreneurs" ? (
+                  <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
+                  Invite to Company
+                 </Button>
+        ): null
+        }
+
+
+        {alertMessage.length > 0 ? (
+                     <Alert severity="error">{alertMessage}</Alert>
+                  ) : null}
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <Typography className={classes.role} variant="caption" align="center">
