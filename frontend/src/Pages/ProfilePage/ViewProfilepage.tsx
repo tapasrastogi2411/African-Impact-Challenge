@@ -306,7 +306,7 @@ function ViewProfilepage(props: any) {
             </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h4">hi{userData.username}</Typography>
+          <Typography variant="h4">{userData.username}</Typography>
           </Grid>
         </Grid>
         
