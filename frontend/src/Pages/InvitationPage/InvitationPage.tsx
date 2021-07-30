@@ -86,7 +86,7 @@ function InvitationPage(prop: any) {
     setAlertMessage(e);
   };
 
-  const handleAccept = (company: any) => async (e: any) => {
+  const handleAccept = async (company: any) => {
     const formData = new FormData();
     formData.append("company", company);
 
@@ -106,7 +106,7 @@ function InvitationPage(prop: any) {
     handleGet();
   };
 
-  const handleDecline = (company: any) => async (e: any) => {
+  const handleDecline = async (company: any) => {
     const formData = new FormData();
     formData.append("company", company);
 
