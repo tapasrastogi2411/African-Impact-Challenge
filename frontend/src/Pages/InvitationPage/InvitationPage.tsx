@@ -10,6 +10,8 @@ import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Paper, 
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { withStyles } from "@material-ui/core/styles";
+import * as Constants from '../../utils';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -66,7 +68,7 @@ function InvitationPage(prop: any) {
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/profile/fetchIncomingInvites",
+      Constants.server + "/api/profile/fetchIncomingInvites",
       {
         method: "GET",
         credentials: "include",
@@ -96,7 +98,7 @@ function InvitationPage(prop: any) {
         object[key] = value;
     });
 
-    const response = await fetch("http://localhost:8080/api/profile/acceptInvite", {
+    const response = await fetch(Constants.server + "/api/profile/acceptInvite", {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json',
@@ -124,7 +126,7 @@ function InvitationPage(prop: any) {
         object[key] = value;
     });
 
-    const response = await fetch("http://localhost:8080/api/profile/declineInvite", {
+    const response = await fetch(Constants.server + "/api/profile/declineInvite", {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json',
