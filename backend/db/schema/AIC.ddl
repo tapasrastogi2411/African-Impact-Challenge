@@ -189,6 +189,6 @@ INSERT INTO PostCategory VALUES
 (4, 'Company');
 
 
-INSERT INTO profile_schema.aic_user VALUES
-('Aaron', '12345678', 2, null, 'Aaron', 'Jacob'), 
-('Karen', '12345678', 1, null, 'Karen', 'Reid'); 
+--INSERT INTO profile_schema.aic_user VALUES
+--('Aaron', '12345678', 2, null, 'Aaron', 'Jacob'), 
+--('Karen', '12345678', 1, null, 'Karen', 'Reid'); 
