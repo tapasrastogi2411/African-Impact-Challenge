@@ -290,7 +290,7 @@ function ViewProfilepage(props: any) {
         
         <Grid container xs={2}>
 
-        <Grid item xs={12}> {hasCompany && userData.role_name == "Entrepreuner" && invite && (!viewUserCompany.result) ? (
+        <Grid item xs={12}> {hasCompany && userData.role_name == "Entrepreneur" && invite && (!viewUserCompany.result) ? (
                   <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>

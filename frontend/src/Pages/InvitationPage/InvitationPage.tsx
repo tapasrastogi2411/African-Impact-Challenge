@@ -55,13 +55,14 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-
+const companyData = {
+  companyName: ""   
+}
 
 function InvitationPage(prop: any) {
   const classes = useStyles();
   const [inviteItems, setInviteItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
-
 
   const handleGet = async () => {
     const response = await fetch(
@@ -86,13 +87,23 @@ function InvitationPage(prop: any) {
     setAlertMessage(e);
   };
 
-  const handleAccept = (company: any) => async (e: any) => {
+  const handleAccept = async (e: any) => {
     const formData = new FormData();
-    formData.append("company", company);
+    formData.append("company", companyData.companyName);
+
+    var object:any = {};
+    formData.forEach(function(value: any, key: any){
+        object[key] = value;
+    });
+
+    console.log(JSON.stringify(object));
 
     const response = await fetch("http://localhost:8080/api/profile/acceptInvite", {
       method: "PATCH",
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(object),
       credentials: "include",
       mode: "cors",
     });
@@ -127,6 +138,7 @@ function InvitationPage(prop: any) {
   };
 
   const renderInvites = (item: any) => {
+    companyData.companyName = item.company;
     return (
       <Paper className={classes.inviteCard} elevation={2}>
         <Grid
@@ -147,7 +159,7 @@ function InvitationPage(prop: any) {
           </Grid>
           <Divider orientation="vertical" flexItem />
           <Grid item >
-            <Button onClick={() => handleAccept(item.company)} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
+            <Button onClick={handleAccept} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
           </Grid>
           <Grid item >
             <Button onClick={() => handleDecline(item.company)} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>

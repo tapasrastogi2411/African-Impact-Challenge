@@ -436,7 +436,7 @@ router.get('/getStartups', auth, async(req, res) => {
 router.patch('/acceptInvite', auth, function (req, res) {
     let preparedStatement = `UPDATE profile_schema.invite
                              SET status = 1
-                             WHERE company = $2 and receiver = $3`;
+                             WHERE company = $1 and receiver = $2`;
 
     let inviteExist = "SELECT * FROM profile_schema.invite WHERE company = $1 and receiver = $2";
     
@@ -447,15 +447,15 @@ router.patch('/acceptInvite', auth, function (req, res) {
     let receiver = req.session.username;
 
     // Check whether the invite exists
-    db.query(inviteExist, [req.body['company'], receiver])
+    db.query(inviteExist, [req.body.company, receiver])
     .then(pgRes => {
         if (pgRes.rowCount == 0) {
             return res.status(404).json("The invite does not exist");
         }
-        return db.query(preparedStatement, [req.body['company'], receiver]);
+        return db.query(preparedStatement, [req.body.company, receiver]);
     }) 
     .then(pgRes => {
-        return db.query("INSERT INTO profile_schema.works_for VALUES ($1, $2)", [receiver, req.body['company']]);
+        return db.query("INSERT INTO profile_schema.works_for (username, company_name) VALUES ($1, $2)", [receiver, req.body.company]);
     })
     .then(pgRes => {
         res.status(200).json("Invite Accepted");
