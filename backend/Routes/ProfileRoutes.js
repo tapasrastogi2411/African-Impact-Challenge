@@ -574,7 +574,7 @@ router.get('/fetchIncomingInvites', auth, async(req, res) => {
     let receiver = req.session.username
     try{
         // query for all pending invites only
-        let query = `SELECT * FROM profile_schema.invite WHERE receiver='${receiver}' AND status=3`
+        let query = `SELECT * FROM profile_schema.invite INNER JOIN profile_schema.company ON profile_schema.invite.receiver=profile_schema.company.creator WHERE receiver='${receiver}' AND status=3`
         const result = await db.query(query)
         res.status(200).json(result.rows)
     }
