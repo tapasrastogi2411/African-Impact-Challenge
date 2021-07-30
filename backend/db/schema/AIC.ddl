@@ -39,19 +39,6 @@ CREATE TABLE invite_status (
   status_description TEXT NOT NULL
 );
 
-CREATE TABLE invite (
-  sender TEXT NOT NULL,
-  receiver TEXT NOT NULL,
-  time timestamp NOT NULL,
-  status INT NOT NULL,
-  FOREIGN KEY(sender) REFERENCES aic_user
-    on delete cascade, 
-  FOREIGN KEY(receiver) REFERENCES aic_user
-    on delete cascade, 
-  FOREIGN KEY(status) REFERENCES invite_status
-    on delete cascade
-);
-
 CREATE TABLE company(
   company_name TEXT PRIMARY KEY, -- each company must have a unique name
   address TEXT,
@@ -60,6 +47,22 @@ CREATE TABLE company(
   bio VARCHAR(100),
   creator TEXT, -- should also be unique in our app
   FOREIGN KEY (creator) REFERENCES aic_user(username)
+);
+
+CREATE TABLE invite (
+  sender TEXT NOT NULL,
+  receiver TEXT NOT NULL,
+  company TEXT NOT NULL, 
+  time timestamp NOT NULL,
+  status INT NOT NULL,
+  FOREIGN KEY(sender) REFERENCES aic_user
+    on delete cascade, 
+  FOREIGN KEY(receiver) REFERENCES aic_user
+    on delete cascade, 
+  FOREIGN KEY(status) REFERENCES invite_status
+    on delete cascade, 
+  FOREIGN KEY(company) REFERENCES company
+    on delete cascade
 );
 
 CREATE TABLE works_for(

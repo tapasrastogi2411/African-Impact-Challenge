@@ -6,6 +6,7 @@ const db = require('../db');
 const bcrypt = require("bcrypt"); 
 const session = require('express-session');
 const path = require('path');
+const { send } = require('process');
 const crypto = require('crypto');
 var dateHelper = require('../Helper/dateHelper');
 
@@ -180,6 +181,70 @@ router.post('/createCompany/', auth, function (req, res, next) {
         }
     })
 });
+
+router.post('/createInvite/', auth, function (req, res, next) { // add auth after /createInvite for the final version
+    
+    var orderedValues = []; 
+
+    // Sender information
+    let sender = req.session.username // This changes to req.body.username for the final version
+    
+    // Setting the status variable 
+    let status = 3;
+    
+    // Setting a time variable
+    var currentdate = new Date(); 
+    var datetime = currentdate.getFullYear() + "-" 
+            + (currentdate.getMonth()+1) + "-"
+            + currentdate.getDate() + " "
+            + currentdate.getHours() + ":"  
+            + currentdate.getMinutes() + ":" 
+            + currentdate.getSeconds();
+            
+    // Putting everything in the orderedValues list
+    orderedValues.push(sender); 
+    orderedValues.push(req.body.receiver); // Pushing in the receiver from the front-end
+    orderedValues.push(req.body.company_name); // Pushing in the company name from the front-end
+    orderedValues.push(datetime);
+    orderedValues.push(status);
+
+    // Inserting into the Postgres DB
+    var inviteExists = "SELECT * FROM profile_schema.invite WHERE sender=$1 AND receiver=$2";
+    // db.query(inviteExists, [req.body['sender']], [req.body['receiver']])
+    db.query(inviteExists, [sender, req.body.receiver])
+
+    // Error and status 400 since invite already exists
+    .then(pgRes => {
+        if (pgRes.rowCount > 0) {
+            res.status(400).json({err: "Invite request already sent"});
+
+            // Adding this error to break the request since it becomes a duplicate otherwise
+            throw new Error("Invite Request ALREADY exists!");
+        }
+
+        // Invite is not duplicate, insert it into the database
+        var insertInvite = "INSERT INTO profile_schema.invite(sender, receiver, company, time, status) VALUES ($1,$2,$3,$4, $5)";
+        return db.query(insertInvite, orderedValues);
+    })
+    .then(pgRes => {
+        res.status(201).json({status: "Invite sent"});
+
+    // Error checking messages    
+    })
+    .catch(err => {
+        console.log(err.message);
+        switch(err.message) {
+            case "Invite request already sent":
+                res.status(409).json("Invite request already sent");
+                break;
+
+            default:
+                res.status(500).json({ error: err.message});
+                break;
+        }
+    })
+});
+// Version 3 Try 3 - 636PM
 
 router.get('/getUser/', auth, function (req, res) {
     var userQuery = "SELECT * FROM profile_schema.aic_user WHERE username=$1";
@@ -367,6 +432,70 @@ router.get('/getStartups', auth, async(req, res) => {
         res.status(500).end('Server Error...')
     }
 })
+
+router.patch('/acceptInvite', auth, function (req, res) {
+    let preparedStatement = `UPDATE profile_schema.invite
+                             SET status = 1
+                             WHERE company = $2 and receiver = $3`;
+
+    let inviteExist = "SELECT * FROM profile_schema.invite WHERE company = $1 and receiver = $2";
+    
+    // Get the receiver's username from session cookies
+    if (!req.session.username) {
+        return res.status(500).json("Username is null");
+    } 
+    let receiver = req.session.username;
+
+    // Check whether the invite exists
+    db.query(inviteExist, [req.body['company'], receiver])
+    .then(pgRes => {
+        if (pgRes.rowCount == 0) {
+            return res.status(404).json("The invite does not exist");
+        }
+        return db.query(preparedStatement, [req.body['company'], receiver]);
+    }) 
+    .then(pgRes => {
+        return db.query("INSERT INTO profile_schema.works_for VALUES ($1, $2)", [receiver, req.body['company']]);
+    })
+    .then(pgRes => {
+        res.status(200).json("Invite Accepted");
+    })
+    .catch(err => {
+        console.log(err.message);
+        res.status(500).json("Internal Server Error")
+    });
+});
+
+router.patch('/declineInvite', auth, function (req, res) {
+    let preparedStatement = `UPDATE profile_schema.invite
+                             SET status = 2
+                             WHERE company = $2 and receiver = $3`;
+
+    let inviteExist = "SELECT * FROM profile_schema.invite WHERE company = $1 and receiver = $2";
+    
+    // Get the receiver's username from session cookies
+    if (!req.session.username) {
+        return res.status(500).json("Username is null");
+    } 
+    let receiver = req.session.username;
+
+    // Check whether the invite exists
+    db.query(inviteExist, [req.body['company'], receiver])
+    .then(pgRes => {
+        if (pgRes.rowCount == 0) {
+            return res.status(404).json("The invite does not exist");
+        }
+        return db.query(preparedStatement, [req.body['company'], receiver]);
+    }) 
+    .then(pgRes => {
+        res.status(200).json("Invite Declined");
+
+    })
+    .catch(err => {
+        console.log(err.message);
+        res.status(500).json("Internal Server Error");
+    });
+});
 
 /* Returns:
 - A list of invite objects sent by a currently logged in user.
