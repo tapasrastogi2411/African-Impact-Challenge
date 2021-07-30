@@ -29,7 +29,6 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { isNullOrUndefined } from "util";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -648,15 +647,24 @@ const renderResubmit = (assignmentItem: any) => {
             <Typography variant="h5">Members</Typography>
           </Grid>
 
-          {members.length > 0 ? (
-            members.map((item) => (
-              <Grid item >
-            <Avatar src={founder} className={classes.relatedPic} />
-            <Typography align="center">{item}</Typography>
-        </Grid>
-            ))
-          ) : null}
+
+          <Grid item >
+              <Typography align="center">Founder</Typography>
+              <Avatar src={founder} className={classes.relatedPic} />
+              <Typography align="center">{companyData.creator}</Typography>
+          </Grid>
           
+
+          <Grid item >
+             <Typography align="center">Member</Typography>
+            <Avatar src={member} className={classes.relatedPic} />
+            <Typography align="center">Aaron1999</Typography>
+          </Grid>
+          <Grid item >
+          <Typography align="center">Member</Typography>
+            <Avatar src={member} className={classes.relatedPic} />
+            <Typography align="center">Jason2002</Typography>
+          </Grid>
         </Grid>
 
         <Divider className={classes.divider} />
