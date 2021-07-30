@@ -25,10 +25,6 @@ As a user, I want to update my profile so that my profile information is accurat
 
 ## Company-Based User-Stories
 
-As a founder/co-founder, I want to invite other entrepreneurs registered on the site to join the company so that all entrepreneurs who work for the company in real-life can be associated with the company on the site.
-
--   Only founders/co-founders of the company can perform this privileged action.
-    
 
   
 As a founder/co-founder, I want to remove entrepreneurs associated with the company I founded/co-founded to keep the company information accurate.
@@ -38,33 +34,11 @@ As a founder/co-founder, I want to remove entrepreneurs associated with the comp
 -   Only founders/co-founders of the company can perform this privileged action.
     
 
-As an entrepreneur, I want to accept/decline invitations to join a company so that I can be associated with the company that I work for.
-
--   Gain access to privileged company information after accepting the invite.
-    
--   Individual entrepreneur profile updated to reflect company the entrepreneur is now associated with after accepting the invite.
-    
 
   
-As a founder/co-founder, I want to upload resources/files pertaining to my company so that potential partners can view them and decide whether to partner with my company.
-
--   Other entrepreneurs outside of the company cannot view the uploaded resources.
-    
--   Only founders/co-founders of the company can perform this privileged action.
-    
-
-
 
 ## E-learning User-Stories
 
-
-As a user, I want to be greeted by a welcome page after I login so that my experience on the site is more enjoyable.
-
- -  User gets taken to the dashboard page after login
- 
- -  Give an overview of user state on the application (i.e. number of videos watched, # of assignments completed, upcoming deadlines, etc.)
- 
- -  Give user recommended actions to take
 
 
 
@@ -120,11 +94,6 @@ As an entrepreneur, I want to ask questions about videos and assignments in an a
     
 
   
-As an entrepreneur, I would like to have an easy, visual way of viewing dates and deadlines for upcoming workshops and the deliverable content provided by the teachers so that I can better plan and organize.
-
--   Entrepreneur has a dashboard to show all the upcoming workshops and deliverables posted by teachers.
-    
-
 
 As a teacher, I would like a convenient way of notifying entrepreneurs of dates and deadlines for upcoming workshops and deliverable content so they can better plan and organize.
 
@@ -142,16 +111,6 @@ As a teacher, I want to view assignment submissions and provide grades as well a
     
 -   Teacher can view assignment submission in the browser or has the option of downloading the submitted assignment as a PDF
     
-
-
-As an entrepreneur, I want to view assignment grades, assignment feedback and my current grade in the course so I can gauge how well I am currently doing in the course.
-
--   Able to view individual grades for each assignment
-    
--   Able to view the overall grade for the course so far
-    
--   Able to view comments made on assignments by teacher
-
 
 
 
