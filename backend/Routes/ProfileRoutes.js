@@ -670,6 +670,20 @@ router.put('/resetpassword', function(req, res) {
         })
 });
 
+router.get('/getCompanyMembers', function (req, res) { 
+    var query = "SELECT username FROM profile_schema.works_for WHERE company_name = $1";
+
+    db.query(query, [req.body.company_name])
+    .then(result => {
+        var members = result.rows.map(x => x.username);
+        res.status(200).json({"members": members});
+    })
+    .catch(e => {
+        console.error(e.stack);
+        res.status(500).json({err: "Server error"});
+    })
+});
+
 module.exports = router;
 
 
