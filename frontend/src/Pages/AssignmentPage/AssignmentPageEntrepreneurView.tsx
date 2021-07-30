@@ -21,6 +21,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Alert from '@material-ui/lab/Alert';
 
 import { Link } from "react-router-dom";
+import * as Constants from '../../utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -228,7 +229,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
     formData.append("postedAssignment", JSON.stringify(assignment as any));
     
 
-    const response = await fetch("http://localhost:8080/api/course/upload/assignment/entrepreneur/", {
+    const response = await fetch(Constants.server + "/api/course/upload/assignment/entrepreneur/", {
       method: "POST",
       body: formData,
       credentials: 'include',
@@ -290,7 +291,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
   const handleGet = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/course/getAssignments",
+        Constants.server + "/api/course/getAssignments",
         {
           method: "GET",
           credentials: 'include',
@@ -415,7 +416,7 @@ function AssignmentPageEntrepreneurView(prop: any) {
                     </Grid>
 
                     <Grid item>
-                        <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+                        <a href={Constants.awsServer + item.file_path }  target='_blank' download>
                             <Typography variant="body2" >
                                 {parseItem(item)}
                             </Typography>

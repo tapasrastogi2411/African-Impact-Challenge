@@ -13,6 +13,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import BusinessIcon from "@material-ui/icons/Business";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import * as Constants from '../../utils';
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from "@material-ui/core/Collapse";
@@ -189,7 +190,7 @@ function ViewProfilepage(props: any) {
       object[key] = value;
     });
     //fetch req to backend after user presses invite button.
-    const response = await fetch('http://localhost:8080/api/profile/createInvite/', {
+    const response = await fetch(Constants.server + '/api/profile/createInvite/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -211,7 +212,7 @@ function ViewProfilepage(props: any) {
 
   const updateHasCompany = async () => {
     // makes request to backend to check if logged in user has a company and updates Hascompany.
-    const response = await fetch('http://localhost:8080/api/profile/getCompany/', {
+    const response = await fetch(Constants.server + '/api/profile/getCompany/', {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
@@ -234,7 +235,7 @@ function ViewProfilepage(props: any) {
       object[key] = value;
       });
     
-    let url = 'http://localhost:8080/api/profile/checkCompany/' + props.viewUserDataProp.username;
+    let url = Constants.server + '/api/profile/checkCompany/' + props.viewUserDataProp.username;
     fetch(url, {
       method: "GET",
       credentials: 'include',

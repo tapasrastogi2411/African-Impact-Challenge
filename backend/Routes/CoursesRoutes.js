@@ -5,6 +5,10 @@ const db = require('../db');
 const path = require('path');
 var upload = require('../Middleware/upload');
 
+if (process.env.NODE_ENV === "production") {
+    upload = require('../Middleware/upload-aws');
+}
+
 router.get('/getReadings', async (req, res) => {
     try{
         let query = `SELECT * FROM post_schema.postfile WHERE category=1 ORDER BY upload_date DESC`;
@@ -115,6 +119,7 @@ router.get('/getCompanyFiles', function (req, res) {
 router.use('/upload', auth, upload.any(), function (req, res, next) { 
     //req.session.username = "Aaron"; //uncomment this for testing
    
+   
 
     if(req.files.length === 0) {
         return res.status(400).end();
@@ -142,10 +147,18 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
         category = 4;
     } 
 
+    var storePath = null;
+    if (process.env.NODE_ENV === "production") {
+        storePath = req.files[0].key;
+        storePath = "/" + storePath; // prepend a slash since aws key does not include slash
+    } else {
+        storePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    }
+
     var postfileSchema = "(file_path, category, upload_date, upload_user, title, description)";
     var preparedValues = "($1,$2,$3,$4,$5,$6)";
     var query = "INSERT INTO post_schema.postfile" + postfileSchema + " VALUES" + preparedValues;
-    var values = [req.files[0].path.split(path.resolve(__dirname, '../')).pop(), category, datetime, req.session.username, title, req.body.description]   
+    var values = [storePath, category, datetime, req.session.username, title, req.body.description]   
 
     db
         .query(query, values)
@@ -162,13 +175,19 @@ router.use('/upload', auth, upload.any(), function (req, res, next) {
 });
 
 
-// /upload is already authenticated so no need to reauthenticate
+// upload is already authenticated so no need to reauthenticate
 /**
  */
 router.post('/upload/companyFile/', function (req, res) { 
-    
 
-    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    var filePath = null;
+    if (process.env.NODE_ENV === "production") {
+        filePath = req.files[0].key;
+        filePath = "/" + filePath; // prepend a slash since aws key does not include slash
+    } else {
+        filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    }
+    
     let companyNameQuery =  "select company_name " +
                             "from profile_schema.works_for " +
                             "where username=$1 ";
@@ -194,9 +213,15 @@ router.post('/upload/companyFile/', function (req, res) {
 
 
 router.post('/upload/assignment/teacher', function (req, res) { 
-   
 
-    let filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    var filePath = null;
+    if (process.env.NODE_ENV === "production") {
+        filePath = req.files[0].key;
+        filePath = "/" + filePath; // prepend a slash since aws key does not include slash
+    } else {
+        filePath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    }
+   
     let totalMarks = req.body.totalMarks;
     let deadline = req.body.deadline.replace("T", " ");
     var query = "INSERT INTO post_schema.PostAssignment VALUES ($1, $2, $3)";
@@ -221,8 +246,15 @@ router.post('/upload/assignment/teacher', function (req, res) {
  * Allows for resubmission
  */
 router.post('/upload/assignment/entrepreneur',  function (req, res) { 
+
+    var submissionPath = null;
+    if (process.env.NODE_ENV === "production") {
+        submissionPath = req.files[0].key;
+        submissionPath = "/" + submissionPath; // prepend a slash since aws key does not include slash
+    } else {
+        submissionPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
+    }
     
-    let submissionPath = req.files[0].path.split(path.resolve(__dirname, '../')).pop();
     let postedAssignment = JSON.parse(req.body.postedAssignment);
     let assignmentPath = postedAssignment.file_path;
     let currentdate = new Date(); 

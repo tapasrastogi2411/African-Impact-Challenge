@@ -10,6 +10,7 @@ import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
+import * as Constants from '../../utils';
 
 const axios = require('axios');
 
@@ -117,8 +118,8 @@ export const SignInAjax =  async (
                 object[key] = value;
             });
 
-                
-            const response = await fetch('http://localhost:8080/api/profile/login/', {
+            const url = Constants.server + '/api/profile/login/';
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

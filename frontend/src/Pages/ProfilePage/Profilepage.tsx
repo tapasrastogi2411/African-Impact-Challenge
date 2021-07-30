@@ -15,6 +15,7 @@ import BusinessIcon from '@material-ui/icons/Business';
 import CreateCompany from './CreateCompany';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import * as Constants from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -139,21 +140,21 @@ function Profilepage(props: any) {
   }
 
   const getUserData = async () => {
-    const response = await fetch('http://localhost:8080/api/profile/getUser/', {
-      method: "GET",
-      credentials: 'include',
-      mode: 'cors',
-    });
-
-    const responseData = await response.json();
-    if (response.status > 300 || response.status < 200) {
-      throw responseData;
-    }
-    setUserData(responseData);
+    const response = await fetch(Constants.server + '/api/profile/getUser/', {
+          method: "GET",
+          credentials: 'include',
+          mode: 'cors',
+      });
+      
+      const responseData = await response.json();
+      if (response.status > 300 || response.status < 200) {
+          throw responseData;
+      }
+      setUserData(responseData);
   };
 
   const checkUserInCompany = () => {
-    fetch('http://localhost:8080/api/profile/inCompany/', {
+    fetch(Constants.server + '/api/profile/inCompany/', {
       method: "GET",
       credentials: 'include',
       mode: 'cors',
@@ -191,7 +192,8 @@ function Profilepage(props: any) {
   React.useEffect(() => {
     getUserData();
     checkUserInCompany();
-  }, [companyButton, openSnackbar]);
+  }, [openSnackbar]);
+// [companyButton, openSnackbar]
 
   props.regHandler("false");
 

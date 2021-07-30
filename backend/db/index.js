@@ -1,12 +1,12 @@
 const { Pool } = require('pg');
+const connectionStringURI = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/aic';
 
 // pool of clients that can connect to the db
 const pool = new Pool({
-    database: 'aic', // african impact challenge
-    user: "postgres",
-    password: "postgres",
-    host: 'localhost',
-    port: 5432 // what port the postgres db process listens on
+    connectionString: connectionStringURI,
+    ssl: {
+      rejectUnauthorized: false
+    }
 });
 
 module.exports = {
