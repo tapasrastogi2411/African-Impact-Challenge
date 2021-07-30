@@ -142,15 +142,15 @@ function InvitationPage(prop: any) {
           <Divider orientation="vertical" flexItem />
           <Grid item>
             <Typography>
-              {item.company}
+              {item.company_name}
             </Typography>
           </Grid>
           <Divider orientation="vertical" flexItem />
           <Grid item >
-            <Button onClick={() => handleAccept(item.company)} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
+            <Button onClick={() => handleAccept(item.company_name)} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
           </Grid>
           <Grid item >
-            <Button onClick={() => handleDecline(item.company)} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
+            <Button onClick={() => handleDecline(item.company_name)} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
           </Grid>
         </Grid>
       </Paper>
