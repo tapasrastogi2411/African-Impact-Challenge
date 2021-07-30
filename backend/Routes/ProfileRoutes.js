@@ -565,7 +565,9 @@ router.get('/checkCompany', auth, async(req, res) => {
         if(result.rows.length === 0){
             res.status(200).json({"result": false})
         }
-        res.status(200).json({"result": true})
+        else{
+            res.status(200).json({"result": true})
+        }
     }
     catch(err){
         console.log(err)
