@@ -60,8 +60,23 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 10,
         marginBottom: 10,
         marginTop: 10,
-        borderRadius: 20
+        borderRadius: 20,
+        textTransform: 'none',
+        fontSize: 15
     },
+    deleteBtn: {
+        '&:hover': { background: "#806348" },
+        backgroundColor: "#987b60",
+        color: "#ffffff",
+        width: 180,
+        marginLeft: 10,
+        marginBottom: 10,
+        marginTop: 10,
+        borderRadius: 20,
+        textTransform: 'none',
+        fontSize: 15
+    },
+
     relatedPic: {
         width: 100,
         height: "auto"
@@ -113,7 +128,7 @@ function UpdateProfile() {
                     </Button>
                     <Button
                         startIcon={<DeleteIcon />}
-                        className={classes.btn}>Delete
+                        className={classes.deleteBtn}>Delete
                     </Button>
 
                 </Grid>

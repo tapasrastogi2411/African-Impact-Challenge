@@ -16,8 +16,10 @@ import ViewCompanyPage from "./CompanyPage/ViewCompanyPage";
 import GuestVideoPage from "./GuestVideoPage/GuestVideoPage";
 import GuestReadingPage from "./GuestReadingPage/GuestReadingPage";
 import { classicNameResolver } from "typescript";
-
-
+import CalendarPage from "./CalendarPage/CalendarPage";
+import InvitationPage from "./InvitationPage/InvitationPage";
+import ForgotPassword from "./UserProfile/ForgotPassword";
+import ResetPassword from "./UserProfile/ResetPassword";
 
 const defaultUserData = {
     username: "",
@@ -81,13 +83,16 @@ export default function Pages(props: any) {
             <Route exact path="/people" render = {() => <PeoplePage changeViewCompanyData={(object: React.SetStateAction<{ company_name: string; address: string; industry: string; bio: string; creator: string; }>) => setViewCompanyData(object)} changeViewUserData={(object: React.SetStateAction<{ username: string; role_name: string; honorifics: string; first_name: string; last_name: string; email: string; phone_number: string; country: string; address: string; }>) => setViewUserData(object) } />} />
             <Route exact path="/videos" component={VideoPage} />
             <Route exact path="/readings" component={ReadingsPage} />
-            <Route exact path="/viewProfile" render={() => <ViewProfilepage viewUserDataProp={viewuserData} />} />
+            <Route exact path="/viewProfile" render={() => <ViewProfilepage viewUserDataProp={viewuserData} viewLoggedInUserData={userData}/>} />
             <Route exact path="/viewCompany" render={() => <ViewCompanyPage viewCompanyDataProp={viewcompanyData} />} />
             <Route exact path="/guestVideos" component={GuestVideoPage} />    
-            <Route exact path="/guestReadings" component={GuestReadingPage} />   
+            <Route exact path="/guestReadings" component={GuestReadingPage} />  
+            <Route exact path="/invites" component={InvitationPage} />   
+            <Route exact path="/calendar" component={CalendarPage} /> 
+            <Route exact path="/forgotpassword" render={() => <ForgotPassword />}  /> 
+            <Route exact path="/resetpassword" render={() => <ResetPassword />}  />
         </Switch>
         
-
     );
 
 }

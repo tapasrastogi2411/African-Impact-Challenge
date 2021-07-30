@@ -27,16 +27,16 @@ CREATE TABLE aic_user (
     on delete cascade
 );
 
+CREATE TABLE password_reset (
+  username TEXT NOT NULL, 
+  recovery_code CHAR(8) NOT NULL,
+  expiry_date timestamp NOT NULL,
+  FOREIGN KEY (username) REFERENCES aic_user(username)
+);
 
-CREATE TABLE message (
-  sender TEXT NOT NULL,
-  receiver TEXT NOT NULL,
-  time timestamp NOT NULL,
-  content TEXT NOT NULL,
-  FOREIGN KEY(sender) REFERENCES aic_user
-    on delete cascade, 
-  FOREIGN KEY(receiver) REFERENCES aic_user
-    on delete cascade
+CREATE TABLE invite_status (
+  status_id INT PRIMARY KEY,
+  status_description TEXT NOT NULL
 );
 
 -- avoid enumerated types
@@ -49,6 +49,22 @@ CREATE TABLE company(
   bio VARCHAR(100),
   creator TEXT, -- should also be unique in our app
   FOREIGN KEY (creator) REFERENCES aic_user(username)
+);
+
+CREATE TABLE invite (
+  sender TEXT NOT NULL,
+  receiver TEXT NOT NULL,
+  company TEXT NOT NULL, 
+  time timestamp NOT NULL,
+  status INT NOT NULL,
+  FOREIGN KEY(sender) REFERENCES aic_user
+    on delete cascade, 
+  FOREIGN KEY(receiver) REFERENCES aic_user
+    on delete cascade, 
+  FOREIGN KEY(status) REFERENCES invite_status
+    on delete cascade, 
+  FOREIGN KEY(company) REFERENCES company
+    on delete cascade
 );
 
 CREATE TABLE works_for(
@@ -74,6 +90,12 @@ INSERT INTO aic_role VALUES
 (1, 'Teacher'), 
 (2, 'Entrepreneur'), 
 (3, 'Partner');
+
+-- Insert into invite_status
+INSERT INTO invite_status VALUES 
+(1, 'Accepted'), 
+(2, 'Declined'), 
+(3, 'Pending');
 
 
 -- Post Schema
