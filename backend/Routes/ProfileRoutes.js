@@ -514,7 +514,7 @@ router.get('/fetchOutgoingInvites', auth, async(req, res) => {
     try{
         let query = `SELECT * FROM profile_schema.invite WHERE sender='${sender}'`
         const result = await db.query(query)
-        res.status(200).json(result)
+        res.status(200).json(result.rows)
     }
     catch(err){
         // print the error and return a 500
@@ -534,14 +534,14 @@ router.get('/fetchOutgoingInvites', auth, async(req, res) => {
         status: 1/2/3, where 1 = Accepted, 2 = Declined, 3 = Pending
     }
 */
-router.get('fetchIncomingInvites', auth, async(req, res) => {
+router.get('/fetchIncomingInvites', auth, async(req, res) => {
     // get the receiver's username (i.e the user current logged in)
     let receiver = req.session.username
     try{
         // query for all pending invites only
         let query = `SELECT * FROM profile_schema.invite WHERE receiver='${receiver}' AND status=3`
         const result = await db.query(query)
-        res.status(200).json(result)
+        res.status(200).json(result.rows)
     }
     catch(err){
         console.log(err)
