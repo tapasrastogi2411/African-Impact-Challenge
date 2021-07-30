@@ -234,16 +234,22 @@ function ViewProfilepage(props: any) {
       object[key] = value;
       });
     
-    const response2 = await fetch('http://localhost:8080/api/profile/checkCompany/' + userData.username, {
+    let url = 'http://localhost:8080/api/profile/checkCompany/' + props.viewUserDataProp.username;
+    fetch(url, {
       method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-      },
       credentials: 'include',
       mode: 'cors',
-    });
-    const responseData = await response2.json();
-    setViewUserCompany(responseData);    
+    })
+    .then(async response => { // company creation successful
+      setViewUserCompany(await response.json());   
+      console.log(viewUserCompany);
+    })
+    .catch(err => { // company name is already taken
+        console.log("error"); 
+    })
+    // const responseData = await response2.json();
+    // console.log(responseData);
+    // setViewUserCompany(responseData);    
 
   }
   

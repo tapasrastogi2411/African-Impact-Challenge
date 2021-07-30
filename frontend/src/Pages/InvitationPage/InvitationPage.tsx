@@ -77,7 +77,7 @@ function InvitationPage(prop: any) {
     if (response.status > 300 || response.status < 200) {
       throw responseData;
     }
-
+    console.log(responseData);
     setInviteItems(responseData);
   };
 
@@ -95,8 +95,6 @@ function InvitationPage(prop: any) {
     formData.forEach(function(value: any, key: any){
         object[key] = value;
     });
-
-    console.log(JSON.stringify(object));
 
     const response = await fetch("http://localhost:8080/api/profile/acceptInvite", {
       method: "PATCH",
@@ -117,13 +115,21 @@ function InvitationPage(prop: any) {
     handleGet();
   };
 
-  const handleDecline = async (company: any) => {
+  const handleDecline = async (e: any) => {
     const formData = new FormData();
-    formData.append("company", company);
+    formData.append("company", companyData.companyName);
+
+    var object:any = {};
+    formData.forEach(function(value: any, key: any){
+        object[key] = value;
+    });
 
     const response = await fetch("http://localhost:8080/api/profile/declineInvite", {
       method: "PATCH",
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(object),
       credentials: "include",
       mode: "cors",
     });
@@ -162,7 +168,7 @@ function InvitationPage(prop: any) {
             <Button onClick={handleAccept} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
           </Grid>
           <Grid item >
-            <Button onClick={() => handleDecline(item.company_name)} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
+            <Button onClick={handleDecline} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
           </Grid>
         </Grid>
       </Paper>

@@ -469,7 +469,7 @@ router.patch('/acceptInvite', auth, function (req, res) {
 router.patch('/declineInvite', auth, function (req, res) {
     let preparedStatement = `UPDATE profile_schema.invite
                              SET status = 2
-                             WHERE company = $2 and receiver = $3`;
+                             WHERE company = $1 and receiver = $2`;
 
     let inviteExist = "SELECT * FROM profile_schema.invite WHERE company = $1 and receiver = $2";
     
@@ -480,12 +480,12 @@ router.patch('/declineInvite', auth, function (req, res) {
     let receiver = req.session.username;
 
     // Check whether the invite exists
-    db.query(inviteExist, [req.body['company'], receiver])
+    db.query(inviteExist, [req.body.company, receiver])
     .then(pgRes => {
         if (pgRes.rowCount == 0) {
             return res.status(404).json("The invite does not exist");
         }
-        return db.query(preparedStatement, [req.body['company'], receiver]);
+        return db.query(preparedStatement, [req.body.company, receiver]);
     }) 
     .then(pgRes => {
         res.status(200).json("Invite Declined");
@@ -539,7 +539,7 @@ router.get('/fetchIncomingInvites', auth, async(req, res) => {
     let receiver = req.session.username
     try{
         // query for all pending invites only
-        let query = `SELECT * FROM profile_schema.invite INNER JOIN profile_schema.company ON profile_schema.invite.receiver=profile_schema.company.creator WHERE receiver='${receiver}' AND status=3`
+        let query = `SELECT * FROM profile_schema.invite WHERE receiver='${receiver}' AND status=3`
         const result = await db.query(query)
         res.status(200).json(result.rows)
     }
@@ -556,23 +556,21 @@ router.get('/fetchIncomingInvites', auth, async(req, res) => {
 }
 Where boolean = true, if the given username is associated with a company and false otherwise.
 */
-router.get('/checkCompany', auth, async(req, res) => {
-    // 
-    try{
-        let user = req.body.username
-        let query = `SELECT * FROM profile_schema.works_for WHERE username='${user}'`
-        const result = await db.query(query)
-        if(result.rows.length === 0){
-            res.status(200).json({"result": false})
-        }
-        else{
-            res.status(200).json({"result": true})
-        }
-    }
-    catch(err){
-        console.log(err)
-        res.status(500).end('Server Error...')
-    }
+router.get('/checkCompany/:username', auth, function(req, res) {
+    let user = req.params.username;
+    let query = "SELECT * FROM profile_schema.works_for WHERE username= $1"
+    db
+        .query(query, [user])
+        .then(result => {
+            if (!result.rows.length) { 
+                return res.status(200).json({"result": false});
+            }
+            return res.status(200).json({"result": true});
+        })
+        .catch(e => {
+            console.error(e.stack);
+            res.status(500).end();
+        })
 })
 
 router.put('/forgotpassword', function(req, res) {
@@ -670,7 +668,7 @@ router.put('/resetpassword', function(req, res) {
         })
 });
 
-router.get('/getCompanyMembers', function (req, res) { 
+router.post('/getCompanyMembers', function (req, res) { 
     var query = "SELECT username FROM profile_schema.works_for WHERE company_name = $1";
 
     db.query(query, [req.body.company_name])
@@ -685,6 +683,3 @@ router.get('/getCompanyMembers', function (req, res) {
 });
 
 module.exports = router;
-
-
-
