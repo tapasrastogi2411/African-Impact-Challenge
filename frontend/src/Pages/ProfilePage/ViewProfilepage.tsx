@@ -230,14 +230,13 @@ function ViewProfilepage(props: any) {
       object[key] = value;
       });
     
-    const response2 = await fetch('http://localhost:8080/api/profile//checkCompany/', {
+    const response2 = await fetch('http://localhost:8080/api/profile/checkCompany/' + userData.username, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
       mode: 'cors',
-      body: JSON.stringify(object)
     });
     const responseData = await response.json();
     setViewUserCompany(responseData.get("result"));
