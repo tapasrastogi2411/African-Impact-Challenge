@@ -108,6 +108,10 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+const resultdata = {
+  result: false
+}
+
 const defaultUserData = {
   username: "",
   user_role: "",
@@ -123,7 +127,7 @@ const defaultUserData = {
 
 const viewUserData = {
   username: "",
-  user_role: "",
+  role_name: "",
   honorifics: "",
   first_name: "",
   last_name : "",
@@ -145,7 +149,7 @@ function ViewProfilepage(props: any) {
   const classes = useStyles();
   const [hasCompany, setHasCompany] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [viewUserCompany, setViewUserCompany] = React.useState(false);
+  const [viewUserCompany, setViewUserCompany] = React.useState(resultdata);
   const [userData, setUserData] = React.useState(viewUserData);
   const [mainUser, setMainUser] = React.useState(defaultUserData);
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
@@ -239,7 +243,7 @@ function ViewProfilepage(props: any) {
       mode: 'cors',
     });
     const responseData = await response2.json();
-    setViewUserCompany(responseData.get("result"));
+    setViewUserCompany(responseData);    
 
   }
   
@@ -286,7 +290,7 @@ function ViewProfilepage(props: any) {
         
         <Grid container xs={2}>
 
-        <Grid item xs={12}> {hasCompany && userData.user_role == "2" && invite && (!viewUserCompany) ? (
+        <Grid item xs={12}> {hasCompany && userData.role_name == "Entrepreuner" && invite && (!viewUserCompany.result) ? (
                   <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>
@@ -303,7 +307,7 @@ function ViewProfilepage(props: any) {
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <Typography className={classes.role} variant="caption" align="center">
-            {userData.user_role}
+            {userData.role_name}
           </Typography>
           <img src={profilepic} className={classes.profilePic} />
           <Button startIcon={<ChatIcon />} className={classes.btn}>
