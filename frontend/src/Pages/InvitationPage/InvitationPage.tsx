@@ -87,7 +87,6 @@ function InvitationPage(prop: any) {
   };
 
   const handleAccept = (company: any) => async (e: any) => {
-    console.log('got here ----------')
     const formData = new FormData();
     formData.append("company", company);
 
