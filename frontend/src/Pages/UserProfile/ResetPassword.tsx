@@ -10,6 +10,7 @@ import Alert from '@material-ui/lab/Alert';
 import { Divider } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import { useLocation } from "react-router-dom";
+import * as Constants from '../../utils';
 
 const axios = require('axios');
 
@@ -124,7 +125,7 @@ export const SignInAjax =  async (
             });
 
                 
-            const response = await fetch('http://localhost:8080/api/profile/resetpassword/', {
+            const response = await fetch(Constants.server + '/api/profile/resetpassword/', {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',

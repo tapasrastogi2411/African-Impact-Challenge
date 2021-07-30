@@ -311,7 +311,7 @@ function CompanyPage(props: any) {
       object[key] = value;
       });
     
-    const response = await fetch("http://localhost:8080/api/profile/getCompanyMembers/", {
+    const response = await fetch(Constants.server + "/api/profile/getCompanyMembers/", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

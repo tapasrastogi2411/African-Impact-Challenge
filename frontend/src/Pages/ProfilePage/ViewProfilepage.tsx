@@ -190,7 +190,7 @@ function ViewProfilepage(props: any) {
       object[key] = value;
     });
     //fetch req to backend after user presses invite button.
-    const response = await fetch('http://localhost:8080/api/profile/createInvite/', {
+    const response = await fetch(Constants.server + '/api/profile/createInvite/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

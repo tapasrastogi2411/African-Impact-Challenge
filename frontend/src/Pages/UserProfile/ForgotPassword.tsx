@@ -9,6 +9,7 @@ import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 're
 import Alert from '@material-ui/lab/Alert';
 import { Divider } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
+import * as Constants from '../../utils';
 
 const axios = require('axios');
 
@@ -116,7 +117,7 @@ export const SignInAjax =  async (
             });
 
                 
-            const response = await fetch('http://localhost:8080/api/profile/forgotpassword/', {
+            const response = await fetch(Constants.server + '/api/profile/forgotpassword/', {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
