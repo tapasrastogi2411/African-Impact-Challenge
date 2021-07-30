@@ -238,7 +238,7 @@ function ViewProfilepage(props: any) {
       credentials: 'include',
       mode: 'cors',
     });
-    const responseData = await response.json();
+    const responseData = await response2.json();
     setViewUserCompany(responseData.get("result"));
 
   }
