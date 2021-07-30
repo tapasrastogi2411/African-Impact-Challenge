@@ -59,5 +59,4 @@ Sub-Tasks
 * Our group of 7 people plan to each dedicate 5 hours per day for 8 days (280 hours total) to complete 210 (sum of story points for the above stories) story points this sprint. 
 
 ## Spikes (User stories that are difficult to estimate)
-* Currently no spikes. The team has gained enough experience from the previous 3 sprints to accurately gauge the difficulty of the user stories to be completed 
-* in this sprint.
+* Currently no spikes. The team has gained enough experience from the previous 3 sprints to accurately gauge the difficulty of the user stories to be completed in this sprint.
