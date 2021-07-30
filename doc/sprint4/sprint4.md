@@ -17,23 +17,23 @@
 ## Sprint 4 Goals
 - Allow users to reset their password
 - Deploy website
-- Allow entrepreuners accept/decline invitations 
+- Allow entrepreneurs to accept/decline invitations 
 - Create a calendar for members to stay updated with upcoming workshops, deadlines, etc
 - Allow Founders to invite entrepreuners to join company
 
 ## Sprint 4 User Stories and Tasks Breakdown
 
 
-### [TT-1] As a user I want to be able to reset my password if I forgot it. (68 pts)
+### [TT-1] As a user I want to be able to reset my password so that if I forget it, I can still access my account. (68 pts)
 Sub-Tasks
 * [TT-3] Create forgot password page - Aaron Tan
 * [TT-4] Create forgotPassword and resetPassword routes – Aaron Tan
 * [TT-125] Create page to insert recovery code and new password – Aaron Tan
 
-### [TT-114] As a user, I would like to be able to access the AIC website (20 pts)
+### [TT-114] As a user, I want to access the website remotely so that I can use it for my desired purpose.  (20 pts)
 Sub-Tasks
-* [TT-123] Modify code so it can be deployed to Heroku – Brandon Jaipersaud
-* [TT-127] Render users and startups correctly on people page - Brandon Jaipersaud
+* [TT-123] Modify code so it can be deployed to Heroku - Brandon Jaipersaud
+
 
 ### [TT-12] As an entrepreneur, I want to accept/decline invitations to join a company so that I can be associated with the company that I work for. (50 pts)
 Sub-Tasks
@@ -51,6 +51,9 @@ Sub-Tasks
 Sub-Tasks
 * [TT-122] Render outgoing and incoming invites - Patrick Kemzang
 * [TT-106] Modify view profile pages to allow invitation of user - Clement Tran
+
+
+
 
 ## Team Capacity
 * Our group of 7 people plan to each dedicate 5 hours per day for 8 days (280 hours total) to complete 210 (sum of story points for the above stories) story points this sprint. 
