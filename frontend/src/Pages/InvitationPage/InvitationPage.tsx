@@ -117,7 +117,7 @@ function InvitationPage(prop: any) {
     handleGet();
   };
 
-  const handleDecline = (company: any) => async (e: any) => {
+  const handleDecline = async (company: any) => {
     const formData = new FormData();
     formData.append("company", company);
 
@@ -154,7 +154,7 @@ function InvitationPage(prop: any) {
           <Divider orientation="vertical" flexItem />
           <Grid item>
             <Typography>
-              {item.company}
+              {item.company_name}
             </Typography>
           </Grid>
           <Divider orientation="vertical" flexItem />
@@ -162,7 +162,7 @@ function InvitationPage(prop: any) {
             <Button onClick={handleAccept} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
           </Grid>
           <Grid item >
-            <Button onClick={() => handleDecline(item.company)} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
+            <Button onClick={() => handleDecline(item.company_name)} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
           </Grid>
         </Grid>
       </Paper>
