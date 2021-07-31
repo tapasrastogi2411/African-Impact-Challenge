@@ -146,6 +146,7 @@ function InvitationPage(prop: any) {
   };
 
   const renderInvites = (item: any) => {
+    console.log(item);
     companyData.companyName = item.company;
     return (
       <Paper className={classes.inviteCard} elevation={2}>
@@ -162,7 +163,7 @@ function InvitationPage(prop: any) {
           <Divider orientation="vertical" flexItem />
           <Grid item>
             <Typography>
-              {item.company_name}
+              {item.company}
             </Typography>
           </Grid>
           <Divider orientation="vertical" flexItem />
