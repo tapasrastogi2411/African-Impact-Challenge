@@ -7,7 +7,7 @@ const pool = new Pool({
     //ssl: {
     //  rejectUnauthorized: false
     //}
-    ssl: process.env.DATABASE_URL ? true : false
+    
 });
 
 module.exports = {
