@@ -7,6 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InputIcon from "@material-ui/icons/Input";
 import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined';
 import LocalLibraryOutlinedIcon from '@material-ui/icons/LocalLibraryOutlined';
+import * as Constants from '../utils';
 
 import Logo from './LOGO.png'
 import { Link, useHistory } from "react-router-dom";
@@ -104,7 +105,7 @@ function Appbar(props: any) {
 
     // session should be destroyed and user taken back to the login page
     function logoutUser() {
-        fetch('http://localhost:8080/api/profile/logout', {
+        fetch(Constants.server + '/api/profile/logout', {
             method: 'GET', 
             credentials: 'include',
         })

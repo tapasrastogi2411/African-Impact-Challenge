@@ -1,13 +1,23 @@
 var express = require('express');
 var app = express();
+
+app.use('/uploads', express.static('backend/uploads'));
+
+
 var profile = require('./Routes/ProfileRoutes');
 var course = require('./Routes/CoursesRoutes');
-app.use('/uploads', express.static('uploads'));
 var cors = require('cors');
+const favicon = require('express-favicon');
+const root = require("path").join(__dirname, "../frontend/build");
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin:"http://localhost:3000", credentials:true }) );
+app.use(favicon(__dirname + '/LOGO.png'));
+
+
 
 //Enabling sessions
 var session = require('express-session');
@@ -22,26 +32,20 @@ app.use(session({
 app.use('/api/profile/', profile);
 app.use('/api/course/', course);
 
-//Configure application to use https 
-const fs = require('fs');
-const https = require('https');
-var privateKey = fs.readFileSync( 'server.key' );
-var certificate = fs.readFileSync( 'server.crt' );
-var config = {
-        key: privateKey,
-        cert: certificate
-};
 
 
-const PORT = 8080;
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(root));
+    app.get('*', (req, res) => {
+        res.sendFile("index.html", { root });
+    });
+} 
 
-/*
-https.createServer(config, app).listen(PORT, function () {
-    console.log('HTTPS on port %s', PORT);
-});
-*/
 
+
+    
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, function () {
-    console.log('HTTP on port '+PORT);
+    console.log('HTTP on port '+ PORT);
 }); 

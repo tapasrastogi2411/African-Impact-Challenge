@@ -14,6 +14,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import VideoCard from "../GuestVideoPage/VideoCard";
+import * as Constants from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +52,7 @@ export default function Dashboard(props: any) {
 
   const getVideos = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getVideos",
+      Constants.server + "/api/course/getVideos",
       {
         method: "GET",
         credentials: "include",
@@ -69,13 +70,13 @@ export default function Dashboard(props: any) {
 
   const renderVideoCard = (item: any) => {
     return(
-      <VideoCard video={"http://localhost:8080" + item.file_path} title={item.title} uploader={item.upload_user} upload_date={item.upload_date}></VideoCard>
+      <VideoCard video={Constants.awsServer + "" + item.file_path} title={item.title} uploader={item.upload_user} upload_date={item.upload_date}></VideoCard>
     );
   }
 
   const getReadings = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getReadings",
+      Constants.server + "/api/course/getReadings",
       {
         method: "GET",
         credentials: 'include',
