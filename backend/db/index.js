@@ -4,10 +4,9 @@ const connectionStringURI = process.env.DATABASE_URL || 'postgresql://postgres:p
 // pool of clients that can connect to the db
 const pool = new Pool({
     connectionString: connectionStringURI,
-    ssl: false
-    //ssl: {
-    //  rejectUnauthorized: false
-    //}
+    ssl: {
+      rejectUnauthorized: false
+    }
     
 });
 
