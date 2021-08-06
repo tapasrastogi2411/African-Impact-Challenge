@@ -4,6 +4,7 @@ import AssignmentPageTeacherView from './AssignmentPageTeacherView';
 import AssignmentPageEntrepreneurView from './AssignmentPageEntrepreneurView';
 import ViewSubmission from './ViewSubmission';
 import Navbar from "../../NavBar/Navbar";
+import * as Constants from '../../utils';
 
 
 
@@ -15,7 +16,7 @@ export default function AssignmentPageRouter(props: any) {
     let history = useHistory();
     
     const getLoggedInUser = () => {
-        fetch('http://localhost:8080/api/profile/getUser/', {
+        fetch(Constants.server + '/api/profile/getUser/', {
             method: "GET",
             credentials: 'include',
             mode: 'cors',

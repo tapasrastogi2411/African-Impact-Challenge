@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
+import { Divider } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
+import { useLocation } from "react-router-dom";
 import * as Constants from '../../utils';
 
 const axios = require('axios');
-
 
 const useStyles: (props?: any) => any = makeStyles((theme) => ({
     root: {
@@ -22,15 +21,19 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
             marginTop: 200,
         },
     },
-    paper: {
-        marginTop: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-
+    paragraph: {
+        fontWeight: 500,
+        fontSize: 15,
+        color: "#72716f",
+    },
+    divider: {
+        width: "100%",
+        height: 3,
+        marginTop: 15,
+        marginBottom: 10,
     },
     form: {
-        width: "100%", // Fix IE 11 issue.
+        width: "100%", 
         marginTop: theme.spacing(1),
     },
     submit: {
@@ -38,17 +41,21 @@ const useStyles: (props?: any) => any = makeStyles((theme) => ({
         backgroundColor: "#fcb040",
         color: "#ffffff",
         '&:hover': { background: "#e69113" },
-
+    },
+    loginpagebtn: {
+        margin: theme.spacing(6, 0, 2),
+        backgroundColor: "#fafafa",
+        color: "#343434",
+        '&:hover': { background: "#f0f0f0" },
     },
     input: {
         background: "white",
         borderRadius: "20px"
     },
-    text: {
+    title: {
         fontWeight: 600,
         fontSize: 36,
     },
-
     registration: {
         marginTop: 10,
     },
@@ -83,33 +90,32 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
-// userErr/passErr = username/password not provided
-// backendErr = username already taken or invalid password
-const defaultErr = {userErr: "", passErr: "", backendErr: "false"};
+const defaultErr = {resetCodeErr: "", passErr: "", backendErr: "false"};
 
 export const SignInAjax =  async (
     data: any,
     onSuccess: any,
     setError: any,
-) => {
+    ) => {
     try {
         var newErr = {... defaultErr};
         var errFlag = false;
-        if (data.username == "") {
+        if (data.resetCode == "") {
             errFlag = true;
-            newErr.userErr = "Username is required";
+            newErr.resetCodeErr = "Reset Code is required";
         }
         if (data.password == "") {
             errFlag = true;
             newErr.passErr = "Password is required";
         }
 
-        setError(newErr);
 
+        setError(newErr);
 
         if (errFlag == false){
             var formdata = new FormData();
-            formdata.append("username", data.username);
+            formdata.append("username", data.uname);
+            formdata.append("resetCode", data.resetCode);
             formdata.append("password", data.password);
 
             // convert formData to JSON since that is what the server looks for
@@ -118,9 +124,9 @@ export const SignInAjax =  async (
                 object[key] = value;
             });
 
-            const url = Constants.server + '/api/profile/login/';
-            const response = await fetch(url, {
-                method: "POST",
+                
+            const response = await fetch(Constants.server + '/api/profile/resetpassword/', {
+                method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -140,7 +146,7 @@ export const SignInAjax =  async (
         }
         
         
-    } catch (e) { // username or password is invalid
+    } catch (e) { // username is invalid
         console.log(e);
         setError( (prevState:Object) => {
             return { ...prevState, backendErr:"true" } 
@@ -148,84 +154,60 @@ export const SignInAjax =  async (
     } 
 };
 
-export default function SignIn(props: any) {
+interface IState {
+    detail?: string;
+  }
+
+export default function ResetPassword(props: any) {
+    const location = useLocation();
+    const uname = (location.state as IState).detail;
     const history = useHistory();
     // get user data from server and pass it to the handler
     const onSuccess = (responseData: any) => {  
-        history.push('/profile');
-        console.log(responseData);
-        props.updateUserDataHandler(responseData); 
-        
+        history.push('/login');   //change t0 reset password  
+        console.log(responseData);        
     }
  
-
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
     const [error, setError] = React.useState(defaultErr); 
 
-    const onSubmit = ({ username, password }: any) => {
-        SignInAjax({ username, password }, onSuccess, setError);
+    const onSubmit = ({ resetCode, password }: any) => {
+        SignInAjax({ uname,resetCode, password }, onSuccess, setError);
     };
 
-
-    
     const renderError = () => {
         if (error.backendErr == "true") {
             return <Alert variant="filled" severity="error" className={classes.error}>
-                        Invalid username or password
+                        Invalid Reset Code
                     </Alert>
         }
     }
-    
-    // If user successfully registered and is taken to login page, regVal prop is set to true
-    // -> render the alert 
-    const renderRegAlert = () => {
-        if (props.regVal == "true") {
-            return <Alert variant="standard" severity="success" className={classes.registration}>
-                        User successfully registered! 
-                    </Alert>
-        } else {
-            return "";
-        }
-    }
-
 
     return (
         <Container component="main" maxWidth="xs" className={classes.root}>
-            <Typography variant="h5" className={classes.text}>
-                WELCOME BACK!
+            <Typography variant="h5" className={classes.title} align="center">
+                Enter Reset Code 
             </Typography>
-            <Link
-                href="#"
-                variant="body2"
-                color="textSecondary"
-                component={RouterLink}
-                to="/signup"
-            >
-                {"Don't have an account? Sign Up"}
-            </Link>
-
+            <Typography className={classes.paragraph} align="center">
+                Please check your email for a message with your code. Your code is 8 characters long.
+            </Typography>
             
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className={classes.form}
-                noValidate
-            >
-                
+            <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
                 <CssTextField
-                    error={error.userErr == "" ? false: true}
-                    helperText={error.userErr}
+                    error={error.resetCodeErr == "" ? false: true}
+                    helperText={error.resetCodeErr}
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    autoComplete="username"
+                    id="resetCode"
+                    label="Reset Code"
+                    name="resetCode"
+                    autoComplete="resetCode"
                     className={classes.input}
                     inputRef={register}
-                    onInput={() => setError( prevState => {return { ...prevState, userErr:"", backendErr: "false" } } )}
+                    onInput={() => setError( prevState => {return { ...prevState, resetCodeErr:"", backendErr: "false" } } )}
                 />
 
                 <CssTextField
@@ -236,7 +218,7 @@ export default function SignIn(props: any) {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
+                    label="New Password"
                     type="password"
                     id="password"
                     autoComplete="current-password"
@@ -245,31 +227,11 @@ export default function SignIn(props: any) {
                     onInput={() => setError( prevState => {return { ...prevState, passErr:"", backendErr: "false"} } )}
                 />
                 {renderError()}
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    className={classes.submit}
-                >
-                    Log In
-                </Button>
-
-                <Link
-                    href="#"
-                    variant="body2"
-                    color="textSecondary"
-                    component={RouterLink}
-                    to="/forgotpassword"
-                >
-                    Forgot password?
-                </Link>
                 
+                <Button type="submit" fullWidth variant="contained" size="large" className={classes.submit}>
+                    Reset Password
+                </Button>            
             </form>
-
-            {renderRegAlert()}
-
-            
         </Container>
     );
 }

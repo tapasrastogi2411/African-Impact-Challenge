@@ -18,6 +18,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import * as Constants from '../../utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -224,7 +225,7 @@ function AssignmentPage(prop: any) {
     formData.append("totalMarks", totalMarks as any);
     formData.append("deadline", deadline);
 
-    const response = await fetch("http://localhost:8080/api/course/upload/assignment/teacher/", {
+    const response = await fetch(Constants.server + "/api/course/upload/assignment/teacher/", {
       method: "POST",
       body: formData,
       credentials: 'include',
@@ -247,7 +248,7 @@ function AssignmentPage(prop: any) {
 
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getAssignments",
+      Constants.server + "/api/course/getAssignments",
       {
         method: "GET",
         credentials: 'include',
@@ -302,7 +303,7 @@ function AssignmentPage(prop: any) {
                     </Grid>
 
                     <Grid item>
-                        <a href={"http://localhost:8080" + item.file_path }  target='_blank' download>
+                        <a href={Constants.awsServer + item.file_path }  target='_blank' download>
                             <Typography variant="body2" >
                                 {parseItem(item)}
                             </Typography>

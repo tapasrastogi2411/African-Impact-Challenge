@@ -17,6 +17,8 @@ import LocalLibraryOutlinedIcon from '@material-ui/icons/LocalLibraryOutlined';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import * as Constants from '../../utils';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -140,7 +142,7 @@ function ReadingPage(prop: any) {
     formData.append("title", title);
     formData.append("description", description);
 
-    const response = await fetch("http://localhost:8080/api/course/upload", {
+    const response = await fetch(Constants.server + "/api/course/upload", {
       method: "POST",
       body: formData,
       credentials: "include",
@@ -205,7 +207,7 @@ function ReadingPage(prop: any) {
                 </Grid>
 
                 <Grid item>
-                  <a href={"http://localhost:8080" + item.file_path} target='_blank' download>
+                  <a href={Constants.awsServer + item.file_path} target='_blank' download>
                     <Typography variant="body2" >
                       {parseItem(item)}
                     </Typography>
@@ -221,7 +223,7 @@ function ReadingPage(prop: any) {
   }
   const handleGet = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/course/getReadings",
+      Constants.server + "/api/course/getReadings",
       {
         method: "GET",
         credentials: "include",
