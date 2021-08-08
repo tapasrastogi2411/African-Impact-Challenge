@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   divider: {
-    width: "150%",
+    width: "110%",
     height: 3,
     marginTop: 15,
     marginBottom: 15,
@@ -168,10 +168,10 @@ function InvitationPage(prop: any) {
           </Grid>
           <Divider orientation="vertical" flexItem />
           <Grid item >
-            <Button onClick={handleAccept} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
+            <Button variant="contained" onClick={handleAccept} className={classes.btn} endIcon={<CheckIcon />}>Accept</Button>
           </Grid>
           <Grid item >
-            <Button onClick={handleDecline} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
+            <Button variant="contained" onClick={handleDecline} className={classes.declineBtn} endIcon={<CloseIcon />} >Decline</Button>
           </Grid>
         </Grid>
       </Paper>
@@ -198,8 +198,8 @@ function InvitationPage(prop: any) {
             renderInvites(item)
           ))
         ) : (
-            <Typography align="center" >
-              No pending invites
+            <Typography align="center" style={{width: "-webkit-fill-available", fontSize: 22}}>
+              No pending invites!
             </Typography>
           )}
         {/* <Paper className={classes.inviteCard} elevation={2}>

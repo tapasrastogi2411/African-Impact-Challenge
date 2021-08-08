@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   divider: {
-    width: "85%",
+    width: "110%",
     height: 3,
     marginTop: 15,
     marginBottom: 20,
@@ -93,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
   },
   noAssignmentHeader: {
     fontSize: 22,
+    width: "-webkit-fill-available"
   },
   assignmentCard: {
     width: 1200,

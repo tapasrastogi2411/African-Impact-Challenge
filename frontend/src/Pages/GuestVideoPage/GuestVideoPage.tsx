@@ -23,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
   },
   noVideoHeader: {
     fontSize: 22,
+    width: "-webkit-fill-available"
+  
   },
   videoGrid: {
     display: "flex",

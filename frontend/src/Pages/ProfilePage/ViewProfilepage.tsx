@@ -298,7 +298,7 @@ function ViewProfilepage(props: any) {
         <Grid container xs={2}>
 
         <Grid item xs={12}> {hasCompany && userData.role_name == "Entrepreneur" && invite && (!viewUserCompany.result) ? (
-                  <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
+                  <Button variant="contained" startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>
         ): null
@@ -317,7 +317,7 @@ function ViewProfilepage(props: any) {
             {userData.role_name}
           </Typography>
           <img src={profilepic} className={classes.profilePic} />
-          <Button startIcon={<ChatIcon />} className={classes.btn}>
+          <Button variant="contained" startIcon={<ChatIcon />} className={classes.btn}>
             Message
           </Button>
         </Grid>

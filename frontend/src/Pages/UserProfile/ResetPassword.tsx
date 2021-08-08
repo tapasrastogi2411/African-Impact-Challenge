@@ -164,8 +164,12 @@ export default function ResetPassword(props: any) {
     const history = useHistory();
     // get user data from server and pass it to the handler
     const onSuccess = (responseData: any) => {  
-        history.push('/login');   //change t0 reset password  
-        console.log(responseData);        
+        //history.push('/login');   //change t0 reset password  
+        history.push({
+            pathname: "/login",
+            state: {pwdReset: true}
+        })
+        console.log(responseData);   
     }
  
     const classes = useStyles();

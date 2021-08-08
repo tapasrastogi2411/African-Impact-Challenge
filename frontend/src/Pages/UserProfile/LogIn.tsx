@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import * as Constants from '../../utils';
+import { Snackbar } from "@material-ui/core";
+import { useLocation } from 'react-router-dom';
 
 const axios = require('axios');
 
@@ -150,6 +152,7 @@ export const SignInAjax =  async (
 
 export default function SignIn(props: any) {
     const history = useHistory();
+    const location:any = useLocation();
     // get user data from server and pass it to the handler
     const onSuccess = (responseData: any) => {  
         history.push('/profile');
@@ -162,6 +165,7 @@ export default function SignIn(props: any) {
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
     const [error, setError] = React.useState(defaultErr); 
+    const [openSnackbar, setOpenSnackbar] = React.useState(false); 
 
     const onSubmit = ({ username, password }: any) => {
         SignInAjax({ username, password }, onSuccess, setError);
@@ -188,10 +192,52 @@ export default function SignIn(props: any) {
             return "";
         }
     }
+    
+
+    const renderPasswordReset = () => {
+        if (typeof(location.state) !== 'undefined') {
+            setOpenSnackbar(true);
+            return (<Snackbar open={openSnackbar} onClose={hideSnackbar} anchorOrigin={{"vertical": "bottom", "horizontal": "center"}} autoHideDuration={2000} >
+                        <Alert  onClose={hideSnackbar} variant="filled" severity="success">
+                            Password successfully reset!
+                        </Alert>
+                    </Snackbar>);
+        }
+    }
+
+    const hideSnackbar = () => {
+        setOpenSnackbar(false);
+    }
+
+   
+
+    React.useEffect(() => {
+
+       if (typeof(location.state) !== 'undefined') {
+           if (location.state.pwdReset) {
+               setOpenSnackbar(true);
+
+           }
+            
+       } 
+       
+      }, []);
+
 
 
     return (
+        
         <Container component="main" maxWidth="xs" className={classes.root}>
+
+            <Snackbar open={openSnackbar} onClose={hideSnackbar} anchorOrigin={{"vertical": "bottom", "horizontal": "center"}} autoHideDuration={5000} >
+                <Alert  onClose={hideSnackbar} variant="filled" severity="success">
+                    Password successfully reset!
+                </Alert>
+            </Snackbar>
+            
+            
+
+            
             <Typography variant="h5" className={classes.text}>
                 WELCOME BACK!
             </Typography>

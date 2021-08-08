@@ -105,6 +105,18 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 20,
     marginLeft: 1250,
   },
+  resourcesBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 170,
+    '&:hover': { background: "#e69113" },
+    borderRadius: 20,
+    paddingTop: 7,
+    paddingBottom: 7,
+    
+    
+
+  },
 
   relatedPic: {
     width: 100,
@@ -587,10 +599,10 @@ const renderResubmit = (assignmentItem: any) => {
                   {/* <Button onClick={handleSubmit} color="primary">
                     Submit
                   </Button> */}
-                  <Button onClick={handleCompanyFileSubmit} color="primary">
+                  <Button variant="contained" onClick={handleCompanyFileSubmit} color="primary">
                     Submit
                   </Button>
-                  <Button onClick={handleClose} color="primary">
+                  <Button variant="contained" onClick={handleClose} color="primary">
                     Cancel
                   </Button>
                 </DialogActions>
@@ -601,7 +613,7 @@ const renderResubmit = (assignmentItem: any) => {
         <Grid container>
             <Grid item xs={12}>
                     
-                    <Button startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
+                    <Button variant="contained" startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
             </Grid>
 
             <Grid item xs={12}>
@@ -616,7 +628,7 @@ const renderResubmit = (assignmentItem: any) => {
         <Divider className={classes.divider} />
         <Grid xs={2} item alignItems="center">
           <img src={building} className={classes.profilePic} />
-          <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
+          <Button variant="contained" component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
         </Grid>
         <Grid
           item
@@ -639,7 +651,7 @@ const renderResubmit = (assignmentItem: any) => {
             <Typography >{companyData.bio}</Typography>
           </Grid>
         </Grid>
-        <Divider className={classes.divider} />
+        <Divider className={classes.divider} style={{marginBottom: 20}}/>
 
 
         <Grid container spacing={5}>
@@ -669,20 +681,21 @@ const renderResubmit = (assignmentItem: any) => {
 
         <Divider className={classes.divider} />
       
-          <Typography variant="h5">Resources</Typography>
-          <Grid item>
+          
+          <Grid item style={{marginBottom:20}}>
+          <Typography variant="h5" style={{display: "inline", marginRight: 250}} >Resources</Typography>
           <Button
-                variant="outlined"
+                variant="contained"
                 onClick={handleClickOpen}
                 // className={classes.uploadButton}
                 startIcon={<AddIcon />}
                 style={{marginLeft: 850}}
-                className={classes.invBtn}
+                className={classes.resourcesBtn}
               >
                 Resources
               </Button>
             </Grid>
-              <Grid item style= {{marginTop: '12px'}} >
+              <Grid item style= {{marginTop: '12px', marginBottom:100}} >
                 {companyFiles.length > 0 ? companyFiles.map((item, index) => (
 
                   renderCompanyFiles(item, index)

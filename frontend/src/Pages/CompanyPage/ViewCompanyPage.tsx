@@ -150,7 +150,7 @@ function ViewCompanyPage(props: any) {
         <Grid container>
             <Grid item xs={12}>
                     
-                    <Button startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
+                    <Button variant="contained" startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
             </Grid>
 
             <Grid item xs={12}>

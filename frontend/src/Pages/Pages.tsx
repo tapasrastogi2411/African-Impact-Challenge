@@ -62,6 +62,7 @@ export default function Pages(props: any) {
     const [viewuserData, setViewUserData] = React.useState(viewUserData);
     const [viewcompanyData, setViewCompanyData] = React.useState(ViewCompanyData);
 
+
     const updateReg = (val:string) => {
         setReg(val);
     };
@@ -69,7 +70,10 @@ export default function Pages(props: any) {
     const updateUserData = (newUserData: any) => {
         setUserData(newUserData);
     }
-   
+
+    
+
+
     return (
         <Switch>
             <Route exact path="/" render={() => <MainPage regHandler={updateReg} />}  />
@@ -89,8 +93,8 @@ export default function Pages(props: any) {
             <Route exact path="/guestReadings" component={GuestReadingPage} />  
             <Route exact path="/invites" component={InvitationPage} />   
             <Route exact path="/calendar" component={CalendarPage} /> 
-            <Route exact path="/forgotpassword" render={() => <ForgotPassword />}  /> 
-            <Route exact path="/resetpassword" render={() => <ResetPassword />}  />
+            <Route exact path="/forgotpassword" render={() => <ForgotPassword  />}  /> 
+            <Route exact path="/resetpassword" render={() => <ResetPassword  />}  />
         </Switch>
         
     );
