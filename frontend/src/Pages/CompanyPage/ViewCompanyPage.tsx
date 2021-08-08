@@ -19,6 +19,7 @@ import building from "./building.png";
 import member from "./member.jpg";
 import founder from "./founder.jpg";
 import AddIcon from '@material-ui/icons/Add';
+import * as Constants from '../../utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -130,12 +131,23 @@ function ViewCompanyPage(props: any) {
   const classes = useStyles();
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
 
-  const getCompanyData = () => {
+  const getCompanyData = async () => {
     setCompanyData(props.viewCompanyDataProp);
+    const response = await fetch(
+      Constants.server + "/api/profile/getCompany",
+      {
+        method: "GET",
+        credentials: "include",
+        mode: "cors",
+      }
+    );
+    const responseData = await response.json();
+    setCompanyData(responseData);
   }
 
   React.useEffect(() => {
     getCompanyData();
+   
   }, []);
 
 

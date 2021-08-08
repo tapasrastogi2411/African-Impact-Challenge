@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Navbar from "../../NavBar/Navbar";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, useHistory } from "react-router-dom";
 import { Accordion, AccordionDetails, AccordionSummary, Avatar, Divider, Paper, Toolbar } from "@material-ui/core";
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
@@ -53,6 +53,18 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 15,
     color: "#ffffff",
 
+  },
+  viewCompanyBtn: {
+    backgroundColor: "#fcb040",
+    color: "#ffffff",
+    width: 200,
+    '&:hover': { background: "#e69113" },
+    borderRadius: 20,
+    fontSize: 15,
+    marginLeft: 590,
+    marginTop: 50,
+    paddingTop: 10,
+    paddingBottom: 10
   }
 
 }));
@@ -63,11 +75,13 @@ const companyData = {
 
 function InvitationPage(prop: any) {
   const classes = useStyles();
+  const history = useHistory();
   const [inviteItems, setInviteItems] = React.useState([]);
   const [alertMessage, setAlertMessage] = React.useState("");
+  const [companyName, setCompanyName] = React.useState("");
 
   const handleGet = async () => {
-    const response = await fetch(
+    let response = await fetch(
       Constants.server + "/api/profile/fetchIncomingInvites",
       {
         method: "GET",
@@ -75,12 +89,30 @@ function InvitationPage(prop: any) {
         mode: "cors",
       }
     );
-    const responseData = await response.json();
+    let responseData = await response.json();
     if (response.status > 300 || response.status < 200) {
       throw responseData;
     }
     console.log(responseData);
     setInviteItems(responseData);
+
+    response = await fetch(
+      Constants.server + "/api/profile/getCompany",
+      {
+        method: "GET",
+        credentials: "include",
+        mode: "cors",
+      }
+    );
+
+    responseData = await response.json();
+    if (response.status == 200) {
+      setCompanyName(responseData.company_name)
+      console.log(responseData.company_name);
+    }
+
+
+
   };
 
 
@@ -145,7 +177,7 @@ function InvitationPage(prop: any) {
     handleGet();
   };
 
-  const renderInvites = (item: any) => {
+  const renderInvite = (item: any) => {
     console.log(item);
     companyData.companyName = item.company;
     return (
@@ -178,6 +210,38 @@ function InvitationPage(prop: any) {
     );
   }
 
+  const renderInvites = () => {
+    if (companyName != "") {
+      return (
+        <React.Fragment>
+          <Typography align="center" style={{width: "-webkit-fill-available", fontSize: 22}}>
+                You are currently apart of {companyName}
+            </Typography>
+            <Button variant="contained" className={classes.viewCompanyBtn} onClick={() => {history.push("/viewCompany")}}>View Company</Button>
+        </React.Fragment>
+        
+      );
+    }
+
+    if (inviteItems.length > 0) {
+      return (
+        inviteItems.map((item) => (
+          renderInvite(item)
+        ))  
+      );
+    } 
+
+    return (
+      <Typography align="center" style={{width: "-webkit-fill-available", fontSize: 22}}>
+             No pending invites!
+        </Typography>
+
+    );
+
+  };
+
+
+
   useEffect(() => {
     handleGet();
   }, []);
@@ -193,15 +257,7 @@ function InvitationPage(prop: any) {
           </Typography>
         </Grid>
         <Divider className={classes.divider} />
-        {inviteItems.length > 0 ? (
-          inviteItems.map((item) => (
-            renderInvites(item)
-          ))
-        ) : (
-            <Typography align="center" style={{width: "-webkit-fill-available", fontSize: 22}}>
-              No pending invites!
-            </Typography>
-          )}
+        {renderInvites()}
         {/* <Paper className={classes.inviteCard} elevation={2}>
           <Grid
             direction="row"
