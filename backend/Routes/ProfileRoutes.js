@@ -704,10 +704,35 @@ router.put('/resetpassword', function(req, res) {
         })
 });
 
-router.post('/getCompanyMembers', function (req, res) { 
-    var query = "SELECT username FROM profile_schema.works_for WHERE company_name = $1";
+router.get('/getCompanyMembers', function (req, res) { 
+    
+    let companyQuery = "SELECT company_name from profile_schema.works_for WHERE username = $1";
+    let membersQuery = "SELECT username FROM profile_schema.works_for WHERE company_name = $1";
+    let founderQuery = "SELECT creator FROM profile_schema.company WHERE company_name = $1";
 
-    db.query(query, [req.body.company_name])
+    let companyMembers;
+    let companyName;
+
+    db.query(companyQuery, [req.session.username])
+    .then(pgRes => {
+        companyName = pgRes.rows[0].company_name;
+        return db.query(membersQuery, [companyName]);
+    })
+    .then(pgRes => {
+        companyMembers = pgRes.rows;
+        return db.query(founderQuery, [companyName]);
+    })
+    .then(pgRes => {
+        let founder = pgRes.rows[0].creator;
+        companyMembers.push(founder);
+        res.status(200).json(companyMembers);
+    })
+    .catch(e => {
+        console.error(e.stack);
+        res.status(500).json({err: "Server error"});
+    })
+
+    /* db.query(query, [req.body.company_name])
     .then(result => {
         var members = result.rows.map(x => x.username);
         res.status(200).json({"members": members});
@@ -715,7 +740,7 @@ router.post('/getCompanyMembers', function (req, res) {
     .catch(e => {
         console.error(e.stack);
         res.status(500).json({err: "Server error"});
-    })
+    }) */
 });
 
 module.exports = router;
