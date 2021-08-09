@@ -178,11 +178,11 @@ function Profilepage(props: any) {
     if (userData.user_role == "Entrepreneur") {
       if (showCreateCompanyBtn) {
         return (
-          <Grid item xs={12} > <CreateCompany setSnackbar={handleOpenSnackbar} />  </Grid>
+           <CreateCompany setSnackbar={handleOpenSnackbar} />  
         )
       } else {
         return (
-          <Grid item xs={12} > <Button startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company</Button></Grid>
+           <Button variant="contained" startIcon={<BusinessIcon />} className={classes.companyBtn} component={Link} to="/company">View Company</Button>
         )
       }
     }
@@ -205,7 +205,7 @@ function Profilepage(props: any) {
 
       <div className={classes.profile}>
         <Grid container >
-          {companyButton()}
+          
           <Grid>
             <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar}>
               <Alert severity="success" onClose={handleCloseSnackbar}>
@@ -214,14 +214,15 @@ function Profilepage(props: any) {
             </Snackbar>
           </Grid>
           <Grid item xs={12}>
+            {companyButton()}
             <Typography variant="h4">{userData.username}</Typography>
           </Grid>
           <Divider className={classes.divider} />
           <Grid xs={2} item alignItems="center">
             <Typography className={classes.role} variant="caption" align="center">{userData.user_role}</Typography>
             <img src={profilepic} className={classes.profilePic} />
-            <Button startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
-            <Button component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
+            <Button variant="contained" startIcon={<ChatIcon />} className={classes.btn}>Message</Button>
+            <Button variant="contained" component={Link} to="/update" startIcon={<EditIcon />} className={classes.btn}>Update Info</Button>
           </Grid>
           <Grid
             item

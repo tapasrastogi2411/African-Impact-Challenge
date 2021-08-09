@@ -236,7 +236,7 @@ export default function CreateCompany(props: any) {
 
     return(
         <div > 
-            <Button startIcon={<BusinessIcon />} className={classes.companyBtn} onClick={handleClickOpen}   aria-labelledby="form-dialog-title" >Create Company </Button>
+            <Button variant="contained" startIcon={<BusinessIcon />} className={classes.companyBtn} onClick={handleClickOpen}   aria-labelledby="form-dialog-title" >Create Company </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="sm" scroll="body" >
                 <DialogTitle id="form-dialog-title" style={{background:"#f2f6fa"}}>Create Company</DialogTitle>
                 
@@ -336,10 +336,10 @@ export default function CreateCompany(props: any) {
                     </DialogContent>
                     <DialogActions style={{background:"#f2f6fa"}}>
                         <div >
-                            <Button onClick={handleClose}  className={classes.createLeftBtn}>
+                            <Button variant="contained" onClick={handleClose}  className={classes.createLeftBtn}>
                                 Cancel
                             </Button>
-                            <Button onClick={(e) => validate(fieldData)} className={classes.createRightBtn}>
+                            <Button variant="contained" onClick={(e) => validate(fieldData)} className={classes.createRightBtn}>
                                 Create
                             </Button>
 

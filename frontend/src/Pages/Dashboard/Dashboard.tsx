@@ -141,7 +141,7 @@ export default function Dashboard(props: any) {
             </>
 
           ) : (
-              <Typography align="center" >
+              <Typography align="center" style={{fontSize: 22, width: "-webkit-fill-available"}} >
                 There are currently no videos!
               </Typography>
             )}
@@ -173,7 +173,7 @@ export default function Dashboard(props: any) {
               </Grid>
             </>
           ) : (
-              <Typography align="center" >
+              <Typography align="center" style={{fontSize: 22, width: "-webkit-fill-available"}}>
                 There are currently no readings!
               </Typography>
             )}

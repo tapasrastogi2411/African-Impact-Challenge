@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   divider: {
-    width: "150%",
+    width: "110%",
     height: 3,
     marginTop: 15,
-    marginBottom: 15,
+    marginBottom: 20,
   },
   profilePic: {
     width: 200,
@@ -70,19 +70,25 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
   },
   uploadButton: {
-    marginLeft: 800,
+    marginLeft: 1000,
     fontWeight: 600,
     backgroundColor: "#fcb040",
     color: "#ffffff",
-    width: 180,
+    width: 190,
     "&:hover": { background: "#e69113" },
     borderRadius: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginBottom: 10
   },
   readingHeader: {
     fontSize: 22,
   },
   noReadingHeader: {
     fontSize: 22,
+    width: "-webkit-fill-available"
   },
 
  
@@ -254,7 +260,7 @@ function ReadingPage(prop: any) {
           <Grid>
             <div>
             <Button
-                      variant="outlined"
+                      variant="contained"
                       onClick={handleClickOpen}
                       className={classes.uploadButton}
                       >

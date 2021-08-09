@@ -19,6 +19,7 @@ import building from "./building.png";
 import member from "./member.jpg";
 import founder from "./founder.jpg";
 import AddIcon from '@material-ui/icons/Add';
+import * as Constants from '../../utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -129,14 +130,66 @@ function ViewCompanyPage(props: any) {
   
   const classes = useStyles();
   const [companyData, setCompanyData] = React.useState(defaultCompanyData);
+  const [companyMembers, setCompanyMembers] = React.useState("");
 
-  const getCompanyData = () => {
+  const getCompanyData = async () => {
     setCompanyData(props.viewCompanyDataProp);
+    let response = await fetch(
+      Constants.server + "/api/profile/getCompany",
+      {
+        method: "GET",
+        credentials: "include",
+        mode: "cors",
+      }
+    );
+    let responseData = await response.json();
+    setCompanyData(responseData);
+
+    response = await fetch(
+      Constants.server + "/api/profile/getCompanyMembers",
+      {
+        method: "GET",
+        credentials: "include",
+        mode: "cors",
+      }
+    );
+
+    responseData = await response.json();
+    setCompanyMembers(responseData);
+    
   }
 
   React.useEffect(() => {
     getCompanyData();
+   
   }, []);
+
+  const renderMembers = () => {
+    
+    let renderMembers:any = [];
+    let companyFounder:any = <Grid item >
+                          <Typography align="center">Founder</Typography>
+                          <Avatar src={founder} className={classes.relatedPic} />
+                          <Typography align="center">{companyMembers[companyMembers.length-1]}</Typography>
+                        </Grid>;
+    renderMembers.push(companyFounder);
+
+    for (let i = 0; i < companyMembers.length-1; i++) {
+      let companyMember = <Grid item >
+                              <Typography align="center">Member</Typography>
+                              <Avatar src={member} className={classes.relatedPic} />
+                              <Typography align="center">{(companyMembers[i] as any).username}</Typography>
+                          </Grid>
+
+        if ((companyMembers[i] as any).username !== companyMembers[companyMembers.length-1]) {
+          renderMembers.push(companyMember);
+        }
+        
+
+    }
+    return renderMembers;
+
+  }
 
 
   
@@ -150,7 +203,7 @@ function ViewCompanyPage(props: any) {
         <Grid container>
             <Grid item xs={12}>
                     
-                    <Button startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
+                    <Button variant="contained" startIcon={<AddIcon />} className={classes.invBtn}>Invite</Button>
             </Grid>
 
             <Grid item xs={12}>
@@ -195,23 +248,9 @@ function ViewCompanyPage(props: any) {
           </Grid>
 
 
-          <Grid item >
-              <Typography align="center">Founder</Typography>
-              <Avatar src={founder} className={classes.relatedPic} />
-              <Typography align="center">{companyData.creator}</Typography>
-          </Grid>
-          
+          {renderMembers()}
 
-          <Grid item >
-             <Typography align="center">Member</Typography>
-            <Avatar src={member} className={classes.relatedPic} />
-            <Typography align="center">Aaron1999</Typography>
-          </Grid>
-          <Grid item >
-          <Typography align="center">Member</Typography>
-            <Avatar src={member} className={classes.relatedPic} />
-            <Typography align="center">Jason2002</Typography>
-          </Grid>
+
         </Grid>
 
         <Divider className={classes.divider} />

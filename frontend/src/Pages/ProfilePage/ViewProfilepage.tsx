@@ -102,7 +102,9 @@ const useStyles = makeStyles((theme) => ({
   alt: {
     marginLeft: 300,
     marginTop:100,
-  }
+    borderRadius: 20,
+    width: 1375,
+  },
 }));
 
 function Alert(props: AlertProps) {
@@ -205,7 +207,7 @@ function ViewProfilepage(props: any) {
       handleAlert("Invite Failed to send");
       setOpen(true);
     }
-    handleAlert("Invite Successfully Sent");
+    handleAlert("Invite Successfully Sent!");
     setInvite(false);
     setOpen(true);
   }
@@ -265,11 +267,10 @@ function ViewProfilepage(props: any) {
       <Navbar></Navbar>
       <Collapse in={open}>
             {alertMessage.length > 0 && open ? (
-            <Alert variant="outlined" color="info" icon={false} action={
+            <Alert variant="filled" color="success" icon={false} action={
                       <IconButton
                         aria-label="close"
-                color="inherit"
-                
+                        color="inherit"
                         size="small"
                         onClick={() => {
                           setOpen(false);
@@ -298,7 +299,7 @@ function ViewProfilepage(props: any) {
         <Grid container xs={2}>
 
         <Grid item xs={12}> {hasCompany && userData.role_name == "Entrepreneur" && invite && (!viewUserCompany.result) ? (
-                  <Button startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
+                  <Button variant="contained" startIcon={<BusinessIcon />} className={classes.invitebtn} onClick={handleInvite}>
                   Invite to Company
                  </Button>
         ): null
@@ -317,7 +318,7 @@ function ViewProfilepage(props: any) {
             {userData.role_name}
           </Typography>
           <img src={profilepic} className={classes.profilePic} />
-          <Button startIcon={<ChatIcon />} className={classes.btn}>
+          <Button variant="contained" startIcon={<ChatIcon />} className={classes.btn}>
             Message
           </Button>
         </Grid>

@@ -33,10 +33,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   divider: {
-    width: "150%",
+    width: "110%",
     height: 3,
     marginTop: 15,
-    marginBottom: 15,
+    marginBottom: 20,
   },
   profilePic: {
     width: 200,
@@ -72,19 +72,25 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
   },
   uploadButton: {
-    marginLeft: 840,
+    marginLeft: 1050,
     fontWeight: 600,
     backgroundColor: "#fcb040",
     color: "#ffffff",
     width: 180,
     "&:hover": { background: "#e69113" },
     borderRadius: 20,
+    paddingTop: 9,
+    paddingBottom: 9,
+    paddingLeft: 7,
+    paddingRight: 7,
+    marginBottom: 10
   },
   VideoHeader: {
     fontSize: 22,
   },
   noVideoHeader: {
     fontSize: 22,
+    width: "-webkit-fill-available"
   },
 
   videoCard: {
@@ -219,7 +225,7 @@ function VideoPage(prop: any) {
           <Grid>
             <div>
               <Button
-                variant="outlined"
+                variant="contained"
                 onClick={handleClickOpen}
                 className={classes.uploadButton}
               >
