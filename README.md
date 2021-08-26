@@ -81,6 +81,16 @@ The contribution process is as follows:
 
 So far, the frontend of the project displays nicely for wide monitors (not laptops or mobile phones). In future development we will make this more flexible.
 
+## Team Members
 
+This project wouldnt have been possible without the contribution of the following people :)
+
+- [Aaron Tan](https://github.com/AaronJTan)
+- [Allen Zhang](https://github.com/AllenZhang2000)
+- [Brandon Jaipersaud](https://github.com/brandonjaipersaud)
+- [Clement Tran](https://github.com/CTprogram)
+- [Jason Ho Ki Yuen](https://github.com/jhk-y)
+- [Patrick Kemzang](https://github.com/patrickkemzang)
+- [Tapas Rastogi](https://github.com/tapasrastogi2411)
 
 
