@@ -3,7 +3,8 @@ The aim of our project is to construct a community and e-learning platform to be
 
 More information about the African Impact Challenge can be found here: https://www.africanimpact.ca/the-african-impact-challenge
 
-
+## Deployment
+Deployed at: http://cscc01-aic.herokuapp.com/
 
 ## Installation
 
